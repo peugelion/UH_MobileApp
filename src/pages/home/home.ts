@@ -17,7 +17,7 @@ export class HomePage {
     let oauth = OAuth.createInstance();
     oauth.login()
       .then(oauthResult => {
-        let service = DataService.createInstance(oauthResult);
+        let service = DataService.createInstance(oauthResult, {useProxy:false});
         service.query(
           `SELECT id, name, uh__status__c, uh__servicePlace__r.Name 
           FROM uh__workOrder__c limit 10`)

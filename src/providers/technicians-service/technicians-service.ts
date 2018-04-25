@@ -18,7 +18,8 @@ export class TechniciansServiceProvider {
     let oauth = OAuth.createInstance();
     return oauth.login()
       .then(oauthResult => {
-        let service = DataService.createInstance(oauthResult);
+        // let service = DataService.createInstance(oauthResult);
+        let service = DataService.createInstance(oauthResult, {useProxy:false});
         return service.query('SELECT Id, Name FROM UH__Technician__c');
       });
   }
