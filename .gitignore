@@ -31,5 +31,6 @@ www/
 $RECYCLE.BIN/
 
 .DS_Store
+.directory
 Thumbs.db
 UserInterfaceState.xcuserstate
