@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { TechniciansPage } from '../pages/technicians/technicians';
 import { TechniciansServiceProvider } from '../providers/technicians-service/technicians-service';
+import { OAuthServiceProvider } from '../providers/o-auth-service/o-auth-service';
 
 
 
@@ -34,7 +35,8 @@ import { TechniciansServiceProvider } from '../providers/technicians-service/tec
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    TechniciansServiceProvider
+    TechniciansServiceProvider,
+    OAuthServiceProvider
   ]
 })
 export class AppModule {}
