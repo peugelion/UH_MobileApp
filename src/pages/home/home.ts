@@ -14,18 +14,24 @@ export class HomePage {
   
   @ViewChild('myWarehouse') myWarehouse: any;
 
-  workOrders : any;
+  // workOrders : any;
   oauthCreds : any;
 
-  constructor(public navCtrl: NavController, private oauth : OAuthServiceProvider) {
-    //this.loadLtngApp();
-    // this.initPage();
-  }
+  columns : any = [
+    { prop: 'workorderName' },
+    { name: 'Status' },
+    { name: 'Service Place' },
+    { name: 'Description' },
+    { name: 'Deadline' }
+  ];
+
+  rows : any; 
+
+  constructor(public navCtrl: NavController, private oauth : OAuthServiceProvider) {}
 
   initPage(){
     this.oauth.getOAuthCredentials().
       then((oauth) => {
-        console.log("Oauth === ", oauth);
         this.loadWOs(oauth);
         this.loadLtngApp(oauth.accessToken);
       });
@@ -34,24 +40,31 @@ export class HomePage {
   loadWOs(oauth) {
     let service = DataService.createInstance(oauth, {useProxy:false});
     service.query(
-      `SELECT id, name, uh__status__c, uh__servicePlace__r.Name 
+      `SELECT id, name, uh__status__c, uh__servicePlace__r.Name, uh__description__c, UH__Deadline__c
       FROM uh__workOrder__c limit 10`)
       .then(response => {
-        this.workOrders = response.records;
+        this.rows = response.records.map(wo => {
+          let obj = {};
+          obj["workorderName"] = wo.Name;
+          obj["status"] = wo.UH__Status__c;
+          obj["servicePlace"] = (wo.UH__ServicePlace__r) ? wo.UH__ServicePlace__r.Name : "";
+          obj["description"] = wo.UH__Description__c;
+          obj["deadline"] = (wo.UH__Deadline__c) ? new Date(wo.UH__Deadline__c).toDateString() : "";
+          return obj;
+        });
       });
   }
 
-  loadLtngApp(accessToken) { console.log("inside loadLtngApp");
+  loadLtngApp(accessToken) {
     $Lightning.use(
       "c:LtngOutDependencyApp",
-      this.createLtngCmp,
+      this.createLtngCmps,
       "https://simple-urbanhawks.lightning.force.com",
       accessToken
     );
   }
 
-  createLtngCmp() {
-    console.log("on createLtngCmp start");
+  createLtngCmps() {
     $Lightning.createComponent(
       "c:showMyWarehouses",
       {},
@@ -62,11 +75,16 @@ export class HomePage {
         console.log("is defined v.stockUnits = ", $A.util.isUndefined(component.get("v.stockUnits")));
       }
     );
-    console.log("on createLtngCmp end");
+
+    $Lightning.createComponent(
+      "c:smallWosMapLightening",
+      {},
+      "mapComponent",
+      function(component) {}
+    );
   }
 
   ionViewDidLoad() {
-    console.log("this.myWarehouse.nativeElement = ", this.myWarehouse.nativeElement);
     this.initPage();
   }
 

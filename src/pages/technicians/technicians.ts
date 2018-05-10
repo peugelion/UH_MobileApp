@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { TechniciansServiceProvider } from '../../providers/technicians-service/technicians-service';
+import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 /**
  * Generated class for the TechniciansPage page.
  *
@@ -16,7 +17,7 @@ import { TechniciansServiceProvider } from '../../providers/technicians-service/
 export class TechniciansPage {
   technicians: Array<{Id: string, Name: any}>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private techService: TechniciansServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private techService: TechniciansServiceProvider, private oauth : OAuthServiceProvider) {
   }
 
   ionViewDidLoad() {
@@ -25,10 +26,13 @@ export class TechniciansPage {
   }
 
   loadTechnicians() {
-    this.techService.loadTechnicians()
-      .then(results => {
-        console.log(results);
-        this.technicians = results.records;
+    this.oauth.getOAuthCredentials().
+      then(oauth => {
+        this.techService.loadTechnicians(oauth)
+          .then(results => {
+            console.log(results);
+            this.technicians = results.records;
+          });
       });
   }
 }

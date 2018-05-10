@@ -18,9 +18,11 @@ export class OAuthServiceProvider {
   getOAuthCredentials() : any {
     return new Promise((resolve, reject) => {
       // if already authenticated just resolve the promise
-      if(this.oAuthCreds) resolve(this.oAuthCreds);
+      if(this.oAuthCreds) {
+        resolve(this.oAuthCreds);
+      }
       else {
-        // authenticate and reasolve the promise
+        // authenticate and resolve the promise
         let oauth = OAuth.createInstance();
         oauth.login()
           .then(oauthResult => {
