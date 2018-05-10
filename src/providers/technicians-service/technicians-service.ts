@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { DataService } from 'forcejs';
-import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 
 /*
   Generated class for the TechniciansServiceProvider provider.
@@ -11,7 +10,7 @@ import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-serv
 @Injectable()
 export class TechniciansServiceProvider {
 
-  constructor(private oauth : OAuthServiceProvider) {
+  constructor() {
     console.log('Hello TechniciansServiceProvider Provider');
   }
 
@@ -28,9 +27,8 @@ export class TechniciansServiceProvider {
   //     });
   // }
 
-  loadTechnicians(){
-    let service = DataService.createInstance(this.oauth.getOAuthCredentials(), {useProxy:false});
+  loadTechnicians(oauthCreds){
+    let service = DataService.createInstance(oauthCreds, {useProxy:false});
     return service.query('SELECT Id, Name FROM UH__Technician__c');
   }
-  
 }

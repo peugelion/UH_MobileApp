@@ -1,3 +1,66 @@
 page-home {
+  .datatable-header {
+    background: rgba(164, 192, 214,1);
+    padding: 1em 0 0 1em;
+  }
 
+  .datatable-header-cell {
+      font-size: 1.2em;
+      font-weight: bold;
+  }
+
+  .datatable-body-row {
+      padding: 0;
+  }
+
+  .datatable-row-even {
+      background: rgba(240, 240, 240, 1);
+  }
+
+  .datatable-row-odd {
+      background: rgba(255, 255, 255,1);
+  }
+
+  .datatable-body-cell {
+      font-size: 1.2em;
+      padding: 1em;
+  }
+
+  // Style footer appearance
+  .datatable-footer {
+    background: rgba(218, 226, 234,1);
+    padding: 0 1em 0 1em;
+
+    .pager {
+       li {
+          padding: 0 1em !important;
+
+          a {
+             color: rgba(68, 68, 68, 1);
+             text-decoration: none;
+          }
+       }
+    }
+  }
+
+  // Style rules for the footer pagination elements
+  .datatable-icon-done-all:before {
+    content: ">>";
+  }
+
+  .datatable-icon-left:before {
+      content: "<";
+  }
+
+  .datatable-icon-right:before {
+      content: ">";
+  }
+
+  .datatable-icon-skip:before {
+      content: ">>";
+  }
+
+  .datatable-icon-prev:before {
+      content: "<<";
+  }
 }

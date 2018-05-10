@@ -8,11 +8,7 @@
 </ion-header>
 
 <ion-content padding>
-  <!-- <h3>Ionic Menu Starter</h3>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p> -->
   <ion-card #myWarehouse>
     <ion-card-header>
       Header
@@ -21,11 +17,32 @@
       <div id="myWarehouseDiv"></div>
     </ion-card-content>
   </ion-card>
-  <ion-card>
+  <ion-card #mapComponent>
+    <ion-card-content>
+      <div id="mapComponent"></div>
+    </ion-card-content>
+  </ion-card>
+  <!-- <ion-card>
     <ion-card-header>
         Work Orders
     </ion-card-header>
     <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-2><h1>Workorder Name</h1></ion-col>
+            <ion-col col-2><h2>Status</h2></ion-col>
+            <ion-col col-3><h3>Service Place</h3></ion-col>
+            <ion-col col-3><h4>Description</h4></ion-col>
+            <ion-col col-2><h5>Deadline</h5></ion-col>
+          </ion-row>
+          <ion-row *ngFor="let WO of workOrders">
+              <ion-col col-2><div>{{WO.woName}}</div></ion-col>
+              <ion-col col-2><div>{{WO.status}}</div></ion-col>
+              <ion-col col-3><div>{{WO.servicePlace}}</div></ion-col>
+              <ion-col col-3><div>{{WO.description}}</div></ion-col>
+              <ion-col col-2><div>{{WO.deadline}}</div></ion-col>
+          </ion-row>
+        </ion-grid>
       <ion-list>
         <ion-item *ngFor="let WO of workOrders">
             <h2>{{WO.Name}}</h2>
@@ -33,18 +50,24 @@
         </ion-item>
       </ion-list>
     </ion-card-content>
+  </ion-card> -->
+  <ion-card>
+    <ion-card-content>
+      <div>
+        <ngx-datatable
+          [sortType]="'multi'"
+          [headerHeight]="50"
+          [footerHeight]="50"
+          [rowHeight]="50"
+          [rows]="rows"
+          [columns]="columns"
+          [columnMode]="'force'"
+          [limit]="5">
+        </ngx-datatable>
+      </div>
+    </ion-card-content>
   </ion-card>
 
-  <!-- <div id="myWarehouseDiv"></div> -->
-
-  <!-- <h3>Work Orders</h3> 
-  <ion-list>
-    <ion-item *ngFor="let WO of workOrders">
-        <h2>{{WO.Name}}</h2>
-        <p>{{WO.UH__Status__c}}</p>
-    </ion-item>
-  </ion-list> -->
-
-  <!-- <button ion-button class="register-btn" type="button" (click)="showTechs()">Show Technicians</button> -->
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+  <!-- <button ion-button class="register-btn" type="button" (click)="showTechs()">Show Technicians</button> 
+  <button ion-button secondary menuToggle>Toggle Menu</button>-->
 </ion-content>
