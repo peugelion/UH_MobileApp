@@ -12,7 +12,7 @@ export class OAuthServiceProvider {
   oAuthCreds : any;
 
   constructor() {
-    console.log('Hello OAuthServiceProvider Provider');
+    //console.log('Hello OAuthServiceProvider Provider');
   }
 
   getOAuthCredentials() : any {
@@ -26,7 +26,7 @@ export class OAuthServiceProvider {
         let oauth = OAuth.createInstance();
         oauth.login()
           .then(oauthResult => {
-            console.log("oauthResult inside OAuthServiceProvider = ", oauthResult);
+            //console.log("oauthResult inside OAuthServiceProvider = ", oauthResult);
             this.oAuthCreds = oauthResult;
             resolve(this.oAuthCreds);
           });

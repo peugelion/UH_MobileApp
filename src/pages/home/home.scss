@@ -1,66 +1,30 @@
 page-home {
-  .datatable-header {
-    background: rgba(164, 192, 214,1);
-    padding: 1em 0 0 1em;
-  }
-
-  .datatable-header-cell {
-      font-size: 1.2em;
-      font-weight: bold;
-  }
-
-  .datatable-body-row {
-      padding: 0;
-  }
-
-  .datatable-row-even {
-      background: rgba(240, 240, 240, 1);
-  }
-
-  .datatable-row-odd {
-      background: rgba(255, 255, 255,1);
-  }
-
-  .datatable-body-cell {
-      font-size: 1.2em;
-      padding: 1em;
-  }
-
-  // Style footer appearance
-  .datatable-footer {
-    background: rgba(218, 226, 234,1);
-    padding: 0 1em 0 1em;
-
-    .pager {
-       li {
-          padding: 0 1em !important;
-
-          a {
-             color: rgba(68, 68, 68, 1);
-             text-decoration: none;
-          }
-       }
+    .ellipsis{
+        div{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 1.4rem;
+        }
     }
-  }
 
-  // Style rules for the footer pagination elements
-  .datatable-icon-done-all:before {
-    content: ">>";
-  }
-
-  .datatable-icon-left:before {
-      content: "<";
-  }
-
-  .datatable-icon-right:before {
-      content: ">";
-  }
-
-  .datatable-icon-skip:before {
-      content: ">>";
-  }
-
-  .datatable-icon-prev:before {
-      content: "<<";
-  }
+    ion-item-options {
+        background-color: rgb(236, 235, 234);
+    }
+    
+    .action-sheets-basic-page {
+        .ion-md-share ion-icon {
+          color: #ED4248;
+        }
+        .ion-md-arrow-dropright-circle {
+          color: #508AE4;
+        }
+        .ion-md-heart-outline {
+          color: #31D55F;
+        }
+        .action-sheet-cancel ion-icon,
+        .action-sheet-destructive ion-icon {
+          color: #757575;
+        }
+    }    
 }
