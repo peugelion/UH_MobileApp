@@ -25,52 +25,56 @@
       <div id="mapComponent"></div>
     </ion-card-content>
   </ion-card>
-  <!-- <ion-card>
+  <ion-card>
     <ion-card-header>
-        Work Orders
+      Work Orders
     </ion-card-header>
     <ion-card-content>
-        <ion-grid>
-          <ion-row>
-            <ion-col col-2><h1>Workorder Name</h1></ion-col>
-            <ion-col col-2><h2>Status</h2></ion-col>
-            <ion-col col-3><h3>Service Place</h3></ion-col>
-            <ion-col col-3><h4>Description</h4></ion-col>
-            <ion-col col-2><h5>Deadline</h5></ion-col>
-          </ion-row>
-          <ion-row *ngFor="let WO of workOrders">
-              <ion-col col-2><div>{{WO.woName}}</div></ion-col>
-              <ion-col col-2><div>{{WO.status}}</div></ion-col>
-              <ion-col col-3><div>{{WO.servicePlace}}</div></ion-col>
-              <ion-col col-3><div>{{WO.description}}</div></ion-col>
-              <ion-col col-2><div>{{WO.deadline}}</div></ion-col>
-          </ion-row>
-        </ion-grid>
       <ion-list>
-        <ion-item *ngFor="let WO of workOrders">
-            <h2>{{WO.Name}}</h2>
-            <p>{{WO.UH__Status__c}}</p>
-        </ion-item>
+        <ion-item-sliding *ngFor="let WO of workOrders">
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col col-12><div>{{WO.workorderName}}</div></ion-col>
+              </ion-row>
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Product in Place:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{WO.productInPlace}}</div></ion-col>
+              </ion-row>              
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Service Place:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{WO.servicePlace}}</div></ion-col>
+              </ion-row>
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Description:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{WO.description}}</div></ion-col>
+              </ion-row>
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Estimated completion date:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{WO.deadline}}</div></ion-col>
+              </ion-row>
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Status:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{WO.status}}</div></ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          <ion-item-options>
+            <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
+              <ion-icon name="ios-more"></ion-icon>
+            </button>
+            <button ion-button color="primary" clear icon-only>
+              <ion-icon name="text"></ion-icon>
+            </button>
+            <button ion-button color="secondary" clear icon-only>
+              <ion-icon name="create"></ion-icon>
+            </button>
+            <button ion-button color="danger" clear icon-only>
+              <ion-icon name='trash'></ion-icon>
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
       </ion-list>
     </ion-card-content>
-  </ion-card> -->
-  <ion-card>
-    <ion-card-content>
-      <div>
-        <ngx-datatable
-          [sortType]="'multi'"
-          [headerHeight]="50"
-          [footerHeight]="50"
-          [rowHeight]="50"
-          [rows]="rows"
-          [columns]="columns"
-          [columnMode]="'force'"
-          [limit]="5">
-        </ngx-datatable>
-      </div>
-    </ion-card-content>
   </ion-card>
-
-  <!-- <button ion-button class="register-btn" type="button" (click)="showTechs()">Show Technicians</button> 
-  <button ion-button secondary menuToggle>Toggle Menu</button>-->
 </ion-content>

@@ -11,21 +11,8 @@ import { DataService } from 'forcejs';
 export class TechniciansServiceProvider {
 
   constructor() {
-    console.log('Hello TechniciansServiceProvider Provider');
+    //console.log('Hello TechniciansServiceProvider Provider');
   }
-
-  // loadTechnicians(){
-  //   console.log("OAuth = ", OAuth);
-  //   let oauth = OAuth.createInstance();
-  //   console.log("oauth = ", oauth);
-  //   return oauth.login()
-  //     .then(oauthResult => {
-  //       console.log("oauthResult = ", oauthResult);
-  //       // let service = DataService.createInstance(oauthResult);
-  //       let service = DataService.createInstance(oauthResult, {useProxy:false});
-  //       return service.query('SELECT Id, Name FROM UH__Technician__c');
-  //     });
-  // }
 
   loadTechnicians(oauthCreds){
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
