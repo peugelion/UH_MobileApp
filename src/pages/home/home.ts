@@ -36,6 +36,16 @@ export class HomePage {
         this.loadLtngApp(oauth.accessToken);
       });
   }
+  
+  // doRefresh(refresher) {
+  //   console.log('Begin async operation', refresher);
+
+  //   setTimeout(() => {
+  //     console.log('Async operation has ended');
+  //     refresher.complete();
+  //   }, 2000);
+  // }
+  
 
   loadWOs(oauth) {
     let service = DataService.createInstance(oauth, {useProxy:false});

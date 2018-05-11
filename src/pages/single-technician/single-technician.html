@@ -1,0 +1,33 @@
+<!--
+  Generated template for the SingleTechnicianPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    <ion-title>{{ technician?.Name }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+      <ion-item>
+        <ion-label>Id: {{ technician?.Id }}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Name: {{ technician?.Name }}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>User: {{ technician?.UH__User__c }}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Username: {{ technician?.UH__username__c }}</ion-label>
+      </ion-item>
+  </ion-list>
+</ion-content>

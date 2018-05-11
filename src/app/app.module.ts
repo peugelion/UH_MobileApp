@@ -9,8 +9,10 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { TechniciansPage } from '../pages/technicians/technicians';
+import { SingleTechnicianPage } from '../pages/single-technician/single-technician';
 import { TechniciansServiceProvider } from '../providers/technicians-service/technicians-service';
 import { OAuthServiceProvider } from '../providers/o-auth-service/o-auth-service';
+import { Refresher } from './refresher.directive';
 
 
 
@@ -19,7 +21,9 @@ import { OAuthServiceProvider } from '../providers/o-auth-service/o-auth-service
     MyApp,
     HomePage,
     ListPage,
-    TechniciansPage
+    TechniciansPage,
+    SingleTechnicianPage,
+    Refresher
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,8 @@ import { OAuthServiceProvider } from '../providers/o-auth-service/o-auth-service
     MyApp,
     HomePage,
     ListPage,
-    TechniciansPage
+    TechniciansPage,
+    SingleTechnicianPage,
   ],
   providers: [
     StatusBar,

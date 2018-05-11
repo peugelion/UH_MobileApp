@@ -8,14 +8,17 @@
 </ion-header>
 
 <ion-content padding>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
   <ion-card #myWarehouse>
-    <ion-card-header>
+    <!-- <ion-card-header>
       Header
-    </ion-card-header>
-    <ion-card-content>
+    </ion-card-header> -->
+    <!-- <ion-card-content> -->
       <div id="myWarehouseDiv"></div>
-    </ion-card-content>
+    <!-- </ion-card-content> -->
   </ion-card>
   <ion-card #mapComponent>
     <ion-card-content>

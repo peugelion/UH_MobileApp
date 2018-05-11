@@ -2,10 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { TechniciansServiceProvider } from '../../providers/technicians-service/technicians-service';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
-import { SingleTechnicianPage } from '../single-technician/single-technician';
 
 /**
- * Generated class for the TechniciansPage page.
+ * Generated class for the SingleTechnicianPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -13,41 +12,42 @@ import { SingleTechnicianPage } from '../single-technician/single-technician';
 
 @IonicPage()
 @Component({
-  selector: 'page-technicians',
-  templateUrl: 'technicians.html',
-  entryComponents:[ SingleTechnicianPage ]
+  selector: 'page-single-technician',
+  templateUrl: 'single-technician.html',
 })
-export class TechniciansPage {
-  technicians: Array<{Id: string, Name: any}>;
+export class SingleTechnicianPage {
+  Id: string;
+  technician: {
+    Id: string,
+    Name: any,
+    Active: boolean,
+    User: any,
+    UH__username__c: any
+  };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private techService: TechniciansServiceProvider, private oauth : OAuthServiceProvider) {
+    this.Id = navParams.get("Id");
   }
 
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad TechniciansPage');
-    this.loadTechnicians();
+  ionViewDidLoad(id) {
+    console.log('ionViewDidLoad SingleTechnicianPage');
+    this.loadTechnician();
   }
 
-  loadTechnicians() {
+  loadTechnician() {
     this.oauth.getOAuthCredentials().
       then(oauth => {
-        this.techService.loadTechnicians(oauth)
+        console.log("uso ... id: " +this.Id);
+        this.techService.getTechnicianById(oauth, this.Id)
           .then(results => {
+            console.log("results");
             console.log(results);
-            this.technicians = results.records;
+            this.technician = results.records[0];
+            console.log("this.technician");
+            console.log(this.technician);
+            console.log(this.Id);
           });
       });
   }
 
-  // loadTechnician(id): void {
-  //   this.navCtrl.push(SingleTechnicianPage, id);
-  // }
-
-  loadTechnician(id) {
-    console.log(" xxx id : " +id);
-    this.navCtrl.push(SingleTechnicianPage, {
-      Id: id
-    });
-  }
 }

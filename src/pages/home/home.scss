@@ -64,3 +64,46 @@ page-home {
       content: "<<";
   }
 }
+
+
+/* override SF */
+$break-small: 380px;
+$sf-rem: 1.6;           /* sf vs ionic REM correction, 1rem / .625rem = 1.6 */
+
+div#myWarehouseDiv.slds-scope {
+    font-size: 1rem * $sf-rem;
+    font-family: -apple-system, "Helvetica Neue", "Roboto", sans-serif;
+
+    .slds-form-element__label {
+        font-size: .875rem * $sf-rem;
+    }
+
+    .slds-text-heading_small,
+    .slds-text-heading--small {
+        font-size: 1.25rem * $sf-rem;
+    }
+
+    td,
+    th {
+        @media screen and (max-width: $break-small) {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    // th:nth-child(2) {
+    //     text-overflow: clip;
+    // }
+
+    td {
+        @media screen and (max-width: $break-small) {
+            max-width: 29vw;
+        }
+    }
+    th {
+        @media screen and (max-width: $break-small) {
+            max-width: 7vw;
+            padding-right: 0.25rem;
+        }
+    }
+}
