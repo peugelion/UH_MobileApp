@@ -2,12 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { TechniciansServiceProvider } from '../../providers/technicians-service/technicians-service';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
-/**
- * Generated class for the TechniciansPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({

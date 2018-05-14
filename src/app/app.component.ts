@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { TechniciansPage } from '../pages/technicians/technicians';
+import { WorkordersPage } from '../pages/workorders/workorders';
 
 @Component({
   templateUrl: 'app.html'
@@ -25,7 +26,7 @@ export class MyApp {
       { icon: 'home', title: 'Home', component: HomePage },
       { icon: 'list-box', title: 'List', component: ListPage },
       { icon: 'briefcase', title: 'Accounts', component: TechniciansPage },
-      { icon: 'hammer', title: 'Work Orders', component: TechniciansPage },
+      { icon: 'hammer', title: 'Work Orders', component: WorkordersPage },
       { icon: 'build', title: 'Technicians', component: TechniciansPage },
       { icon: 'construct', title: 'Service Places', component: TechniciansPage },
       { icon: 'share', title: 'Departments', component: TechniciansPage }

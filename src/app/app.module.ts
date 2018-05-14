@@ -8,8 +8,11 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { TechniciansPage } from '../pages/technicians/technicians';
+import { WorkordersPage } from '../pages/workorders/workorders';
+
 import { TechniciansServiceProvider } from '../providers/technicians-service/technicians-service';
 import { OAuthServiceProvider } from '../providers/o-auth-service/o-auth-service';
+import { WorkordersServiceProvider } from '../providers/workorders-service/workorders-service';
 
 
 
@@ -18,7 +21,8 @@ import { OAuthServiceProvider } from '../providers/o-auth-service/o-auth-service
     MyApp,
     HomePage,
     ListPage,
-    TechniciansPage
+    TechniciansPage,
+    WorkordersPage
   ],
   imports: [
     BrowserModule,
@@ -29,14 +33,16 @@ import { OAuthServiceProvider } from '../providers/o-auth-service/o-auth-service
     MyApp,
     HomePage,
     ListPage,
-    TechniciansPage
+    TechniciansPage,
+    WorkordersPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     TechniciansServiceProvider,
-    OAuthServiceProvider
+    OAuthServiceProvider,
+    WorkordersServiceProvider
   ]
 })
 export class AppModule {}
