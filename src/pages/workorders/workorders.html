@@ -13,9 +13,12 @@
       <ion-icon name="ios-list" item-start></ion-icon>{{list}}
     </ion-item>
   </ion-list>
-  
+
   <ion-list>
-    <ion-item *ngFor="let WO of workorders" class="clickable">
+    <ion-list-header>
+      {{listLabel}}
+    </ion-list-header>
+    <ion-item *ngFor="let WO of workorders" (click)="gotoWO(WO.Id)">
       <ion-grid>
         <ion-row>
           <ion-col col-12><div>{{WO.Name}}</div></ion-col>

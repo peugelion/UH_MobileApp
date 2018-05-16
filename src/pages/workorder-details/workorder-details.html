@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Workorder Details</ion-title>
+  </ion-navbar>
+
+  <!-- <ion-toolbar no-border-top> -->
+  <ion-segment [(ngModel)]="tab">
+    <ion-segment-button value="related">
+      Related
+    </ion-segment-button>
+    <ion-segment-button value="details">
+      Details
+    </ion-segment-button>
+  </ion-segment>
+  <!-- </ion-toolbar> -->
+</ion-header>
+
+<ion-content padding>
+  <div [ngSwitch]="tab">
+    <ion-list *ngSwitchCase="'related'">
+      <ion-item>
+        <h2>Luna</h2>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngSwitchCase="'details'">
+      <ion-item>
+        <h3>Workorder Name</h3>
+        <p>{{currWO?.Name}}</p>
+      </ion-item>
+      <ion-item>
+        <h3>Created Date</h3>
+        <p>{{currWO?.CreatedDate}}</p>
+      </ion-item>
+      <ion-item>
+        <h3>Description</h3>
+        <p>{{currWO?.UH__Description__c}}</p>
+      </ion-item>
+      <ion-item>
+        <h3>Product in place</h3>
+        <p>{{currWO?.UH__productInPlace__r?.Name}}</p>
+      </ion-item>
+      <ion-item>
+        <h3>Service place</h3>
+        <p>{{currWO?.UH__ServicePlace__r?.Name}}</p>
+      </ion-item>
+      <ion-item>
+        <h3>Status</h3>
+        <p>{{currWO?.UH__Status__c}}</p>
+      </ion-item>
+      <ion-item>
+        <h3>Technician</h3>
+        <p>{{currWO?.UH__Technician__r?.UH__User__r.Name}}</p>
+      </ion-item>
+      <ion-item>
+        <h3>Start time</h3>
+        <p>{{currWO?.UH__startTime__c}}</p>
+      </ion-item>
+      <ion-item>
+        <h3>Deadline</h3>
+        <p>{{currWO?.UH__Deadline__c}}</p>
+      </ion-item>
+      <ion-item>
+        <h3>Closed on</h3>
+        <p>{{currWO?.UH__ClosedOn__c}}</p>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

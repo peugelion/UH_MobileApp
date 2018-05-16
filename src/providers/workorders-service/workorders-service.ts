@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DataService } from 'forcejs';
 
-/*
-  Generated class for the WorkordersServiceProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class WorkordersServiceProvider {
 
@@ -24,5 +18,11 @@ export class WorkordersServiceProvider {
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
     return service.query(`SELECT id, name, uh__status__c, uh__servicePlace__r.Name, uh__productInPlace__r.Name, uh__description__c, UH__Deadline__c
     FROM uh__workOrder__c ${selectCond}`);
+  }
+
+  getWODetails(oauthCreds, woID) {
+    let service = DataService.createInstance(oauthCreds, {useProxy:false});
+    let urlMapping: string = `/services/apexrest/UH/woResourceCtrl/${woID}`;
+    return service.apexrest(urlMapping);
   }
 }

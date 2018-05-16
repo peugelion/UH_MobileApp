@@ -3,13 +3,6 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 
-/**
- * Generated class for the WorkordersPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-workorders',
@@ -67,5 +60,9 @@ export class WorkordersPage {
             loading.dismiss();
           });
       });
+  }
+
+  gotoWO(woId) {
+    this.navCtrl.push('WorkorderDetailsPage', {"woId": woId});
   }
 }
