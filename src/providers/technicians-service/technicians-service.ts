@@ -16,7 +16,7 @@ export class TechniciansServiceProvider {
 
   loadTechnicians(oauthCreds){
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query('SELECT Id, Name FROM UH__Technician__c');
+    return service.query(`SELECT Id, Name FROM UH__Technician__c WHERE UH__Active__c=true`);
   }
 
   getTechnicianById(oauthCreds, id){

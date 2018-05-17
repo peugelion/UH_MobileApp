@@ -11,7 +11,6 @@ import { TechniciansPage } from '../pages/technicians/technicians';
 import { SingleTechnicianPage } from '../pages/single-technician/single-technician';
 import { TechniciansServiceProvider } from '../providers/technicians-service/technicians-service';
 import { OAuthServiceProvider } from '../providers/o-auth-service/o-auth-service';
-import { Refresher } from './refresher.directive';
 
 
 
@@ -22,7 +21,6 @@ import { Refresher } from './refresher.directive';
     ListPage,
     TechniciansPage,
     SingleTechnicianPage,
-    Refresher
   ],
   imports: [
     BrowserModule,

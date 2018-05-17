@@ -29,25 +29,47 @@ export class TechniciansPage {
     this.loadTechnicians();
   }
 
-  loadTechnicians() {
-    this.oauth.getOAuthCredentials().
-      then(oauth => {
-        this.techService.loadTechnicians(oauth)
-          .then(results => {
-            console.log(results);
-            this.technicians = results.records;
-          });
-      });
-  }
-
-  // loadTechnician(id): void {
-  //   this.navCtrl.push(SingleTechnicianPage, id);
+  // loadTechnicians() {
+  //   this.oauth.getOAuthCredentials().
+  //     then(oauth => {
+  //       this.techService.loadTechnicians(oauth)
+  //         .then(results => {
+  //           console.log(results);
+  //           this.technicians = results.records;
+  //         });
+  //     });
   // }
+  loadTechnicians(){
+    return new Promise((resolve, reject) => {
+      this.oauth.getOAuthCredentials().
+        then(oauth => {
+          this.techService.loadTechnicians(oauth)
+            .then(results => {
+              console.log(results);
+              this.technicians = results.records;
+              resolve(this.technicians);
+            });
+        });
+    });
+  }
 
   loadTechnician(id) {
     console.log(" xxx id : " +id);
     this.navCtrl.push(SingleTechnicianPage, {
       Id: id
     });
+  }
+
+  
+  
+  // https://blog.ionicframework.com/pull-to-refresh-directive/
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+    this.loadTechnicians().
+      then(r => {
+        console.log(" resolve ", r);
+        refresher.complete();
+        console.log(" refresher.complete ");
+      })
   }
 }

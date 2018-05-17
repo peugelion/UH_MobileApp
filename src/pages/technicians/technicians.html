@@ -14,6 +14,9 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list>
     <ion-item *ngFor="let technician of technicians" id={{technician.Id}} (click)="loadTechnician(technician.Id)">
       {{ technician.Name }}
