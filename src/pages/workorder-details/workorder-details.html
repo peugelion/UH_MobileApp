@@ -20,11 +20,6 @@
 
 <ion-content padding>
   <div [ngSwitch]="tab">
-    <ion-list *ngSwitchCase="'related'">
-      <ion-item>
-        <h2>Luna</h2>
-      </ion-item>
-    </ion-list>
     <ion-list *ngSwitchCase="'details'">
       <ion-item>
         <h3>Workorder Name</h3>
@@ -66,6 +61,49 @@
         <h3>Closed on</h3>
         <p>{{currWO?.UH__ClosedOn__c}}</p>
       </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'related'" class="accordion-list">
+      <!-- First Level -->
+      <ion-list-header *ngFor="let item of relatedData; let i = index;" no-lines no-padding>
+        <!-- Toggle Button -->
+        <button ion-item (click)="toggleSection(i)" detail-none [ngClass]="{'section-active': item.open, 'section': !item.open}">
+          <ion-icon item-left name="arrow-forward" *ngIf="!item.open"></ion-icon>
+          <ion-icon item-left name="arrow-down" *ngIf="item.open"></ion-icon>
+            {{ item.name }} ({{item.size}})
+        </button>
+        <ion-list *ngIf="item.elements && item.open">
+          <!-- <button ion-button outline item-end (click)="buyItem(child)">{{ child.price }}</button> -->
+          <ion-item *ngFor="let element of item.elements" ion-item detail-none class="element-item">
+            <ion-grid>
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Name:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.relatedName }}</div></ion-col>
+              </ion-row>              
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Type:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.type }}</div></ion-col>
+              </ion-row>
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Cost:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.cost }}</div></ion-col>
+              </ion-row>              
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Quantity:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.quantity }}</div></ion-col>
+              </ion-row>
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Total cost:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.totalCost }}</div></ion-col>
+              </ion-row>              
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Created date:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.createdDate }}</div></ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-list-header>
     </ion-list>
   </div>
 </ion-content>
