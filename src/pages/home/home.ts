@@ -44,7 +44,7 @@ export class HomePage {
     let service = DataService.createInstance(oauth, {useProxy:false});
     service.query(
       `SELECT id, name, uh__status__c, uh__servicePlace__r.Name, uh__productInPlace__r.Name, uh__description__c, UH__Deadline__c
-      FROM uh__workOrder__c limit 5`)
+      FROM uh__workOrder__c WHERE UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK`)
       .then(response => {
         this.workOrders = response.records.map(wo => {
           let obj = {};

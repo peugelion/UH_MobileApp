@@ -4,13 +4,6 @@ import { TechniciansServiceProvider } from '../../providers/technicians-service/
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { SingleTechnicianPage } from '../single-technician/single-technician';
 
-/**
- * Generated class for the TechniciansPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-technicians',
