@@ -60,9 +60,9 @@ export class TechniciansPage {
     console.log('Begin async operation', refresher);
     this.loadTechnicians().
       then(r => {
-        console.log(" resolve ", r);
+        console.log(" refresher resolve : ", r);
         refresher.complete();
-        console.log(" refresher.complete ");
+        console.log(" refresher.complete ! ");
       })
   }
 }

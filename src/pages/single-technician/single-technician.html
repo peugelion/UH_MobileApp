@@ -16,8 +16,8 @@
         <ion-title>{{ technician?.Name }}</ion-title>
       </ion-navbar>
 
-      <ion-toolbar>
-        <ion-segment [(ngModel)]="toptabs" color="secondary">
+      <!-- <ion-toolbar> -->
+        <ion-segment [(ngModel)]="toptabs">
           <ion-segment-button value="details">
             Details
           </ion-segment-button>
@@ -25,7 +25,7 @@
             Related
           </ion-segment-button>
         </ion-segment>
-      </ion-toolbar>
+      <!-- </ion-toolbar> -->
 
     </ion-header>
 
@@ -39,14 +39,16 @@
 
           <ion-list id={{technician?.Id}}>
               <ion-item>
-                <ion-label>Id: {{ technician?.Id }}</ion-label>
-              </ion-item>
-              <ion-item>
                 <ion-label>User: {{ technician?.UH__User__c }}</ion-label>
               </ion-item>
               <ion-item>
                 <ion-label>Username: {{ technician?.UH__username__c }}</ion-label>
               </ion-item>
+              <ion-item>
+                <ion-label>Default Department:</ion-label>
+                <ion-label>{{ technician?.UH__defaultDepartment__r.Name }}</ion-label>
+              </ion-item>
+              
           </ion-list>
 
         </ion-list>

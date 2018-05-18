@@ -29,34 +29,38 @@ export class HomePage {
       });
   }
   
-  // https://blog.ionicframework.com/pull-to-refresh-directive/
-  doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      refresher.complete();
-    }, 2000);
-  }
-  
 
   loadWOs(oauth) {
-    let service = DataService.createInstance(oauth, {useProxy:false});
-    service.query(
-      `SELECT id, name, uh__status__c, uh__servicePlace__r.Name, uh__productInPlace__r.Name, uh__description__c, UH__Deadline__c
-      FROM uh__workOrder__c WHERE UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK`)
-      .then(response => {
-        this.workOrders = response.records.map(wo => {
-          let obj = {};
-          obj["workorderName"] = wo.Name;
-          obj["status"] = wo.UH__Status__c;
-          obj["servicePlace"] = (wo.UH__ServicePlace__r) ? wo.UH__ServicePlace__r.Name : "";
-          obj["productInPlace"] = (wo.UH__productInPlace__r) ? wo.UH__productInPlace__r.Name : "";
-          obj["description"] = wo.UH__Description__c;
-          obj["deadline"] = (wo.UH__Deadline__c) ? new Date(wo.UH__Deadline__c).toDateString() : "";
-          return obj;
+    //return new Promise((resolve, reject) => {
+      let service = DataService.createInstance(oauth, {useProxy:false});
+      service.query(
+        `SELECT id, name, uh__status__c, uh__servicePlace__r.Name, uh__productInPlace__r.Name, uh__description__c, UH__Deadline__c
+        FROM uh__workOrder__c WHERE UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK`)
+        .then(response => {
+          this.workOrders = response.records.map(wo => {
+            let obj = {};
+            obj["workorderName"] = wo.Name;
+            obj["status"] = wo.UH__Status__c;
+            obj["servicePlace"] = (wo.UH__ServicePlace__r) ? wo.UH__ServicePlace__r.Name : "";
+            obj["productInPlace"] = (wo.UH__productInPlace__r) ? wo.UH__productInPlace__r.Name : "";
+            obj["description"] = wo.UH__Description__c;
+            obj["deadline"] = (wo.UH__Deadline__c) ? new Date(wo.UH__Deadline__c).toDateString() : "";
+            //resolve(this.workOrders);
+            return obj;
+          });
         });
-      });
+    //});
+  }
+  
+  // https://blog.ionicframework.com/pull-to-refresh-directive/
+  doRefresh(refresher, oauth) {
+    console.log('Begin async operation', refresher);
+    //this.loadWOs(oauth).
+      //then(r => {
+        //console.log(" refresher resolve : ", r);
+        refresher.complete();
+        console.log(" refresher.complete! ");
+      //})
   }
 
   loadLtngApp(accessToken) {

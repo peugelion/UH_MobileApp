@@ -28,6 +28,7 @@ export class SingleTechnicianPage {
     Active: boolean,
     UH__User__c: any,
     UH__username__c: any
+    UH__defaultDepartment__r: any
   };
 
   //@Input dataObject;
@@ -49,7 +50,7 @@ export class SingleTechnicianPage {
               console.log("results", results);
               this.technician = results.records[0];
               resolve(this.technician);
-              console.log("this.technician id: ", this.Id, "this.technician obj : ", this.technician,);
+              console.log("this.technician id: ", this.Id, "this.technician obj : ", this.technician);
             });
         });
     });
@@ -60,9 +61,9 @@ export class SingleTechnicianPage {
     console.log('Begin async operation', refresher);
     this.loadTechnician().
       then(r => {
-        console.log(" resolve ", r);
+        console.log(" refresher resolve : ", r);
         refresher.complete();
-        console.log(" refresher.complete ");
+        console.log(" refresher.complete! ");
       })
 
     // setTimeout(() => {
