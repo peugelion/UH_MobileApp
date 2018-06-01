@@ -26,6 +26,7 @@ export class WorkorderDetailsPage {
       .then(oauth => {
         this.woService.getWODetails(oauth, woID)
           .then(result => {
+            console.log("r :", result);
             this.currWO = result.currWO;
 
             // so ugly because I wanted to use existing functions to get required data

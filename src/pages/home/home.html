@@ -22,7 +22,9 @@
   </ion-card>
   <ion-card #mapComponent>
     <ion-card-content>
-      <div id="mapComponent"></div>
+      <!-- <div id="mapComponent"></div> -->
+      <ion-content ng-controller="MapController" id="mapComponent">
+      </ion-content>
     </ion-card-content>
   </ion-card>
   <ion-card>
@@ -32,7 +34,7 @@
     <ion-card-content>
       <ion-list>
         <ion-item-sliding *ngFor="let WO of workOrders">
-          <ion-item>
+          <ion-item  (click)="gotoWO(WO?.Id)">
             <ion-grid>
               <ion-row>
                 <ion-col col-12><div>{{WO?.workorderName}}</div></ion-col>

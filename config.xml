@@ -2,7 +2,7 @@
 <widget id="com.urbanhawks" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>UHMobileApp</name>
     <description>Urban Hawks Salesforce Mobile SDK app that integrates with the Ionic Framework.</description>
-    <author email="jovica.jovanovic@europos.co.rs" href="http://europos.co.rs">Europos Dev Team</author>
+    <author email="jovica.jovanovic@europos.co.rs" href="https://www.europos.co.rs/">Europos Dev Team</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -76,11 +76,14 @@
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
-    <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^1.2.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="com.salesforce" spec="https://github.com/forcedotcom/SalesforceMobileSDK-CordovaPlugin.git#v6.1.0" />
-    <engine name="android" spec="~7.0.0" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
+    <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
+    </plugin>
+    <engine name="android" spec="7.0.0" />
 </widget>
