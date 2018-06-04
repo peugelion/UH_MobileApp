@@ -3,6 +3,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
 
+
+import { DataService } from 'forcejs';
+
 @IonicPage()
 @Component({
   selector: 'page-workorder-details',
@@ -70,6 +73,8 @@ export class WorkorderDetailsPage {
             this.relatedData.push({"name": "WO Parts", "elements": woParts, "size": woParts.length});
             this.relatedData.push({"name": "WO Expenses", "elements": woExpenses, "size": woExpenses.length});
             this.relatedData.push({"name": "WO Labors", "elements": woLabors, "size": woLabors.length});
+
+            console.log("currWO === ", this.currWO);
           });
       });
   }
@@ -80,5 +85,19 @@ export class WorkorderDetailsPage {
       if (idx !== i && elem.open) elem.open = !elem.open; 
     });
     this.relatedData[i].open = !this.relatedData[i].open;
+  }
+
+  gotoRecord(page, url) {
+    console.log("url === ", url);
+    console.log("page === ", page);
+    this.oauth.getOAuthCredentials()
+      .then(oauth => {
+        let service = DataService.createInstance(oauth, {useProxy:false});
+        //let urlMapping: string = `/services/apexrest/UH/woResourceCtrl/${woID}`;
+        return service.apexrest(url);
+      })
+      .then(result => {
+        console.log('result of gotoRecord == ', result);
+      });
   }
 }
