@@ -5,6 +5,7 @@ import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-serv
 
 import { ActionSheetController } from 'ionic-angular'
 
+
 declare var $Lightning:any;
 declare var $A:any;
 
@@ -31,37 +32,43 @@ export class HomePage {
   
 
   loadWOs(oauth) {
-    //return new Promise((resolve, reject) => {
-      let service = DataService.createInstance(oauth, {useProxy:false});
-      service.query(
-        `SELECT id, name, uh__status__c, uh__servicePlace__r.Name, uh__productInPlace__r.Name, uh__description__c, UH__Deadline__c
-        FROM uh__workOrder__c WHERE UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK`)
-        .then(response => {
-          this.workOrders = response.records.map(wo => {
-            let obj = {};
-            obj["workorderName"] = wo.Name;
-            obj["status"] = wo.UH__Status__c;
-            obj["servicePlace"] = (wo.UH__ServicePlace__r) ? wo.UH__ServicePlace__r.Name : "";
-            obj["productInPlace"] = (wo.UH__productInPlace__r) ? wo.UH__productInPlace__r.Name : "";
-            obj["description"] = wo.UH__Description__c;
-            obj["deadline"] = (wo.UH__Deadline__c) ? new Date(wo.UH__Deadline__c).toDateString() : "";
-            //resolve(this.workOrders);
-            return obj;
-          });
-        });
-    //});
+    return new Promise((resolve, reject) => {
+      this.oauth.getOAuthCredentials().
+        then(oauth => {
+          let service = DataService.createInstance(oauth, {useProxy:false});
+          return service.query(
+            `SELECT id, name, uh__status__c, uh__servicePlace__r.Name, uh__productInPlace__r.Name, uh__description__c, UH__Deadline__c
+            FROM uh__workOrder__c
+            WHERE UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK`)
+              .then(r => {
+                this.workOrders = r.records.map(wo => {
+                  let obj = {};
+                  obj["Id"] = wo.Id;
+                  obj["workorderName"] = wo.Name;
+                  obj["status"] = wo.UH__Status__c;
+                  obj["servicePlace"] = (wo.UH__ServicePlace__r) ? wo.UH__ServicePlace__r.Name : "";
+                  obj["productInPlace"] = (wo.UH__productInPlace__r) ? wo.UH__productInPlace__r.Name : "";
+                  obj["description"] = wo.UH__Description__c;
+                  obj["deadline"] = (wo.UH__Deadline__c) ? new Date(wo.UH__Deadline__c).toDateString() : "";
+                  return obj;
+                });
+                resolve(this.workOrders);
+            });
+      });
+    });
   }
   
   // https://blog.ionicframework.com/pull-to-refresh-directive/
   doRefresh(refresher, oauth) {
     console.log('Begin async operation', refresher);
-    //this.loadWOs(oauth).
-      //then(r => {
-        //console.log(" refresher resolve : ", r);
+    this.loadWOs(oauth).
+      then(r => {
+        console.log(" refresher resolve : ", r);
         refresher.complete();
         console.log(" refresher.complete! ");
-      //})
+      })
   }
+
 
   loadLtngApp(accessToken) {
     $Lightning.use(
@@ -73,6 +80,11 @@ export class HomePage {
   }
 
   createLtngCmps() {
+    if (!document.getElementById('mapComponent') || !document.getElementById('myWarehouseDiv')) {
+      console.log('  #mapComponent || #myWarehouseDiv missing, prekini ucitavanje LtngCmps za homepage');
+      return;
+    }
+
     $Lightning.createComponent(
       "c:showMyWarehouses",
       {},
@@ -142,6 +154,11 @@ export class HomePage {
 
   ionViewDidLoad() {
     this.initPage();
+  }
+
+  gotoWO(woId) {
+    console.log('woId : ', woId);
+    this.navCtrl.push('WorkorderDetailsPage', {"woId": woId});
   }
 
   // public showTechs() {

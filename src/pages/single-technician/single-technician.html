@@ -13,7 +13,7 @@
           <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
           </button>
-        <ion-title>{{ technician?.Name }}</ion-title>
+        <ion-title><ion-icon item-left name="build"></ion-icon>&nbsp; {{ technician?.Name }}</ion-title>
       </ion-navbar>
 
       <!-- <ion-toolbar> -->
@@ -39,16 +39,19 @@
 
           <ion-list id={{technician?.Id}}>
               <ion-item>
-                <ion-label>User: {{ technician?.UH__User__c }}</ion-label>
+                <!-- <ion-label>User: {{ technician?.UH__User__c }}</ion-label> -->
+                <p>User</p>
+                <h2>{{ user?.FirstName }} {{ user?.LastName }}&nbsp;</h2>
+              </ion-item>
+              <ion-item id={{department?.Id}} (click)="loadDepartmentDetails(department?.Id, department)">
+                <p>Department</p>
+                <h2>{{ department?.Name }}&nbsp;</h2>
               </ion-item>
               <ion-item>
-                <ion-label>Username: {{ technician?.UH__username__c }}</ion-label>
+                <!-- <ion-label>Username: {{ technician?.UH__username__c }}</ion-label> -->
+                <p>Username</p>
+                <h2>{{ technician?.UH__username__c }}&nbsp;</h2>
               </ion-item>
-              <ion-item>
-                <ion-label>Default Department:</ion-label>
-                <ion-label>{{ technician?.UH__defaultDepartment__r.Name }}</ion-label>
-              </ion-item>
-              
           </ion-list>
 
         </ion-list>
@@ -61,8 +64,8 @@
                 <ion-item>
                   <ion-grid>
                     <ion-row class="ellipsis">
-                        <ion-col col-5 col-lg-3 col-xl-3><div>Id:</div></ion-col>
-                        <ion-col col-7 col-lg-9 col-xl-9><div>{{ technician?.Id }}</div></ion-col>
+                        <ion-col col-5 col-lg-3 col-xl-3><div>Service teams:</div></ion-col>
+                        <ion-col col-7 col-lg-9 col-xl-9><div>  TODO </div></ion-col>
                     </ion-row>
                     </ion-grid>
                 </ion-item>

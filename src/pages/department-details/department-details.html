@@ -1,0 +1,71 @@
+<!--
+  Generated template for the DepartmentDetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title><ion-icon item-left name="construct"></ion-icon>&nbsp;{{ department?.Name }} </ion-title>
+    <!-- <ion-title>
+      <p>Department</p>
+      <h2>{{ department?.Name }}&nbsp;</h2>
+    </ion-title> -->
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+</ion-content>
+
+<ion-footer no-border>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons start>
+      <button ion-button color="save">
+        SAVE
+      </button>
+    </ion-buttons>
+
+    <ion-buttons end>
+      <button ion-button color="primary" clear icon-only>
+        <!-- <ion-icon name="text"></ion-icon> -->
+        <div>
+          <ion-icon name="text"></ion-icon>
+          <label>Text</label>
+        </div>
+      </button>
+      <button ion-button color="secondary" clear icon-only>
+        <!-- <ion-icon name="create"></ion-icon> -->
+        <div>
+          <ion-icon name="create"></ion-icon>
+          <label>Create</label>
+        </div>
+      </button>
+      <button ion-button color="danger" clear icon-only>
+        <!-- <ion-icon name='trash'></ion-icon> -->
+        <div>
+          <ion-icon name="trash"></ion-icon>
+          <label>Trash</label>
+        </div>
+      </button>
+      <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
+        <!-- <ion-icon name="flash"></ion-icon> -->
+        <div>
+            <ion-icon name="flash"></ion-icon>
+            <label>Flash</label>
+        </div>
+      </button>
+      <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
+        <!-- <ion-icon name="ios-more"></ion-icon> -->
+        <div>
+            <ion-icon name="ios-more"></ion-icon>
+            <label>More</label>
+        </div>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

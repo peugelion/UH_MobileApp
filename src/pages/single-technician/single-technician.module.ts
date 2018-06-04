@@ -9,5 +9,8 @@ import { SingleTechnicianPage } from './single-technician';
   imports: [
     IonicPageModule.forChild(SingleTechnicianPage),
   ],
+  exports: [
+    SingleTechnicianPage
+  ]
 })
 export class SingleTechnicianPageModule {}
