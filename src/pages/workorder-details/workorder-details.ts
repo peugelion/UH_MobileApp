@@ -29,7 +29,6 @@ export class WorkorderDetailsPage {
       .then(oauth => {
         this.woService.getWODetails(oauth, woID)
           .then(result => {
-            console.log("r :", result);
             this.currWO = result.currWO;
 
             // so ugly because I wanted to use existing functions to get required data
@@ -74,8 +73,6 @@ export class WorkorderDetailsPage {
             this.relatedData.push({"name": "WO Parts", "elements": woParts, "size": woParts.length});
             this.relatedData.push({"name": "WO Expenses", "elements": woExpenses, "size": woExpenses.length});
             this.relatedData.push({"name": "WO Labors", "elements": woLabors, "size": woLabors.length});
-
-            console.log("currWO === ", this.currWO);
           });
       });
   }

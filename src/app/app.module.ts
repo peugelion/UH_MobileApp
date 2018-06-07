@@ -22,6 +22,7 @@ import { ServicePlacesServiceProvider } from '../providers/service-places-servic
 
 // import { Geolocation } from '@ionic-native/geolocation';
 
+import { WorkorderInfoPage } from '../pages/workorder-info/workorder-info';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ServicePlacesServiceProvider } from '../providers/service-places-servic
     ListPage,
     TechniciansPage,
     WorkordersPage,
-    ServicePlacesPage
+    ServicePlacesPage,
+    WorkorderInfoPage
   ],
   imports: [
     BrowserModule,
