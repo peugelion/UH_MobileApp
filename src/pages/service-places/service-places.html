@@ -10,7 +10,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Service Places</ion-title>
+    <ion-title><ion-icon item-left name="construct"></ion-icon> Service Places</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -31,8 +31,8 @@
     <ion-list-header>
       {{listLabel}}
     </ion-list-header>
-    <ion-item *ngFor="let item of items; let j = index" id={{item.Id}} (click)="loadSingleItem(item.Id)">
-      {{j}}. <ion-icon item-left name="construct"></ion-icon>{{ item.Name }}
+    <ion-item [color]="odd? 'positive' : 'light'" *ngFor="let item of items; let j = index; let odd = odd" id={{item.Id}} (click)="loadSingleItem(item.Id)">
+      <!-- <ion-icon item-left name="construct"></ion-icon> --> <div>{{ item.Name }} </div>
     </ion-item>
   </ion-list>
 </ion-content>
