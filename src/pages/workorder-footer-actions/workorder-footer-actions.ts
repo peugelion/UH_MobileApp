@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
@@ -15,12 +15,17 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class WorkorderFooterActionsPage {
   @Input() woStatus: string;
+  @Output() onActionDispatch: EventEmitter<string>;
   
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.onActionDispatch = new EventEmitter();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad WorkorderFooterActionsPage');
   }
 
+  dispatchAction(actionName) {
+    this.onActionDispatch.emit(actionName);
+  }
 }

@@ -164,4 +164,4 @@
     <!-- related tab end -->
   </div>
 </ion-content>
-<workorder-footer-actions [woStatus]="currentWOStatus"></workorder-footer-actions>
+<workorder-footer-actions [woStatus]="currentWOStatus" (onActionDispatch)="executeAction($event)"></workorder-footer-actions>

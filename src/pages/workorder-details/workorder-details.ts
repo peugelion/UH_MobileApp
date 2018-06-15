@@ -116,4 +116,13 @@ export class WorkorderDetailsPage {
           });
       });
   }
+
+  executeAction(action) {
+    console.log("action == ", action);
+    this[`${action}`]();
+  }
+
+  editWO() {
+    console.log("I got inside editWO!");
+  } 
 }
