@@ -10,12 +10,16 @@ import { ServicePlacesServiceProvider } from '../../providers/service-places-ser
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+@IonicPage({
+  //name: 'sp-list'
+})
 @Component({
   selector: 'page-service-places',
   templateUrl: 'service-places.html',
 })
 export class ServicePlacesPage {
+
+  toptabs: string = "details";
 
   listLabel: string;
   items: Array<{Id: string, Name: any}>;
@@ -55,8 +59,9 @@ export class ServicePlacesPage {
       });
   }
 
-  gotoWO(woId) {
-    this.navCtrl.push('spDetailsPage', {"woId": woId});
+  gotoSP(spId) {
+    //console.log("sp id : ", spId);
+    this.navCtrl.push('ServicePlaceDetailsPage', {"spId": spId});
   }
 
   doRefresh(refresher) {

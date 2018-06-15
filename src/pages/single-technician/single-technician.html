@@ -29,7 +29,7 @@
 
     </ion-header>
 
-    <ion-content padding>
+    <ion-content padding-vertical>
       <ion-refresher (ionRefresh)="doRefresh($event)">
           <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
@@ -45,7 +45,7 @@
               </ion-item>
               <ion-item id={{department?.Id}} (click)="loadDepartmentDetails(department?.Id, department)">
                 <p>Department</p>
-                <h2>{{ department?.Name }}&nbsp;</h2>
+                <h2><a>{{ department?.Name }}</a>&nbsp;</h2>
               </ion-item>
               <ion-item>
                 <!-- <ion-label>Username: {{ technician?.UH__username__c }}</ion-label> -->

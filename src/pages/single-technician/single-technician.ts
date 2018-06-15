@@ -60,6 +60,7 @@ export class SingleTechnicianPage {
           let techPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, '');
           let defDeptPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__defaultDepartment__r');
           let userPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__User__r');
+          console.log("techPromise:, ", techPromise);
 
           Promise.all([techPromise, userPromise, defDeptPromise])
             .then((arrayOfResults) => {
@@ -77,7 +78,7 @@ export class SingleTechnicianPage {
                 });
 
               
-              resolve(arrayOfResults);
+              resolve(arrayOfResults); // !!!
           });
           //resolve(userPromise);
 

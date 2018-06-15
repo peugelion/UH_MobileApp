@@ -76,7 +76,7 @@ export class TechniciansPage {
   //   });
   // }
 
-  loadSingleTechnician(id) {
+  gotoSingleTechnician(id) {
     //this.navCtrl.push(SingleTechnicianPage, {Id: id});
     //this.navCtrl.push('SingleTechnicianPage', {Id: id})
     this.navCtrl.push('SingleTechnicianPage', {"techId": id});

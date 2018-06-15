@@ -1,0 +1,200 @@
+<!--
+  Generated template for the spDetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+
+  <ion-navbar>
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    <ion-title><ion-icon item-left name="construct"></ion-icon>&nbsp; {{ name }}</ion-title>
+  </ion-navbar>
+
+  <!-- <ion-toolbar> -->
+    <!-- <ion-segment [(ngModel)]="toptabs" (ionChange)="onSegmentChanged($event)"> -->
+    <ion-segment [(ngModel)]="toptabs" (ionChange)="onSegmentChanged(toptabs)">
+    <!-- <ion-segment [(ngModel)]="toptabs"> -->
+      <ion-segment-button value="details">
+        Details
+      </ion-segment-button>
+      <ion-segment-button value="related">
+        Related
+      </ion-segment-button>
+    </ion-segment>
+  <!-- </ion-toolbar> -->
+
+</ion-header>
+
+
+<ion-content padding-vertical>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div [ngSwitch]="toptabs" color="primary">
+    <ion-list *ngSwitchCase="'details'">
+
+
+      <!-- UH__Address__c:"Dragoslava Srejovica 66"
+UH__City__c:"a011500000Rj9xpAAB"
+UH__Contact__c:"003150000259kkrAAA"
+UH__Phone__c:"123-222-123"
+UH__pmPlan__c:null
+UH__position__Latitude__s:44.8065045
+UH__position__Longitude__s:20.4960216
+UH__position__c:{latitude: 44.8065045, longitude: 20.4960216}
+UH__postalCode__c:"11060" -->
+
+
+      <ion-list id={{sp?.Id}}>
+          <ion-item *ngIf="contact != null;else elsetag" id={{contact?.Id}} (click)="goToContact(contact?.Id)">
+            <p>Contact</p>
+            <h2><a>{{ contact?.FirstName}}&nbsp;{{ contact?.LastName}}</a></h2>
+          </ion-item>
+          <ng-template #elsetag>
+            <ion-item>
+              <p>Contact</p>
+              <h2>&nbsp;</h2>
+            </ion-item>
+          </ng-template>
+
+          <ion-item>
+            <p>Phone</p>
+            <h2><a href="tel:{{ tel }}">{{ tel }}</a>&nbsp;</h2>
+          </ion-item>
+          <ion-item>
+            <p>Address</p>
+            <!-- <h2><a target="_blank" href="https://maps.google.com/?ll={{ sp?.UH__position__Latitude__s }},{{ sp?.UH__position__Longitude__s }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
+            <!-- <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&query={{ sp?.UH__position__Latitude__s }},{{ sp?.UH__position__Longitude__s }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
+            <!-- <h2><a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ sp?.UH__Address__c }} {{ city?.Name }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
+            <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ name }}">{{ addr }}</a>&nbsp;</h2>
+          </ion-item>
+          <ion-item>
+            <p>City</p>
+            <h2>{{ name }}&nbsp;</h2>
+          </ion-item>
+          <ion-item>
+            <div id="map_sp"></div>
+          </ion-item>
+      </ion-list>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'related'">
+
+      <ion-card-content>
+        <ion-list>
+          <ion-item-sliding>
+            <ion-item>
+              <ion-grid>
+                <ion-row class="ellipsis">
+                    <ion-col col-5 col-lg-3 col-xl-3><div>SP related:</div></ion-col>
+                    <ion-col col-7 col-lg-9 col-xl-9><div>  TODO </div></ion-col>
+                </ion-row>
+                </ion-grid>
+            </ion-item>
+          </ion-item-sliding>
+        </ion-list>
+      </ion-card-content>
+
+    </ion-list>
+
+  </div>
+</ion-content>
+
+<!-- <ion-footer>
+    <ion-row>
+        <ion-col no-padding>
+            <button no-margin ion-button full large color="primary">Update</button>
+        </ion-col>
+        <ion-col no-padding>
+            <button no-margin ion-button full large color="danger">Cancel</button>
+        </ion-col>
+        <ion-col no-padding>
+            <button no-margin ion-button full large color="danger">Cancel</button>
+        </ion-col>
+    </ion-row>
+</ion-footer> -->
+
+
+<!-- <ion-footer>
+    <div class="btn-wrapper">
+      <button ion-button float-start>Button1</button>
+      <button ion-button>Button2</button>
+      <button ion-button float-end>Button3</button>
+    </div>
+  </ion-footer> -->
+
+
+<ion-footer no-border text-center>
+    <ion-toolbar>
+      <!-- <ion-buttons start>
+        <button ion-button color="save">
+          SAVE
+        </button>
+      </ion-buttons> -->
+  
+      <!-- <ion-buttons end> -->
+      <ion-row>
+        <ion-col no-padding>
+          <button ion-button color="primary" clear icon-only>
+            <div>
+              <ion-icon name="hammer"></ion-icon>
+              <label>Create Work Order</label>
+            </div>
+          </button>
+        </ion-col>
+
+        <!-- <ion-col no-padding>
+          <button ion-button color="primary" clear icon-only>
+            <div>
+              <ion-icon name="text"></ion-icon>
+              <label>Create Work Order</label>
+            </div>
+          </button>
+        </ion-col> -->
+
+        <ion-col no-padding>
+          <!-- <button ion-button color="secondary" clear icon-only>
+            <div>
+              <ion-icon name="create"></ion-icon>
+              <label>Create</label>
+            </div>
+          </button> -->
+        </ion-col>
+
+        <ion-col no-padding>
+          <!-- <button ion-button color="danger" clear icon-only>
+            <div>
+              <ion-icon name="trash"></ion-icon>
+              <label>Trash</label>
+            </div>
+          </button> -->
+        </ion-col>
+
+        <ion-col no-padding>
+          <!-- <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
+            <div>
+                <ion-icon name="flash"></ion-icon>
+                <label>Flash</label>
+            </div>
+          </button> -->
+        </ion-col>
+
+        <ion-col no-padding>
+          <!-- <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
+            <div>
+                <ion-icon name="ios-more"></ion-icon>
+                <label>More</label>
+            </div>
+          </button> -->
+        </ion-col>
+      </ion-row>
+
+      <!-- </ion-buttons> -->
+    </ion-toolbar>
+  </ion-footer>

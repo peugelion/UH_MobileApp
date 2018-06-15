@@ -20,6 +20,8 @@ import { OAuthServiceProvider } from '../providers/o-auth-service/o-auth-service
 import { WorkordersServiceProvider } from '../providers/workorders-service/workorders-service';
 import { ServicePlacesServiceProvider } from '../providers/service-places-service/service-places-service';
 
+import { HttpClientModule } from  '@angular/common/http';
+
 // import { Geolocation } from '@ionic-native/geolocation';
 
 
@@ -34,6 +36,7 @@ import { ServicePlacesServiceProvider } from '../providers/service-places-servic
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     WorkorderDetailsPageModule
   ],
