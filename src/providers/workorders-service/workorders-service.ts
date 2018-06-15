@@ -25,4 +25,17 @@ export class WorkordersServiceProvider {
     let urlMapping: string = `/services/apexrest/UH/woResourceCtrl/${woID}`;
     return service.apexrest(urlMapping);
   }
+
+  changeWOStatus(oauthCreds, woID, status) {
+    let service = DataService.createInstance(oauthCreds, {useProxy:false});
+    let reqObject = {
+      path: '/services/apexrest/UH/woResourceCtrl/',
+      method: 'POST',
+      data: {
+        woId: woID,
+        woStatus: status
+      }
+    };
+    return service.request(reqObject);
+  }
 }
