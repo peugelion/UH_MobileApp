@@ -26,13 +26,12 @@ export class WorkordersPage {
       then(oauth => {
         this.woService.loadWOs(oauth)
           .then(results => {
-            console.log(results);
             this.workorders = results.records;
           });
       });
   }
 
-  showListWOs(listName) {
+  showListWOs(listName: string) : void {
     let selectCond: string = '';
     switch(listName) {
       case 'Recently assigned WOs': 
@@ -54,7 +53,6 @@ export class WorkordersPage {
         loading.present();
         this.woService.showListWOs(oauth, selectCond)
           .then(results => {
-            console.log(results);
             this.workorders = results.records;
             this.listLabel = listName;
             loading.dismiss();

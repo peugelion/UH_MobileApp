@@ -1,32 +1,23 @@
 page-home {
-    .ellipsis{
-        div{
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 1.4rem;
-        }
-    }
-
-    ion-item-options {
-        background-color: rgb(236, 235, 234);
-    }
+  ion-item-options {
+    background-color: rgb(236, 235, 234);
+  }
     
-    .action-sheets-basic-page {
-        .ion-md-share ion-icon {
-          color: #ED4248;
-        }
-        .ion-md-arrow-dropright-circle {
-          color: #508AE4;
-        }
-        .ion-md-heart-outline {
-          color: #31D55F;
-        }
-        .action-sheet-cancel ion-icon,
-        .action-sheet-destructive ion-icon {
-          color: #757575;
-        }
-    }    
+  .action-sheets-basic-page {
+    .ion-md-share ion-icon {
+      color: #ED4248;
+    }
+    .ion-md-arrow-dropright-circle {
+      color: #508AE4;
+    }
+    .ion-md-heart-outline {
+      color: #31D55F;
+    }
+    .action-sheet-cancel ion-icon,
+    .action-sheet-destructive ion-icon {
+      color: #757575;
+    }
+  }    
 }
 
 
@@ -35,41 +26,41 @@ $break-small: 380px;
 $sf-rem: 1.6;           /* sf vs ionic REM correction, 1rem / .625rem = 1.6 */
 
 div#myWarehouseDiv.slds-scope {
-    font-size: 1rem * $sf-rem;
-    font-family: -apple-system, "Helvetica Neue", "Roboto", sans-serif;
+  font-size: 1rem * $sf-rem;
+  font-family: -apple-system, "Helvetica Neue", "Roboto", sans-serif;
 
-    .slds-form-element__label {
-        font-size: .875rem * $sf-rem;
-    }
+  .slds-form-element__label {
+    font-size: .875rem * $sf-rem;
+  }
 
-    .slds-text-heading_small,
-    .slds-text-heading--small {
-        font-size: 1.25rem * $sf-rem;
-    }
+  .slds-text-heading_small,
+  .slds-text-heading--small {
+    font-size: 1.25rem * $sf-rem;
+  }
 
-    td,
-    th {
-        @media screen and (max-width: $break-small) {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+  td,
+  th {
+    @media screen and (max-width: $break-small) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    // th:nth-child(2) {
-    //     text-overflow: clip;
-    // }
+  }
+  // th:nth-child(2) {
+  //     text-overflow: clip;
+  // }
 
-    td {
-        @media screen and (max-width: $break-small) {
-            max-width: 29vw;
-        }
+  td {
+    @media screen and (max-width: $break-small) {
+      max-width: 29vw;
     }
-    th {
-        @media screen and (max-width: $break-small) {
-            max-width: 7vw;
-            padding-right: 0.25rem;
-        }
+  }
+  th {
+    @media screen and (max-width: $break-small) {
+      max-width: 7vw;
+      padding-right: 0.25rem;
     }
+  }
 }
 
 #mapComponent {

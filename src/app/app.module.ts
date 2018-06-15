@@ -24,6 +24,7 @@ import { HttpClientModule } from  '@angular/common/http';
 
 // import { Geolocation } from '@ionic-native/geolocation';
 
+import { WorkorderInfoPage } from '../pages/workorder-info/workorder-info';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { HttpClientModule } from  '@angular/common/http';
     ListPage,
     TechniciansPage,
     WorkordersPage,
-    ServicePlacesPage
+    ServicePlacesPage,
+    WorkorderInfoPage
   ],
   imports: [
     BrowserModule,

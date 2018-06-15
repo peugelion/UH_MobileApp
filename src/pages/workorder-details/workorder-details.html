@@ -20,27 +20,60 @@
 
 <ion-content padding>
   <div [ngSwitch]="tab">
+    <!-- details tab -->
     <div *ngSwitchCase="'details'">
-      <ul id="breadcrumbs">
-        <li>
-          <a href="#" class="odd">Open<span class="arrow"></span></a>
-        </li>
-        <li>
-          <a href="#">Accepted<span class="arrow"></span></a>
-        </li>
-        <li>
-          <a href="#" class="odd">Travelling<span class="arrow"></span></a>
-        </li>
-        <li>
-          <a href="#">Working<span class="arrow"></span></a>
-        </li>
-        <li>
-          <a href="#" class="odd"><span class="arrow"></span>Completed</a>
-        </li>
-        <li>
-          <a href="#">Closed</a>
-        </li>
-      </ul>
+      <div class="slds-tabs_path">
+        <div class="slds-tabs_path__nav">
+          <div class="{{statusClassMap?.Open}}">
+            <a class="slds-tabs_path__link" data-woStatus="" (click)="changeWOStatus(woStatuses[0])">
+              <span class="slds-tabs_path__stage">
+                <ion-icon ios="ios-checkmark" md="md-checkmark"></ion-icon>
+              </span>
+              <span class="slds-tabs_path__title">Open</span>
+            </a>
+          </div>
+          <div class="{{statusClassMap?.Accept}}">
+            <a class="slds-tabs_path__link" data-woStatus="" (click)="changeWOStatus(woStatuses[1])">
+              <span class="slds-tabs_path__stage">
+                <ion-icon ios="ios-checkmark" md="md-checkmark"></ion-icon>
+              </span>
+              <span class="slds-tabs_path__title">Accepted</span>
+            </a>
+          </div>
+          <div class="{{statusClassMap?.Travelling}}">
+            <a class="slds-tabs_path__link" data-woStatus="" (click)="changeWOStatus(woStatuses[2])">
+              <span class="slds-tabs_path__stage">
+                <ion-icon ios="ios-checkmark" md="md-checkmark"></ion-icon>
+              </span>
+              <span class="slds-tabs_path__title">Travelling</span>
+            </a>
+          </div>
+          <div class="{{statusClassMap?.Arrived}}">
+            <a class="slds-tabs_path__link" data-woStatus="" (click)="changeWOStatus(woStatuses[3])">
+              <span class="slds-tabs_path__stage">
+                <ion-icon ios="ios-checkmark" md="md-checkmark"></ion-icon>
+              </span>
+              <span class="slds-tabs_path__title">Arrived on place</span>
+            </a>
+          </div>
+          <div class="{{statusClassMap?.Completed}}">
+            <a class="slds-tabs_path__link" data-woStatus="" (click)="changeWOStatus(woStatuses[4])">
+              <span class="slds-tabs_path__stage">
+                <ion-icon ios="ios-checkmark" md="md-checkmark"></ion-icon>
+              </span>
+              <span class="slds-tabs_path__title">Completed</span>
+            </a>
+          </div>
+          <div class="{{statusClassMap?.Closed}}">
+            <a class="slds-tabs_path__link" data-woStatus="" (click)="changeWOStatus(woStatuses[5])">
+              <span class="slds-tabs_path__stage">
+                <ion-icon ios="ios-checkmark" md="md-checkmark"></ion-icon>
+              </span>
+              <span class="slds-tabs_path__title">Closed</span>
+            </a>
+          </div>
+        </div>
+      </div>
       <ion-list>
         <ion-item>
           <h3>Workorder Name</h3>
@@ -84,6 +117,8 @@
         </ion-item>
       </ion-list>
     </div>
+    <!-- details tab end -->
+    <!-- related tab -->
     <ion-list *ngSwitchCase="'related'" class="accordion-list">
       <!-- First Level -->
       <ion-list-header *ngFor="let item of relatedData; let i = index;" no-lines no-padding>
@@ -126,5 +161,7 @@
         </ion-list>
       </ion-list-header>
     </ion-list>
+    <!-- related tab end -->
   </div>
 </ion-content>
+<workorder-footer-actions [woStatus]="currentWOStatus" (onActionDispatch)="executeAction($event)"></workorder-footer-actions>

@@ -1,0 +1,149 @@
+<ion-footer text-center>
+  <div [ngSwitch]="woStatus">
+    <ion-row *ngSwitchCase="'Open'">
+      <ion-col col-6 col-lg-6 col-xl-6>
+        <button ion-button color="primary" clear icon-only (click)="dispatchAction('assignTech')">
+          <div>
+            <ion-icon name="map"></ion-icon>
+            <label>Assign Tech from Map</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-6 col-lg-6 col-xl-6>
+        <button ion-button color="secondary" clear icon-only (click)="dispatchAction('editWO')">
+          <div>
+            <ion-icon name="create"></ion-icon>
+            <label>Edit</label>
+          </div>
+        </button>
+      </ion-col>
+    </ion-row>
+    <!-- Accept -->
+    <ion-row *ngSwitchCase="'Accept'">
+      <ion-col col-4 col-lg-4 col-xl-4>
+        <button ion-button color="primary" clear icon-only (click)="dispatchAction('rejectWO')">
+          <div>
+            <ion-icon name="close-circle"></ion-icon>
+            <label>Reject WO</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-4 col-lg-4 col-xl-4>
+        <button ion-button color="secondary" clear icon-only (click)="dispatchAction('checkInventory')">
+          <div>
+            <ion-icon name="filing"></ion-icon>
+            <label>Check Inventory</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-4 col-lg-4 col-xl-4>
+        <button ion-button color="secondary" clear icon-only (click)="dispatchAction('editWO')">
+          <div>
+            <ion-icon name="create"></ion-icon>
+            <label>Edit</label>
+          </div>
+        </button>
+      </ion-col>
+    </ion-row>
+    <!-- Travelling -->
+    <ion-row *ngSwitchCase="'Travelling'">
+      <ion-col col-4 col-lg-4 col-xl-4>
+        <button ion-button color="primary" clear icon-only (click)="dispatchAction('checkInventory')">
+          <div>
+            <ion-icon name="filing"></ion-icon>
+            <label>Check Inventory</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-4 col-lg-4 col-xl-4>
+        <button ion-button color="secondary" clear icon-only (click)="dispatchAction('addExpense')">
+          <div>
+            <ion-icon name="cash"></ion-icon>
+            <label>Add Expense</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-4 col-lg-4 col-xl-4>
+        <button ion-button color="secondary" clear icon-only (click)="dispatchAction('editWO')">
+          <div>
+            <ion-icon name="create"></ion-icon>
+            <label>Edit</label>
+          </div>
+        </button>
+      </ion-col>
+    </ion-row>
+    <!-- Arrived -->
+    <ion-row *ngSwitchCase="'Arrived on place'">
+      <ion-col col-2 col-lg-2 col-xl-2>
+        <button ion-button color="primary" clear icon-only (click)="dispatchAction('addPart')">
+          <div>
+            <ion-icon name="cog"></ion-icon>
+            <label>Add Part</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-2 col-lg-2 col-xl-2>
+        <button ion-button color="secondary" clear icon-only (click)="dispatchAction('addLabour')">
+          <div>
+            <ion-icon name="construct"></ion-icon>
+            <label>Add Labour</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-2 col-lg-2 col-xl-2>
+        <button ion-button color="primary" clear icon-only (click)="dispatchAction('addExpense')">
+          <div>
+            <ion-icon name="cash"></ion-icon>
+            <label>Add Expense</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-2 col-lg-2 col-xl-2>
+        <button ion-button color="secondary" clear icon-only (click)="dispatchAction('checkInventory')">
+          <div>
+            <ion-icon name="filing"></ion-icon>
+            <label>Check Inventory</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-2 col-lg-2 col-xl-2>
+        <button ion-button color="primary" clear icon-only (click)="dispatchAction('woReport')">
+          <div>
+            <ion-icon name="pie"></ion-icon>
+            <label>WO report</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-2 col-lg-2 col-xl-2>
+        <button ion-button color="secondary" clear icon-only (click)="dispatchAction('printInvoice')">
+          <div>
+            <ion-icon name="print"></ion-icon>
+            <label>Print invoice</label>
+          </div>
+        </button>
+      </ion-col>
+    </ion-row>
+    <!-- completed -->
+    <ion-row *ngSwitchCase="'Completed'">
+      <ion-col col-6 col-lg-6 col-xl-6>
+        <button ion-button color="primary" clear icon-only (click)="dispatchAction('updateInvoice')">
+          <div>
+            <ion-icon name="paper"></ion-icon>
+            <label>Update Invoice Info</label>
+          </div>
+        </button>
+      </ion-col>
+      <ion-col col-6 col-lg-6 col-xl-6>
+        <button ion-button color="secondary" clear icon-only (click)="dispatchAction('editWO')">
+          <div>
+            <ion-icon name="create"></ion-icon>
+            <label>Edit</label>
+          </div>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngSwitchDefault>
+      <ion-col col-12 col-lg-12 col-xl-12>&nbsp;</ion-col>
+    </ion-row>
+  </div>
+</ion-footer>

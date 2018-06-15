@@ -2,9 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, Platform } from 'ionic-angular';
 import { DataService } from 'forcejs';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
+import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
 
 import { ActionSheetController } from 'ionic-angular'
-
 
 declare var $Lightning:any;
 declare var $A:any;
@@ -20,55 +20,32 @@ export class HomePage {
   workOrders : any;
   oauthCreds : any; 
 
-  constructor(public navCtrl: NavController, private oauth : OAuthServiceProvider, public actionSheetCtrl: ActionSheetController, public platform: Platform) {}
+  constructor(private woService: WorkordersServiceProvider, public navCtrl: NavController, private oauth : OAuthServiceProvider, public actionSheetCtrl: ActionSheetController, public platform: Platform) {}
 
   initPage(){
     this.oauth.getOAuthCredentials().
       then((oauth) => {
-        this.loadWOs(oauth);
+        this.showListWOs(oauth);
         this.loadLtngApp(oauth.accessToken);
       });
   }
-  
 
-  loadWOs(oauth) {
-    return new Promise((resolve, reject) => {
-      this.oauth.getOAuthCredentials().
-        then(oauth => {
-          let service = DataService.createInstance(oauth, {useProxy:false});
-          return service.query(
-            `SELECT id, name, uh__status__c, uh__servicePlace__r.Name, uh__productInPlace__r.Name, uh__description__c, UH__Deadline__c
-            FROM uh__workOrder__c
-            WHERE UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK`)
-              .then(r => {
-                this.workOrders = r.records.map(wo => {
-                  let obj = {};
-                  obj["Id"] = wo.Id;
-                  obj["workorderName"] = wo.Name;
-                  obj["status"] = wo.UH__Status__c;
-                  obj["servicePlace"] = (wo.UH__ServicePlace__r) ? wo.UH__ServicePlace__r.Name : "";
-                  obj["productInPlace"] = (wo.UH__productInPlace__r) ? wo.UH__productInPlace__r.Name : "";
-                  obj["description"] = wo.UH__Description__c;
-                  obj["deadline"] = (wo.UH__Deadline__c) ? new Date(wo.UH__Deadline__c).toDateString() : "";
-                  return obj;
-                });
-                resolve(this.workOrders);
-            });
+  showListWOs(oauth) {
+    let selectCond = 'WHERE UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK';
+    this.woService.showListWOs(oauth, selectCond)
+      .then(results => {
+        this.workOrders = results.records;
       });
-    });
   }
   
   // https://blog.ionicframework.com/pull-to-refresh-directive/
-  doRefresh(refresher, oauth) {
-    console.log('Begin async operation', refresher);
-    this.loadWOs(oauth).
-      then(r => {
-        console.log(" refresher resolve : ", r);
+  doRefresh(refresher) {
+    this.oauth.getOAuthCredentials().
+      then((oauth) => {
+        this.showListWOs(oauth);
         refresher.complete();
-        console.log(" refresher.complete! ");
-      })
+      });
   }
-
 
   loadLtngApp(accessToken) {
     $Lightning.use(
@@ -157,11 +134,6 @@ export class HomePage {
   }
 
   gotoWO(woId) {
-    console.log('woId : ', woId);
     this.navCtrl.push('WorkorderDetailsPage', {"woId": woId});
   }
-
-  // public showTechs() {
-  //   this.navCtrl.push('TechniciansPage');
-  // }
 }
