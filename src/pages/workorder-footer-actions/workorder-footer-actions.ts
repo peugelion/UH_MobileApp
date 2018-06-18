@@ -16,6 +16,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class WorkorderFooterActionsPage {
   @Input() woStatus: string;
   @Output() onActionDispatch: EventEmitter<string>;
+
+  // button colors
+  addExpanseColor: string = '#37474F';
   
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.onActionDispatch = new EventEmitter();
