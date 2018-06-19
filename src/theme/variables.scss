@@ -38,7 +38,20 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  
+  twitter: (
+    base: #55acee,  // Base acts as the background color and contrast acts as the text color for most components
+    contrast: #fff  // https://ionicframework.com/docs/theming/theming-your-app/
+  ),
+  stable: #eee,
+  positive: #387ef5,
+  calm: #11c1f3,
+  balanced: #33cd5f,
+  energized: #ffc900,
+  assertive: #ef473a,
+  royal: #886aea,
+
 );
 
 

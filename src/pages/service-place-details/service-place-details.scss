@@ -3,6 +3,11 @@ page-service-place-details {
         display:block;
         font-size: 1.1rem;
     }
+    button {
+        a {
+            text-decoration: none;
+        }
+    }
     ion-app.md [padding-vertical] {
         padding: 16px 0;
     }

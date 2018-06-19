@@ -38,18 +38,6 @@
   <div [ngSwitch]="toptabs" color="primary">
     <ion-list *ngSwitchCase="'details'">
 
-
-      <!-- UH__Address__c:"Dragoslava Srejovica 66"
-UH__City__c:"a011500000Rj9xpAAB"
-UH__Contact__c:"003150000259kkrAAA"
-UH__Phone__c:"123-222-123"
-UH__pmPlan__c:null
-UH__position__Latitude__s:44.8065045
-UH__position__Longitude__s:20.4960216
-UH__position__c:{latitude: 44.8065045, longitude: 20.4960216}
-UH__postalCode__c:"11060" -->
-
-
       <ion-list id={{sp?.Id}}>
           <ion-item *ngIf="contact != null;else elsetag" id={{contact?.Id}} (click)="goToContact(contact?.Id)">
             <p>Contact</p>
@@ -71,7 +59,7 @@ UH__postalCode__c:"11060" -->
             <!-- <h2><a target="_blank" href="https://maps.google.com/?ll={{ sp?.UH__position__Latitude__s }},{{ sp?.UH__position__Longitude__s }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
             <!-- <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&query={{ sp?.UH__position__Latitude__s }},{{ sp?.UH__position__Longitude__s }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
             <!-- <h2><a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ sp?.UH__Address__c }} {{ city?.Name }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
-            <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ name }}">{{ addr }}</a>&nbsp;</h2>
+            <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ name }}">{{ addr }}  <ion-icon [name]="addr ? 'flag':''"></ion-icon></a>&nbsp;</h2>
           </ion-item>
           <ion-item>
             <p>City</p>
@@ -83,51 +71,39 @@ UH__postalCode__c:"11060" -->
       </ion-list>
 
     </ion-list>
+    <!-- details tab end -->
+    <!-- related tab -->
+    <ion-list *ngSwitchCase="'related'" class="accordion-list">
+      <!-- First Level -->
+      <!-- <ion-list-header *ngFor="let relatedList of [WOs, PIPs, AOs, AHs, NandAs]; let i = index;" no-lines no-padding> -->
+      <ion-item *ngFor="let relatedList of [WOs, PIPs]; let i = index;" no-lines >
+        <!-- Toggle Button -->
+        <button ion-item (click)="toggleSection(i)" detail-none [color]="(i == active) ? 'primary' : 'light'">
+        <!-- <button ion-item (click)="toggleSection(i)" detail-none [ngClass]="{'section-active': relatedList.open, 'section': !relatedList.open}"> -->
+          <ion-icon item-left name="arrow-forward" *ngIf="i != active"></ion-icon>
+          <ion-icon item-left name="arrow-down" *ngIf="i == active"></ion-icon>          
+          <!-- <div *ngFor="let list of ['Work Orders', 'Products in Place', 'Open Activities', 'Activity History', 'Notes & Attachments']; let j = index"> -->
+          <div *ngFor="let listLabel of ['Work Orders', 'Products in Place']; let j = index">
+            <div *ngIf="j == i">
+              <h2>{{ listLabel }}&nbsp;({{ relatedList?.length }})</h2>
+            </div>
+          </div>
+        </button>
+        <ion-list *ngIf="relatedList && i == active">
 
-    <ion-list *ngSwitchCase="'related'">
-
-      <ion-card-content>
-        <ion-list>
-          <ion-item-sliding>
-            <ion-item>
-              <ion-grid>
-                <ion-row class="ellipsis">
-                    <ion-col col-5 col-lg-3 col-xl-3><div>SP related:</div></ion-col>
-                    <ion-col col-7 col-lg-9 col-xl-9><div>  TODO </div></ion-col>
-                </ion-row>
-                </ion-grid>
-            </ion-item>
-          </ion-item-sliding>
+          <ion-list>
+            <button ion-item *ngFor="let item of relatedList" id={{item.Id}} (click)="gotoItemPage(item.Id)">
+              <ion-icon item-left color='primary' name="build"></ion-icon> {{ item.Name }}
+            </button>
+          </ion-list>
         </ion-list>
-      </ion-card-content>
-
+      </ion-item>
     </ion-list>
+    <!-- related tab end -->
 
   </div>
 </ion-content>
 
-<!-- <ion-footer>
-    <ion-row>
-        <ion-col no-padding>
-            <button no-margin ion-button full large color="primary">Update</button>
-        </ion-col>
-        <ion-col no-padding>
-            <button no-margin ion-button full large color="danger">Cancel</button>
-        </ion-col>
-        <ion-col no-padding>
-            <button no-margin ion-button full large color="danger">Cancel</button>
-        </ion-col>
-    </ion-row>
-</ion-footer> -->
-
-
-<!-- <ion-footer>
-    <div class="btn-wrapper">
-      <button ion-button float-start>Button1</button>
-      <button ion-button>Button2</button>
-      <button ion-button float-end>Button3</button>
-    </div>
-  </ion-footer> -->
 
 
 <ion-footer no-border text-center>
@@ -143,9 +119,18 @@ UH__postalCode__c:"11060" -->
         <ion-col no-padding>
           <button ion-button color="primary" clear icon-only>
             <div>
-              <ion-icon name="hammer"></ion-icon>
-              <label>Create Work Order</label>
+              <ion-icon name="add-circle"></ion-icon>
+              <label>Create WO</label>
             </div>
+          </button>
+        </ion-col>
+
+        <ion-col no-padding>
+          <button ion-button color="primary" clear icon-only>
+            <a href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ name }}">
+              <ion-icon name="map"></ion-icon>
+              <label>Directions</label>
+            </a>
           </button>
         </ion-col>
 

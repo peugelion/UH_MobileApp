@@ -11,6 +11,7 @@ import { ServicePlacesServiceProvider } from '../../providers/service-places-ser
  */
 
 @IonicPage({
+  segment: 'ServicePlaces/',
   //name: 'sp-list'
 })
 @Component({
@@ -22,7 +23,7 @@ export class ServicePlacesPage {
   toptabs: string = "details";
 
   listLabel: string;
-  items: Array<{Id: string, Name: any}>;
+  items: Array<{Id: string, Name: any}>; // service places
   filter: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private spService: ServicePlacesServiceProvider, private oauth : OAuthServiceProvider, private loadingCtrl: LoadingController) {
@@ -36,10 +37,8 @@ export class ServicePlacesPage {
       content: 'Loading, please wait...'
     });
     loading.present();
-    this.loadSPs(false)
-      .then(r => {
-        loading.dismiss();
-      });
+    this.loadSPs(false) // load recent SPs
+    .then(r => {loading.dismiss()});
   }
 
 
@@ -67,10 +66,9 @@ export class ServicePlacesPage {
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
     this.loadSPs(this.filter).
-      then(r => {
-        console.log(" refresher resolve : ", r);
-        refresher.complete();
-        console.log(" refresher.complete! ");
-      })
+    // then(r => {      console.log(" refresher resolve : ", r);
+    //   refresher.complete();
+    // })
+    then(refresher.complete())
   }
 }

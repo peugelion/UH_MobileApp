@@ -49,9 +49,9 @@ export class DepartmentDetailsPage {
     return new Promise((resolve, reject) => {
       this.oauth.getOAuthCredentials().
         then(oauth => {
-          //this.techService.loadTechnicians(oauth)
           let service = DataService.createInstance(oauth, {useProxy:false});
-          let departmentPromise = this.soService.getSobject(service, 'UH__Department__c', this.Id, '') //
+          //let departmentPromise = this.soService.getSobject(service, 'UH__Department__c', this.Id, '')
+          this.soService.getSobject(service, 'UH__Department__c', this.Id, '') //
             .then(results => {
               console.log(results);
               this.department = results;

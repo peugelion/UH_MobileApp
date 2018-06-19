@@ -31,7 +31,7 @@
     <ion-list-header>
       {{listLabel}}
     </ion-list-header>
-    <button ion-item [color]="odd? 'positive' : 'light'" *ngFor="let item of items; let j = index; let odd = odd" id={{item.Id}} (click)="gotoSP(item.Id)">
+    <button ion-item [color]="odd? '' : 'light'" *ngFor="let item of items; let j = index; let odd = odd" id={{item.Id}} (click)="gotoSP(item.Id)">
       <ion-icon item-left color='primary' name="construct"></ion-icon> <div>{{ item.Name }} </div>
     </button>
   </ion-list>

@@ -4,7 +4,6 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-tabs>
 
 
     <ion-header>
@@ -43,7 +42,7 @@
                 <p>User</p>
                 <h2>{{ user?.FirstName }} {{ user?.LastName }}&nbsp;</h2>
               </ion-item>
-              <ion-item id={{department?.Id}} (click)="loadDepartmentDetails(department?.Id, department)">
+              <ion-item *ngIf="department != null" (click)="loadDepartmentDetails(department?.Id, department)">
                 <p>Department</p>
                 <h2><a>{{ department?.Name }}</a>&nbsp;</h2>
               </ion-item>

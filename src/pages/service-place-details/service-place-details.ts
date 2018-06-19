@@ -44,8 +44,16 @@ export class ServicePlaceDetailsPage {
   contact: {};
   city: {};
 
+  map;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private spService: ServicePlacesServiceProvider, private oauth : OAuthServiceProvider, private soService: SobjectServiceProvider) {
+  // RELATED TAB
+  //WOs; pips; AOs; AHs; NandAs: {}
+  WOs; PIPs: {}
+  active: number = -1 // (click) WOs or PIPs: 0 or 1
+  //activeObj: {}
+
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, private soService: SobjectServiceProvider, private spService: ServicePlacesServiceProvider) {
     this.Id = this.navParams.data['spId']
   }
 
@@ -75,7 +83,7 @@ export class ServicePlaceDetailsPage {
               this.lat  = r["UH__position__Latitude__s"];
               this.lng  = r["UH__position__Longitude__s"];
 
-              this.initmap(); 
+              this.initmap();
               resolve(r);   // !!!
             });
 
@@ -99,8 +107,10 @@ export class ServicePlaceDetailsPage {
     });
   }
 
+  // BEGIN map
+
   initmap() {
-    // if no lat/lng is set, fetch from sp address
+    // fetch lat\lng from sp address, if no lat\lng is set
     if (!this.lat) {
       this.getLatLong().
         then(r => {
@@ -110,7 +120,7 @@ export class ServicePlaceDetailsPage {
           this.drawmap();       //
         })
     } else {
-      this.drawmap();       // 
+      this.drawmap();           // 
     }
   }
 
@@ -119,7 +129,7 @@ export class ServicePlaceDetailsPage {
       // this.spService.getLatLong("Bulevar umetnosti, 33, Novi Beograd").subscribe(
       this.spService.getLatLong(this.addr).subscribe(
         data => {
-          let latLng = data["results"][0]["locations"][0]["latLng"];
+          let latLng = data["results"][0]["locations"][0]["latLng"]; // 1st out of all the results
           resolve(latLng);
         },
         err => console.error(err),
@@ -130,18 +140,15 @@ export class ServicePlaceDetailsPage {
 
   drawmap() {
 
-    let map;
+    //let map = this.map;
     //let plotlist;
     //let plotlayers=[];
 
-    console.log('lat, lng', this.lat, this.lng);
-
-
-    document.getElementById('map_sp');
-    // set up the map
-    if (map) map.remove(); // tab reload fix
-    //if (this.map) this.map = null;
-    map = new L.Map('map_sp');
+    //console.log('lat, lng', this.lat, this.lng);
+    
+    // init map
+    if (this.map) this.map.remove();   // tab reload fix
+    this.map = new L.Map('map_sp');    // attach to 'map_sp' element
 
     // create the tile layer with correct attribution
     var osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -149,8 +156,8 @@ export class ServicePlaceDetailsPage {
     var osm = new L.TileLayer(osmUrl, {minZoom: 9, maxZoom: 18, attribution: osmAttrib});		
 
     //this.map.setView(new L.LatLng(51.3, 0.7),9);
-    map.setView(new L.LatLng(this.lat, this.lng), 16);
-    map.addLayer(osm);
+    this.map.setView(new L.LatLng(this.lat, this.lng), 16);
+    this.map.addLayer(osm);
 
     
     // marker - ikonica
@@ -160,31 +167,87 @@ export class ServicePlaceDetailsPage {
       .setContent(popupContent);
     
     var spIcon = L.icon({
-        // iconUrl: "/resource/1500293185000/uh__jsAndStyles/images/mapPinStar.png",
-        iconUrl: "https://unpkg.com/leaflet@1.3.1/dist/images/marker-icon.png",
-        iconSize: [25,41],
-        iconAnchor: [15,35],
-        popupAnchor: [0,-18]
+      // iconUrl: "/resource/1500293185000/uh__jsAndStyles/images/mapPinStar.png",
+      iconUrl: "https://unpkg.com/leaflet@1.3.1/dist/images/marker-icon.png",
+      iconSize: [25,41],
+      iconAnchor: [15,35],
+      popupAnchor: [0,-18]
     });
     //let spMarker = L.marker([lat, lng], {riseOnHover:true, riseOffset: 30, icon: spIcon})
     L.marker([this.lat, this.lng], {riseOnHover:true, riseOffset: 30, icon: spIcon})
-      .addTo(map)
+      .addTo(this.map)
       .bindPopup(popup);
   }
+  // END map
+
 
   onSegmentChanged(toptabs) {
     if (toptabs === 'details') {
       window.setTimeout(
         this.drawmap.bind(this), 0
       );
+    } else {
+      this.loadRelated();
     }
   }
 
   doRefresh(refresher) {
-    this.loadServicePlace().
+    let reloadPromise = (this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated();
+    reloadPromise.
       then(r => {
         refresher.complete();
-      })
+      });
+  }
+
+
+  // RELATED TAB/SEGMENT
+  
+  loadRelated() {
+    return new Promise((resolve, reject) => {
+      this.oauth.getOAuthCredentials().
+        then(oauth => {
+
+          let service = DataService.createInstance(oauth, {useProxy:false});
+
+          let wosPromise  = this.spService.getRelated(service, this.Id, 'UH__WorkOrder__c');
+          let pipsPromise = this.spService.getRelated(service, this.Id, 'UH__ProductInPlace__c');
+
+          wosPromise.
+            then(r => {
+              console.log(" wosPromise resolve : ", r);
+              this.WOs = r;
+              resolve(r);
+            });
+          pipsPromise.
+            then(r => {
+              console.log(" pipPromise resolve : ", r);
+              this.PIPs = r;
+              resolve(r);
+            });
+
+            /* Attachment pokusaj (ContentDocument) */
+
+            //this.spService.getRelated(service, '0691C000003yzzUQAQ', 'ContentDocument');
+            // let xxPromise = this.soService.getSobject(service, 'ContentDocument', '0691C000003yzzUQAQ', '');
+            // xxPromise.
+            // then(r => {
+            //   console.log(" xxPromise resolve : ", r);
+            //   resolve(r);
+            // });
+
+      });
+    });
+  }
+
+  toggleSection(i) {
+    this.active = (this.active != i) ?  i : -1; // WO (0), PiP (1), or none (-1)
+  }
+
+  gotoItemPage(itemId) {
+    if (this.active) // 1 or 0 (pip or wo)
+      this.navCtrl.push('ProductInPlaceDetailsPage', {"id": itemId});
+    else
+      this.navCtrl.push('WorkorderDetailsPage', {"woId": itemId});
   }
 
 }
