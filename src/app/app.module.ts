@@ -25,6 +25,8 @@ import { HttpClientModule } from  '@angular/common/http';
 // import { Geolocation } from '@ionic-native/geolocation';
 
 import { WorkorderInfoPage } from '../pages/workorder-info/workorder-info';
+import { ComponentsModule } from '../components/components.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { WorkorderInfoPage } from '../pages/workorder-info/workorder-info';
     BrowserModule,
     HttpClientModule,
     IonicModule.forRoot(MyApp),
-    WorkorderDetailsPageModule
+    WorkorderDetailsPageModule,
+    ComponentsModule,
+    ReactiveFormsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

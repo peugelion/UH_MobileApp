@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
 
+import { AddExpenseComponent } from '../../components/add-expense/add-expense';
 
 import { DataService } from 'forcejs';
 
@@ -17,12 +18,17 @@ export class WorkorderDetailsPage {
 
   tab: string = "details";
   currWO: any;
-  currentWOStatus: string;
+  currentWOStatus: string = 'Open';
   relatedData: Array<any> = [];
   woStatuses: Array<string> = ['Open', 'Accept', 'Travelling', 'Arrived on place', 'Completed', 'Closed'];
   statusClassMap: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, private woService: WorkordersServiceProvider) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public modalCtrl: ModalController,
+    private oauth : OAuthServiceProvider, 
+    private woService: WorkordersServiceProvider) {
   }
 
   ionViewDidLoad() {
@@ -124,5 +130,13 @@ export class WorkorderDetailsPage {
 
   editWO() {
     console.log("I got inside editWO!");
-  } 
+  }
+
+  addExpense() {
+    let expenseModal = this.modalCtrl.create(AddExpenseComponent, { userId: 8675309 });
+    expenseModal.onDidDismiss(data => {
+      console.log(data);
+    });
+    expenseModal.present();
+  }
 }
