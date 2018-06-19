@@ -1,0 +1,185 @@
+<!--
+  Generated template for the spDetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+
+  <ion-navbar>
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    <ion-title><ion-icon item-left name="construct"></ion-icon>&nbsp; {{ name }}</ion-title>
+  </ion-navbar>
+
+  <!-- <ion-toolbar> -->
+    <!-- <ion-segment [(ngModel)]="toptabs" (ionChange)="onSegmentChanged($event)"> -->
+    <ion-segment [(ngModel)]="toptabs" (ionChange)="onSegmentChanged(toptabs)">
+    <!-- <ion-segment [(ngModel)]="toptabs"> -->
+      <ion-segment-button value="details">
+        Details
+      </ion-segment-button>
+      <ion-segment-button value="related">
+        Related
+      </ion-segment-button>
+    </ion-segment>
+  <!-- </ion-toolbar> -->
+
+</ion-header>
+
+
+<ion-content padding-vertical>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div [ngSwitch]="toptabs" color="primary">
+    <ion-list *ngSwitchCase="'details'">
+
+      <ion-list id={{sp?.Id}}>
+          <ion-item *ngIf="contact != null;else elsetag" id={{contact?.Id}} (click)="goToContact(contact?.Id)">
+            <p>Contact</p>
+            <h2><a>{{ contact?.FirstName}}&nbsp;{{ contact?.LastName}}</a></h2>
+          </ion-item>
+          <ng-template #elsetag>
+            <ion-item>
+              <p>Contact</p>
+              <h2>&nbsp;</h2>
+            </ion-item>
+          </ng-template>
+
+          <ion-item>
+            <p>Phone</p>
+            <h2><a href="tel:{{ tel }}">{{ tel }}</a>&nbsp;</h2>
+          </ion-item>
+          <ion-item>
+            <p>Address</p>
+            <!-- <h2><a target="_blank" href="https://maps.google.com/?ll={{ sp?.UH__position__Latitude__s }},{{ sp?.UH__position__Longitude__s }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
+            <!-- <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&query={{ sp?.UH__position__Latitude__s }},{{ sp?.UH__position__Longitude__s }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
+            <!-- <h2><a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ sp?.UH__Address__c }} {{ city?.Name }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
+            <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ name }}">{{ addr }}  <ion-icon [name]="addr ? 'flag':''"></ion-icon></a>&nbsp;</h2>
+          </ion-item>
+          <ion-item>
+            <p>City</p>
+            <h2>{{ name }}&nbsp;</h2>
+          </ion-item>
+          <ion-item>
+            <div id="map_sp"></div>
+          </ion-item>
+      </ion-list>
+
+    </ion-list>
+    <!-- details tab end -->
+    <!-- related tab -->
+    <ion-list *ngSwitchCase="'related'" class="accordion-list">
+      <!-- First Level -->
+      <!-- <ion-list-header *ngFor="let relatedList of [WOs, PIPs, AOs, AHs, NandAs]; let i = index;" no-lines no-padding> -->
+      <ion-item *ngFor="let relatedList of [WOs, PIPs]; let i = index;" no-lines >
+        <!-- Toggle Button -->
+        <button ion-item (click)="toggleSection(i)" detail-none [color]="(i == active) ? 'primary' : 'light'">
+        <!-- <button ion-item (click)="toggleSection(i)" detail-none [ngClass]="{'section-active': relatedList.open, 'section': !relatedList.open}"> -->
+          <ion-icon item-left name="arrow-forward" *ngIf="i != active"></ion-icon>
+          <ion-icon item-left name="arrow-down" *ngIf="i == active"></ion-icon>          
+          <!-- <div *ngFor="let list of ['Work Orders', 'Products in Place', 'Open Activities', 'Activity History', 'Notes & Attachments']; let j = index"> -->
+          <div *ngFor="let listLabel of ['Work Orders', 'Products in Place']; let j = index">
+            <div *ngIf="j == i">
+              <h2>{{ listLabel }}&nbsp;({{ relatedList?.length }})</h2>
+            </div>
+          </div>
+        </button>
+        <ion-list *ngIf="relatedList && i == active">
+
+          <ion-list>
+            <button ion-item *ngFor="let item of relatedList" id={{item.Id}} (click)="gotoItemPage(item.Id)">
+              <ion-icon item-left color='primary' name="build"></ion-icon> {{ item.Name }}
+            </button>
+          </ion-list>
+        </ion-list>
+      </ion-item>
+    </ion-list>
+    <!-- related tab end -->
+
+  </div>
+</ion-content>
+
+
+
+<ion-footer no-border text-center>
+    <ion-toolbar>
+      <!-- <ion-buttons start>
+        <button ion-button color="save">
+          SAVE
+        </button>
+      </ion-buttons> -->
+  
+      <!-- <ion-buttons end> -->
+      <ion-row>
+        <ion-col no-padding>
+          <button ion-button color="primary" clear icon-only>
+            <div>
+              <ion-icon name="add-circle"></ion-icon>
+              <label>Create WO</label>
+            </div>
+          </button>
+        </ion-col>
+
+        <ion-col no-padding>
+          <button ion-button color="primary" clear icon-only>
+            <a href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ name }}">
+              <ion-icon name="map"></ion-icon>
+              <label>Directions</label>
+            </a>
+          </button>
+        </ion-col>
+
+        <!-- <ion-col no-padding>
+          <button ion-button color="primary" clear icon-only>
+            <div>
+              <ion-icon name="text"></ion-icon>
+              <label>Create Work Order</label>
+            </div>
+          </button>
+        </ion-col> -->
+
+        <ion-col no-padding>
+          <!-- <button ion-button color="secondary" clear icon-only>
+            <div>
+              <ion-icon name="create"></ion-icon>
+              <label>Create</label>
+            </div>
+          </button> -->
+        </ion-col>
+
+        <ion-col no-padding>
+          <!-- <button ion-button color="danger" clear icon-only>
+            <div>
+              <ion-icon name="trash"></ion-icon>
+              <label>Trash</label>
+            </div>
+          </button> -->
+        </ion-col>
+
+        <ion-col no-padding>
+          <!-- <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
+            <div>
+                <ion-icon name="flash"></ion-icon>
+                <label>Flash</label>
+            </div>
+          </button> -->
+        </ion-col>
+
+        <ion-col no-padding>
+          <!-- <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
+            <div>
+                <ion-icon name="ios-more"></ion-icon>
+                <label>More</label>
+            </div>
+          </button> -->
+        </ion-col>
+      </ion-row>
+
+      <!-- </ion-buttons> -->
+    </ion-toolbar>
+  </ion-footer>

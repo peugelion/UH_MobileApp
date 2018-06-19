@@ -45,38 +45,7 @@ export class TechniciansPage {
       });
   }
 
-  // loadTechnicians() {
-  //   this.oauth.getOAuthCredentials().
-  //     then(oauth => {
-  //       this.techService.loadTechnicians(oauth)
-  //         .then(results => {
-  //           console.log(results);
-  //           this.technicians = results.records;
-  //         });
-  //     });
-  // }
-
-  // loadTechnicians(){
-  //   return new Promise((resolve, reject) => {
-  //     this.oauth.getOAuthCredentials().
-  //       then(oauth => {
-  //         let loading = this.loadingCtrl.create({
-  //           spinner: 'bubbles',
-  //           content: 'Loading, please wait...'
-  //         });
-  //         loading.present();
-  //         this.techService.loadTechnicians(oauth)
-  //           .then(results => {
-  //             console.log(results);
-  //             this.technicians = results.records;
-  //             loading.dismiss();
-  //             resolve(this.technicians);
-  //           });
-  //       });
-  //   });
-  // }
-
-  loadSingleTechnician(id) {
+  gotoSingleTechnician(id) {
     //this.navCtrl.push(SingleTechnicianPage, {Id: id});
     //this.navCtrl.push('SingleTechnicianPage', {Id: id})
     this.navCtrl.push('SingleTechnicianPage', {"techId": id});
@@ -88,10 +57,10 @@ export class TechniciansPage {
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
     this.loadTechnicians().
-      //then(refresher.complete());
-      then(r => {
-        console.log(" refresher resolve : ", r);
-        refresher.complete();
-      })
+    then(refresher.complete());
+    // then(r => {
+    //   console.log(" refresher resolve : ", r);
+    //   refresher.complete();
+    // })
   }
 }

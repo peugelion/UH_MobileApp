@@ -6,7 +6,9 @@ import { SobjectServiceProvider } from '../../providers/sobject-service/sobject-
 //import { PipeTransform, Pipe } from '@angular/core';
 import { DataService } from 'forcejs';
 
-@IonicPage()
+@IonicPage({
+  segment: 'Technician/:techId',                 // https://ionicframework.com/docs/api/navigation/IonicPage/
+})
 @Component({
   selector: 'page-single-technician',
   templateUrl: 'single-technician.html',
@@ -60,26 +62,36 @@ export class SingleTechnicianPage {
           let techPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, '');
           let defDeptPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__defaultDepartment__r');
           let userPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__User__r');
+          console.log("techPromise:, ", techPromise);
 
-          Promise.all([techPromise, userPromise, defDeptPromise])
+          Promise.all([techPromise, userPromise])
             .then((arrayOfResults) => {
               console.log('arrayOfResults', arrayOfResults);
               this.technician = arrayOfResults[0];              console.log("this.technician", this.technician);
-              this.user = arrayOfResults[1];                    console.log("this.user", this.user);
-              this.defaultDepartment = arrayOfResults[2];       console.log("this.defDeptPromise", this.defaultDepartment);
-
-              //this.department = {};
-              let departmentId = this.defaultDepartment['UH__Department__c'];
-              this.soService.getSobject(service, 'UH__Department__c', departmentId, '')
-                .then(r => {
-                  this.department = r;                          console.log("this.department", this.department);
-                  //resolve(this.department);
-                });
-
-              
-              resolve(arrayOfResults);
-          });
+              this.user = arrayOfResults[1];                    console.log("this.user", this.user);              
+              //resolve(arrayOfResults); // puca ako nije admin (default department pravo)
+              resolve(techPromise); // !!!
+            })
+            .catch(error => {
+              this.department = null;             console.log("arrayOfResults promisee err", error);
+            });
           //resolve(userPromise);
+
+          defDeptPromise
+          .then((r) => {
+            this.defaultDepartment = r;       console.log("this.defDeptPromise", this.defaultDepartment);
+
+            this.department = {};
+            let departmentId = this.defaultDepartment['UH__Department__c'];
+            this.soService.getSobject(service, 'UH__Department__c', departmentId, '')
+              .then(r => {
+                this.department = r;                          console.log("this.department", this.department);
+                resolve(this.department);
+              });
+          })
+          .catch(error => {
+            this.department = null;             console.log("defDeptPromise", error);
+          });
 
       });
     });

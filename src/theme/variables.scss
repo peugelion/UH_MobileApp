@@ -39,6 +39,7 @@ $colors: (
   danger:         #f53d3d,
   light:          #f4f4f4,
   dark:           #222,
+  
   materialRed:    #D32F2F,
   materialPink:   #C2185B,
   materialPurple: #512DA8,
@@ -51,7 +52,19 @@ $colors: (
   materialYellow: #FBC02D,
   materialOrange: #E64A19,
   materialBrown:  #5D4037,
-  materialGray:   #455A64
+  materialGray:   #455A64,
+  
+  twitter: (
+    base: #55acee,  // Base acts as the background color and contrast acts as the text color for most components
+    contrast: #fff  // https://ionicframework.com/docs/theming/theming-your-app/
+  ),
+  stable: #eee,
+  positive: #387ef5,
+  calm: #11c1f3,
+  balanced: #33cd5f,
+  energized: #ffc900,
+  assertive: #ef473a,
+  royal: #886aea,
 );
 
 
