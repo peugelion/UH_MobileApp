@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ViewController, ToastController } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
 
@@ -28,7 +28,8 @@ export class WorkorderDetailsPage {
     public navParams: NavParams,
     public modalCtrl: ModalController,
     private oauth : OAuthServiceProvider, 
-    private woService: WorkordersServiceProvider) {
+    private woService: WorkordersServiceProvider,
+    private toastCtrl: ToastController,) {
   }
 
   ionViewDidLoad() {
@@ -128,15 +129,56 @@ export class WorkorderDetailsPage {
     this[`${action}`]();
   }
 
+  assignTech() {
+    console.log("I got inside AssignTech!");
+  }
+
   editWO() {
     console.log("I got inside editWO!");
   }
 
+  rejectWO() {
+    console.log("I got inside rejectWO!");
+  }
+
+  checkInventory() {
+    console.log("I got inside checkInventory!");
+  }
+
+  addPart() {
+    console.log("I got inside addPart!");
+  }
+
+  addLabour() {
+    console.log("I got inside addLabour!");
+  }
+
   addExpense() {
-    let expenseModal = this.modalCtrl.create(AddExpenseComponent, { userId: 8675309 });
+    let expenseModal = this.modalCtrl.create(AddExpenseComponent, { woId: this.currWO.Id });
     expenseModal.onDidDismiss(data => {
-      console.log(data);
+      if(!data.isCanceled) {
+        // push newly created expense into its related list
+        let relatedWOExpenses = this.relatedData[1];
+        relatedWOExpenses.elements.push(data.createdExpense);
+        relatedWOExpenses.size += 1;
+
+        // present the message from a addExpense modal
+        let toast = this.toastCtrl.create({
+          message: data.message,
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+      }
     });
     expenseModal.present();
+  }
+
+  woReport() {
+    console.log("I got inside woReport!");
+  }
+
+  printInvoice() {
+    console.log("I got inside printInvoice!");
   }
 }

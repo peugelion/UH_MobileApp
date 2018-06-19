@@ -20,7 +20,12 @@ export class HomePage {
   workOrders : any;
   oauthCreds : any; 
 
-  constructor(private woService: WorkordersServiceProvider, public navCtrl: NavController, private oauth : OAuthServiceProvider, public actionSheetCtrl: ActionSheetController, public platform: Platform) {}
+  constructor(
+    private woService: WorkordersServiceProvider,
+    public navCtrl: NavController,
+    private oauth : OAuthServiceProvider,
+    public actionSheetCtrl: ActionSheetController,
+    public platform: Platform) {}
 
   initPage(){
     this.oauth.getOAuthCredentials().

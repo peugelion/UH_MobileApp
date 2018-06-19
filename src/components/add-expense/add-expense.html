@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-row text-center>
-        <ion-col col-3 col-lg-3 col-xl-3><button ion-button outline (click)="dismiss()">Close</button></ion-col>
+        <ion-col col-3 col-lg-3 col-xl-3><button ion-button color="dark" outline (click)="dismiss()">Close</button></ion-col>
         <ion-col col-6 col-lg-6 col-xl-6><ion-title>Add Expense</ion-title></ion-col>
         <ion-col col-3 col-lg-3 col-xl-3><button ion-button color="materialGreen" (click)="saveExpense(newExpense.value)" [disabled]="!newExpense.valid">Save</button></ion-col>
     </ion-row>
@@ -12,13 +12,29 @@
   <!-- <ion-list> -->
     <form [formGroup]="newExpense" (ngSubmit)="saveExpense(newExpense.value)">
       <ion-item>
-        <ion-label stacked><span>*</span>Cost</ion-label>
-        <ion-input type="text" [formControl]="newExpense.controls['type']"></ion-input>
+        <ion-label stacked>Expense type</ion-label>
+        <ion-select [formControl]="newExpense.controls['type']">
+          <ion-option value="Parking">Parking</ion-option>
+          <ion-option value="Toll">Toll</ion-option>
+          <ion-option value="Meals">Meals</ion-option>
+          <ion-option value="Lodging">Lodging</ion-option>
+          <ion-option value="Mileage">Mileage</ion-option>
+        </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label stacked><span>*</span>Quantity</ion-label>
-        <ion-input type="text" [formControl]="newExpense.controls['cost']"></ion-input>
+        <ion-label stacked><span style="color: red;">*</span>Cost</ion-label>
+        <ion-input type="number" [formControl]="newExpense.controls['cost']" clearInput="true"></ion-input>
       </ion-item>
+      <!-- <ion-item>
+        <div *ngIf="cost.hasError('required') && cost.touched">Cost is required</div>
+      </ion-item> -->
+      <ion-item>
+        <ion-label stacked><span style="color: red;">*</span>Quantity</ion-label>
+        <ion-input type="number" [formControl]="newExpense.controls['qty']" clearInput="true"></ion-input>
+      </ion-item>
+      <!-- <ion-item>
+        <div *ngIf="quantity.hasError('required') && quantity.touched">Quantity is required</div>
+      </ion-item> -->
     </form>
   <!-- </ion-list> -->
   <!-- <button ion-button color="materialGreen" type="submit" [disabled]="!newExpense.valid">Save</button> -->
