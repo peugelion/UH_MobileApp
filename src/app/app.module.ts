@@ -8,7 +8,6 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { TechniciansPage } from '../pages/technicians/technicians';
-//import { SingleTechnicianPageModule } from '../pages/single-technician/single-technician.module';
 import { WorkordersPage } from '../pages/workorders/workorders';
 import { WorkorderDetailsPageModule } from '../pages/workorder-details/workorder-details.module';
 import { ServicePlacesPage } from '../pages/service-places/service-places';
@@ -25,8 +24,8 @@ import { HttpClientModule } from  '@angular/common/http';
 // import { Geolocation } from '@ionic-native/geolocation';
 
 import { WorkorderInfoPage } from '../pages/workorder-info/workorder-info';
-import { ComponentsModule } from '../components/components.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
   declarations: [
@@ -43,8 +42,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     IonicModule.forRoot(MyApp),
     WorkorderDetailsPageModule,
-    ComponentsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -52,7 +51,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     HomePage,
     ListPage,
     TechniciansPage,
-    //SingleTechnicianPage,
     WorkordersPage,
     ServicePlacesPage
   ],

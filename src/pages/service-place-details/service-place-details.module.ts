@@ -7,7 +7,7 @@ import { ServicePlaceDetailsPage } from './service-place-details';
     ServicePlaceDetailsPage,
   ],
   imports: [
-    IonicPageModule.forChild(ServicePlaceDetailsPage),
+    IonicPageModule.forChild(ServicePlaceDetailsPage)
   ],
 })
 export class ServicePlaceDetailsPageModule {}

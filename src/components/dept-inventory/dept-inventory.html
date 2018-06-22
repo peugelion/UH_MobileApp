@@ -1,0 +1,60 @@
+<!-- <ion-header>
+  <ion-navbar>
+    <ion-row text-center>
+        <ion-col col-12 col-lg-12 col-xl-12><ion-title>My Warehouse Stock</ion-title></ion-col>
+    </ion-row>
+  </ion-navbar>
+</ion-header> -->
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-row text-center>
+        <ion-col col-9 col-lg-9 col-xl-9><ion-title>My Warehouse Stock</ion-title></ion-col>
+        <ion-col col-3 col-lg-3 col-xl-3><button *ngIf="showCloseBtn" ion-button color="dark" outline (click)="dismiss()">Close</button></ion-col>
+      </ion-row>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-6 col-lg-6 col-xl-6>
+            <button ion-item>
+              <ion-icon name="filing" item-start></ion-icon>
+              Stock
+            </button>
+          </ion-col>
+          <ion-col col-6 col-lg-6 col-xl-6>
+            <form>  <!--   [formGroup]="newExpense" (ngSubmit)="saveExpense(newExpense.value)"> -->
+              <ion-item item-end>
+                <ion-label stacked>Select a warehouse</ion-label>
+                <ion-select>
+                  <ion-option *ngFor="let warehouse of userWarehouses" value="warehouse.UH__Department__r.Id" selected>{{warehouse.UH__Department__r.Name}}</ion-option>
+                </ion-select>
+              </ion-item>
+            </form>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngFor="let unit of unitsInStock" color="grayish">
+    <ion-grid>
+      <ion-row class="ellipsis">
+        <ion-col col-4 col-lg-3 col-xl-3><div>Name:</div></ion-col>
+        <ion-col col-8 col-lg-9 col-xl-9><div><a>{{unit.UH__Product__r.Name}}</a></div></ion-col>
+      </ion-row>              
+      <ion-row class="ellipsis">
+        <ion-col col-4 col-lg-3 col-xl-3><div>Quantity:</div></ion-col>
+        <ion-col col-8 col-lg-9 col-xl-9><div>{{unit.UH__AvailableQty__c}}</div></ion-col>
+      </ion-row>
+      <ion-row class="ellipsis">
+        <ion-col col-4 col-lg-3 col-xl-3><div>Reserved:</div></ion-col>
+        <ion-col col-8 col-lg-9 col-xl-9><div>{{unit.UH__ReservedQty__c}}</div></ion-col>
+      </ion-row>
+      <ion-row class="ellipsis">
+        <ion-col col-4 col-lg-3 col-xl-3><div>In Transit:</div></ion-col>
+        <ion-col col-8 col-lg-9 col-xl-9><div>{{unit.UH__InTransitQty__c}}</div></ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+</ion-content>
