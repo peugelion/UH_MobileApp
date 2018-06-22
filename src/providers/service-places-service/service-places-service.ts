@@ -27,11 +27,6 @@ export class ServicePlacesServiceProvider {
     });
   }
  
-  // Uses http.get() to load data from a single API endpoint
-  getLatLong(addr) {
-    let url = `https://open.mapquestapi.com/geocoding/v1/address?key=U2hDmDdwpkymNz1JUjPkACYVMZUn1hRo&location=`+encodeURIComponent(addr)+`&thumbMaps=false`;
-    return this.http.get(url);
-  }
 
   // RELATED TAB
 
@@ -45,7 +40,7 @@ export class ServicePlacesServiceProvider {
        ` WHERE UH__ServicePlace__c = '${Id}'`
     )
     .then(result => {
-        console.log('getRelatedWOs r:', result);
+        console.log('getRelated r:', result);
         return result.records;
     });
   }
@@ -63,6 +58,18 @@ export class ServicePlacesServiceProvider {
   //       return result.records;
   //   });
   // }
+  getRelatedWOs(oauthCreds, Id) {
+    let service = DataService.createInstance(oauthCreds, {useProxy:false});
+    return service.query(
+        `SELECT Id, Name, uh__status__c, uh__productInPlace__r.Name, uh__description__c, format(UH__Deadline__c)
+         FROM UH__WorkOrder__c 
+         WHERE UH__ServicePlace__c = '${Id}'`
+    )
+    .then(result => {
+        console.log('getRelatedWOs result:', result);
+        return result.records;
+    });
+  }
 
 }
 

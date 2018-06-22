@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { SobjectServiceProvider } from '../../providers/sobject-service/sobject-service';
 import { ServicePlacesServiceProvider } from '../../providers/service-places-service/service-places-service';
 import { DataService } from 'forcejs';
+import { MapComponent } from '../../components/map/map';
 
 /**
  * Generated class for the ServicePlaceDetailsPage page.
@@ -12,7 +13,6 @@ import { DataService } from 'forcejs';
  * Ionic pages and navigation.
  */
 
-declare var L:any;
 
 @IonicPage({
   segment: 'ServicePlace/:spId',                 // https://ionicframework.com/docs/api/navigation/IonicPage/
@@ -24,7 +24,7 @@ declare var L:any;
   templateUrl: 'service-place-details.html',
 })
 
-export class ServicePlaceDetailsPage {
+export class ServicePlaceDetailsPage implements AfterViewInit {
 
   toptabs: string = "details";
 
@@ -35,8 +35,11 @@ export class ServicePlaceDetailsPage {
     // "UH__position__Longitude__s" : string,
     // "UH__Address__c" : string,
   };
-  tel: string;
+  
+  spPromise: Promise<any>;
+
   name: string;
+  tel: string;
   addr: string;
   lat: string;
   lng: string;
@@ -44,20 +47,31 @@ export class ServicePlaceDetailsPage {
   contact: {};
   city: {};
 
-  map;
+  //map;
 
   // RELATED TAB
   //WOs; pips; AOs; AHs; NandAs: {}
-  WOs; PIPs: {}
+  WOs: Array<any>; PIPs: Array<any>;
+  woLabels = [];
+  PIPsLabels = [];
   active: number = -1 // (click) WOs or PIPs: 0 or 1
   //activeObj: {}
 
+  asd;
+  @ViewChild(MapComponent) mapCmp;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, private soService: SobjectServiceProvider, private spService: ServicePlacesServiceProvider) {
     this.Id = this.navParams.data['spId']
   }
 
-  ionViewDidLoad() {
+  ngAfterViewInit() {
+    console.log("ngAfterViewInit - this.map", this.mapCmp);
+  }
+
+  // ionViewDidLoad() {
+  //   this.loadServicePlace();
+  // }
+  ngOnInit() {
     this.loadServicePlace();
   }
 
@@ -68,14 +82,13 @@ export class ServicePlaceDetailsPage {
 
           let service = DataService.createInstance(oauth, {useProxy:false});
 
-          let spPromise       = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, '');
+          this.spPromise      = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, '');
           let cityPromise     = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r');
           let contactPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__Contact__r');
 
-          spPromise.
+          this.spPromise.
             then(r => {
               console.log(" spPromise resolve : ", r);
-              //this.sp = r;
 
               this.tel  = r["UH__Phone__c"];
               this.name = r["Name"];
@@ -83,19 +96,28 @@ export class ServicePlaceDetailsPage {
               this.lat  = r["UH__position__Latitude__s"];
               this.lng  = r["UH__position__Longitude__s"];
 
-              this.initmap();
+              //this.initmap();
+              //this.map.initmap();
+              //let map = MapComponent.initmap(oauth, {useProxy:false});
+
+              // window.setTimeout(
+              //   function(){
+              //     this.mapCmp.initmap();
+              //   }.bind(this), 0
+              // );
+
               resolve(r);   // !!!
             });
 
           cityPromise.
             then(r => {
-              console.log(" cityDeptPromise resolve : ", r);
+              // console.log(" cityDeptPromise resolve : ", r);
               this.city = r;
             });
 
           contactPromise.
             then(r => {
-              console.log(" contactPromise resolve : ", r);
+              // console.log(" contactPromise resolve : ", r);
               this.contact = r;
             }).
             catch( reason => {
@@ -107,88 +129,10 @@ export class ServicePlaceDetailsPage {
     });
   }
 
-  // BEGIN map
-
-  initmap() {
-    // fetch lat\lng from sp address, if no lat\lng is set
-    if (!this.lat) {
-      this.getLatLong().
-        then(r => {
-          console.log(" getLatLong resolve : ", r);
-          this.lat = r["lat"];
-          this.lng = r["lng"];
-          this.drawmap();       //
-        })
-    } else {
-      this.drawmap();           // 
-    }
-  }
-
-  getLatLong(){
-    return new Promise((resolve, reject) => {
-      // this.spService.getLatLong("Bulevar umetnosti, 33, Novi Beograd").subscribe(
-      this.spService.getLatLong(this.addr).subscribe(
-        data => {
-          let latLng = data["results"][0]["locations"][0]["latLng"]; // 1st out of all the results
-          resolve(latLng);
-        },
-        err => console.error(err),
-        //() => console.log('error loading lat/long')
-      );
-    });
-  }
-
-  drawmap() {
-
-    //let map = this.map;
-    //let plotlist;
-    //let plotlayers=[];
-
-    //console.log('lat, lng', this.lat, this.lng);
-    
-    // init map
-    if (this.map) this.map.remove();   // tab reload fix
-    this.map = new L.Map('map_sp');    // attach to 'map_sp' element
-
-    // create the tile layer with correct attribution
-    var osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    var osmAttrib='Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
-    var osm = new L.TileLayer(osmUrl, {minZoom: 9, maxZoom: 18, attribution: osmAttrib});		
-
-    //this.map.setView(new L.LatLng(51.3, 0.7),9);
-    this.map.setView(new L.LatLng(this.lat, this.lng), 16);
-    this.map.addLayer(osm);
-
-    
-    // marker - ikonica
-    var popupContent = '<div class="spPopupContent"><h2>'+name+'</h2> <br />'+this.addr+'</div>';
-    var popup = L.popup()
-      .setLatLng([this.lat, this.lng])
-      .setContent(popupContent);
-    
-    var spIcon = L.icon({
-      // iconUrl: "/resource/1500293185000/uh__jsAndStyles/images/mapPinStar.png",
-      iconUrl: "https://unpkg.com/leaflet@1.3.1/dist/images/marker-icon.png",
-      iconSize: [25,41],
-      iconAnchor: [15,35],
-      popupAnchor: [0,-18]
-    });
-    //let spMarker = L.marker([lat, lng], {riseOnHover:true, riseOffset: 30, icon: spIcon})
-    L.marker([this.lat, this.lng], {riseOnHover:true, riseOffset: 30, icon: spIcon})
-      .addTo(this.map)
-      .bindPopup(popup);
-  }
-  // END map
 
 
   onSegmentChanged(toptabs) {
-    if (toptabs === 'details') {
-      window.setTimeout(
-        this.drawmap.bind(this), 0
-      );
-    } else {
-      this.loadRelated();
-    }
+    (this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated();
   }
 
   doRefresh(refresher) {
@@ -209,13 +153,35 @@ export class ServicePlaceDetailsPage {
 
           let service = DataService.createInstance(oauth, {useProxy:false});
 
-          let wosPromise  = this.spService.getRelated(service, this.Id, 'UH__WorkOrder__c');
+          let wosPromise  = this.spService.getRelatedWOs(service, this.Id);
           let pipsPromise = this.spService.getRelated(service, this.Id, 'UH__ProductInPlace__c');
 
           wosPromise.
             then(r => {
               console.log(" wosPromise resolve : ", r);
               this.WOs = r;
+
+              let tmpArr = [];
+              r.forEach(item => {
+                console.log("el", item);
+                let tmp = [];
+                // tmp["Product in Place"]          = item["UH__productInPlace__r"] ? item["UH__productInPlace__r"]["Name"] : null
+                // tmp["Description"]               = item["UH__Description__c"]
+                // tmp["Estimated completion date"] = item["UH__Deadline__c"]
+                // tmp["Status"]                    = item["UH__Status__c"]
+                
+                tmp.push( item["UH__productInPlace__r"] ? item["UH__productInPlace__r"]["Name"] : null );
+                tmp.push( item["UH__Description__c"] );
+                tmp.push( item["UH__Deadline__c"] );
+                tmp.push( item["UH__Status__c"] );
+                tmpArr.push(tmp);
+              });
+
+              this.WOs = tmpArr;
+              this.woLabels = ["Product in Place", "Description", "Estimated completion date", "Status"];
+
+              console.log("     this.tmpArr", tmpArr);
+
               resolve(r);
             });
           pipsPromise.

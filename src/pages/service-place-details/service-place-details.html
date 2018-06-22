@@ -66,13 +66,18 @@
             <h2>{{ name }}&nbsp;</h2>
           </ion-item>
           <ion-item>
-            <div id="map_sp"></div>
+            <!-- <div id="map_sp"></div> -->
+            <!-- <map [spPromisesArr]="[spPromise]"></map> -->
+            <!-- <map [spPromise]="spPromise | async"></map> -->
+            <map [lat]="lat" [lng]="lng" [addr]="addr"></map>
           </ion-item>
       </ion-list>
 
     </ion-list>
-    <!-- details tab end -->
-    <!-- related tab -->
+<!-- details tab end -->
+
+
+<!-- related tab -->
     <ion-list *ngSwitchCase="'related'" class="accordion-list">
       <!-- First Level -->
       <!-- <ion-list-header *ngFor="let relatedList of [WOs, PIPs, AOs, AHs, NandAs]; let i = index;" no-lines no-padding> -->
@@ -85,18 +90,45 @@
           <!-- <div *ngFor="let list of ['Work Orders', 'Products in Place', 'Open Activities', 'Activity History', 'Notes & Attachments']; let j = index"> -->
           <div *ngFor="let listLabel of ['Work Orders', 'Products in Place']; let j = index">
             <div *ngIf="j == i">
-              <h2>{{ listLabel }}&nbsp;({{ relatedList?.length }})</h2>
+              <h2>{{ listLabel }}&nbsp;<ion-badge color='twitter'>{{ relatedList?.length }}</ion-badge></h2>
             </div>
           </div>
         </button>
-        <ion-list *ngIf="relatedList && i == active">
+        <div *ngIf="relatedList && i == active">
 
-          <ion-list>
-            <button ion-item *ngFor="let item of relatedList" id={{item.Id}} (click)="gotoItemPage(item.Id)">
-              <ion-icon item-left color='primary' name="build"></ion-icon> {{ item.Name }}
-            </button>
-          </ion-list>
-        </ion-list>
+          <ion-card *ngFor="let item of relatedList; let count = index" id={{item.Id}} (click)="gotoItemPage(item.Id)" color='light'>
+            <ion-card-header>
+              <ion-badge color='light'>{{ count+1 }}</ion-badge> {{ item.Name }}
+            </ion-card-header>
+            <ion-card-content>
+              <ion-grid>
+                <!-- <ion-row *ngFor="let labelInCard of ['Product in Place', 'Description', 'Estimated completion date', 'Status']; let j = index; let valueInCard = [ 'item.UH__productInPlace__r?.Name', 'item.UH__Description__c', 'item.UH__Deadline__c', 'item.UH__Status__c' ]" class="ellipsis"> -->
+                <!-- <ion-row *ngFor="let labelInCard of [ 'Product in Place', 'Description', 'Estimated completion date', 'Status' ]; let j = index;" class="ellipsis"> -->
+                <ion-row *ngFor="let value of item; let j = index;" class="ellipsis">
+                  <ion-col col-5 col-lg-3 col-xl-3><div>{{ woLabels[j] }}</div></ion-col>
+                  <ion-col col-7 col-lg-9 col-xl-9><div>{{ value }}</div></ion-col>
+                </ion-row>
+                <!-- <ion-row class="ellipsis">
+                  <ion-col col-5 col-lg-3 col-xl-3><div>Product in Place:</div></ion-col>
+                  <ion-col col-7 col-lg-9 col-xl-9><div>{{ item.UH__productInPlace__r?.Name }}</div></ion-col>
+                </ion-row>
+                <ion-row class="ellipsis">
+                  <ion-col col-5 col-lg-3 col-xl-3><div>Description:</div></ion-col>
+                  <ion-col col-7 col-lg-9 col-xl-9><div>{{ item.UH__Description__c }}</div></ion-col>
+                </ion-row>
+                <ion-row class="ellipsis">
+                  <ion-col col-5 col-lg-3 col-xl-3><div>Estimated completion date:</div></ion-col>
+                  <ion-col col-7 col-lg-9 col-xl-9><div>{{ item.UH__Deadline__c }}</div></ion-col>
+                </ion-row>
+                <ion-row class="ellipsis">
+                  <ion-col col-5 col-lg-3 col-xl-3><div>Status:</div></ion-col>
+                  <ion-col col-7 col-lg-9 col-xl-9><div>{{ item.UH__Status__c }}</div></ion-col>
+                </ion-row> -->
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+
+        </div>
       </ion-item>
     </ion-list>
     <!-- related tab end -->
@@ -105,6 +137,9 @@
 </ion-content>
 
 
+
+
+<!-- FOOTER -->
 
 <ion-footer no-border text-center>
     <ion-toolbar>
