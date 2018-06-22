@@ -67,16 +67,16 @@ export class HomePage {
       return;
     }
 
-    $Lightning.createComponent(
-      "c:showMyWarehouses",
-      {},
-      "myWarehouseDiv", // this.myWarehouse.nativeElement
-      function(component) {
-        console.log("Added component = ", component);
-        console.log("component attr = ", component.get("v.stockUnits"));
-        console.log("is defined v.stockUnits = ", $A.util.isUndefined(component.get("v.stockUnits")));
-      }
-    );
+    // $Lightning.createComponent(
+    //   "c:showMyWarehouses",
+    //   {},
+    //   "myWarehouseDiv", // this.myWarehouse.nativeElement
+    //   function(component) {
+    //     console.log("Added component = ", component);
+    //     console.log("component attr = ", component.get("v.stockUnits"));
+    //     console.log("is defined v.stockUnits = ", $A.util.isUndefined(component.get("v.stockUnits")));
+    //   }
+    // );
 
     $Lightning.createComponent(
       "c:smallWosMapLightening",

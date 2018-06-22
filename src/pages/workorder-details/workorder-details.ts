@@ -4,6 +4,7 @@ import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-serv
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
 
 import { AddExpenseComponent } from '../../components/add-expense/add-expense';
+import { DeptInventoryComponent } from '../../components/dept-inventory/dept-inventory';
 
 import { DataService } from 'forcejs';
 
@@ -29,7 +30,7 @@ export class WorkorderDetailsPage {
     public modalCtrl: ModalController,
     private oauth : OAuthServiceProvider, 
     private woService: WorkordersServiceProvider,
-    private toastCtrl: ToastController,) {
+    private toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
@@ -142,7 +143,8 @@ export class WorkorderDetailsPage {
   }
 
   checkInventory() {
-    console.log("I got inside checkInventory!");
+    let expenseModal = this.modalCtrl.create(DeptInventoryComponent);
+    expenseModal.present();
   }
 
   addPart() {
