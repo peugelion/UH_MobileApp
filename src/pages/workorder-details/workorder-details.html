@@ -89,7 +89,11 @@
         </ion-item>
         <ion-item>
           <h3>Product in place</h3>
-          <p>{{currWO?.UH__productInPlace__r?.Name}}</p>
+          <p>
+            <a (click)="gotoRecord('/services/apexrest/UH/productInPlace/', currWO?.UH__productInPlace__c, 'ProductInPlacePage')">
+              {{currWO?.UH__productInPlace__r?.Name}}
+            </a>
+          </p>
         </ion-item>
         <ion-item>
           <h3>Service place</h3>
@@ -126,7 +130,7 @@
         <button ion-item (click)="toggleSection(i)" detail-none [ngClass]="{'section-active': item.open, 'section': !item.open}">
           <ion-icon item-left name="arrow-forward" *ngIf="!item.open"></ion-icon>
           <ion-icon item-left name="arrow-down" *ngIf="item.open"></ion-icon>
-            {{ item.name }} ({{item.size}})
+            {{ item.name }} <ion-badge color='twitter'>{{item.size}}</ion-badge>
         </button>
         <ion-list *ngIf="item.elements && item.open">
           <!-- <button ion-button outline item-end (click)="buyItem(child)">{{ child.price }}</button> -->

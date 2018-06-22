@@ -62,7 +62,7 @@ export class HomePage {
   }
 
   createLtngCmps() {
-    if (!document.getElementById('mapComponent') || !document.getElementById('myWarehouseDiv')) {
+    if (!document.getElementById('mapComponent')) {
       console.log('  #mapComponent || #myWarehouseDiv missing, prekini ucitavanje LtngCmps za homepage');
       return;
     }
