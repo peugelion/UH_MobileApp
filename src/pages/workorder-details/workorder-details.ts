@@ -98,18 +98,8 @@ export class WorkorderDetailsPage {
     this.relatedData[i].open = !this.relatedData[i].open;
   }
 
-  gotoRecord(page, url) {
-    console.log("url === ", url);
-    console.log("page === ", page);
-    this.oauth.getOAuthCredentials()
-      .then(oauth => {
-        let service = DataService.createInstance(oauth, {useProxy:false});
-        //let urlMapping: string = `/services/apexrest/UH/woResourceCtrl/${woID}`;
-        return service.apexrest(url);
-      })
-      .then(result => {
-        console.log('result of gotoRecord == ', result);
-      });
+  gotoRecord(page, recordId) {
+    this.navCtrl.push(page, {"id": recordId});
   }
 
   changeWOStatus(status: string) {

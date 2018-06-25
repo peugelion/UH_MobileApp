@@ -11,6 +11,7 @@ import { TechniciansPage } from '../pages/technicians/technicians';
 import { WorkordersPage } from '../pages/workorders/workorders';
 import { WorkorderDetailsPageModule } from '../pages/workorder-details/workorder-details.module';
 import { ServicePlacesPage } from '../pages/service-places/service-places';
+import { ProductInPlacePageModule } from '../pages/product-in-place/product-in-place.module';
 
 import { TechniciansServiceProvider } from '../providers/technicians-service/technicians-service';
 import { SobjectServiceProvider } from '../providers/sobject-service/sobject-service';
@@ -23,9 +24,10 @@ import { HttpClientModule } from  '@angular/common/http';
 
 // import { Geolocation } from '@ionic-native/geolocation';
 
-import { WorkorderInfoPage } from '../pages/workorder-info/workorder-info';
+//import { WorkorderInfoPage } from '../pages/workorder-info/workorder-info';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '../components/components.module';
+import { WorkorderInfoPageModule } from '../pages/workorder-info/workorder-info.module';
 
 @NgModule({
   declarations: [
@@ -34,8 +36,7 @@ import { ComponentsModule } from '../components/components.module';
     ListPage,
     TechniciansPage,
     WorkordersPage,
-    ServicePlacesPage,
-    WorkorderInfoPage
+    ServicePlacesPage
   ],
   imports: [
     BrowserModule,
@@ -43,7 +44,9 @@ import { ComponentsModule } from '../components/components.module';
     IonicModule.forRoot(MyApp),
     WorkorderDetailsPageModule,
     ReactiveFormsModule,
-    ComponentsModule
+    ComponentsModule,
+    ProductInPlacePageModule,
+    WorkorderInfoPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
