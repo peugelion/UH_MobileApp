@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
+import { NavController } from 'ionic-angular';
 
 /**
  * Generated class for the RelatedTabComponent component.
@@ -33,7 +34,7 @@ export class RelatedTabComponent {
   relatedListArr: Array<any>
 
 
-  constructor() {
+  constructor(public navCtrl: NavController) {
     console.log('Hello RelatedTabComponent Component');
     this.text = 'Hello World';
     console.log("inputs", this.active, this.labels, this.relatedListArr);
@@ -60,6 +61,13 @@ export class RelatedTabComponent {
   toggleSection(i) {
     if (this.relatedListArr[i].length)
       this.active = (this.active != i) ?  i : -1; // WO (0), PiP (1), or none (-1)
+  }
+
+  gotoItemPage(itemId) {
+    if (this.active) // 1 or 0 (pip or wo)
+      this.navCtrl.push('ProductInPlaceDetailsPage', {"id": itemId});
+    else
+      this.navCtrl.push('WorkorderDetailsPage', {"woId": itemId});
   }
 
 }

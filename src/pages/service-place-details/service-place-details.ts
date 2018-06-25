@@ -50,7 +50,6 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   //map;
 
   // RELATED TAB
-  //active: number = -1 // (click) WOs or PIPs: 0 or 1
   labels = [
     [
       ['Work Orders'],
