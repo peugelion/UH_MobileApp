@@ -2,8 +2,7 @@
 
 <div *ngIf="relatedListArr">
 <!-- First Level -->
-<!-- <ion-list-header *ngFor="let relatedList of [WOs, PIPs, AOs, AHs, NandAs]; let i = index;" no-lines no-padding> -->
-  <!-- <ion-item *ngFor="let relatedList of [WOs, PIPs]; let i = index;" no-lines > -->
+  <!-- <ion-item *ngFor="let relatedList of [WOs, PIPs, AOs, AHs, NandAs]; let i = index;" no-lines > -->
   <ion-item *ngFor="let relatedList of relatedListArr; let i = index;" no-lines >
     <!-- Toggle Button -->
     <button ion-item (click)="toggleSection(i)" detail-none [color]="(i == active) ? 'primary' : 'light'">
@@ -19,17 +18,18 @@
     </button>
     <div *ngIf="relatedList && i == active" class="cards_container">
 
-      <ion-card *ngFor="let item of relatedList; let count = index" id={{item.Id}} (click)="gotoItemPage(item.Id)" color='light'>
+      <!-- <ion-card *ngFor="let item of relatedList; let count = index" id={{item.Id}} (click)="gotoItemPage(item.Id)" color='light'> -->
+      <ion-card *ngFor="let item of relatedList; let count = index" id={{item[0]}} (click)="gotoItemPage( item[0] )" color='light'>
         <ion-card-header>
           <!-- <ion-badge color='light'>{{ count+1 }}</ion-badge> {{ item.Name }} -->
-          <ion-badge color='light'>{{ count+1 }}</ion-badge> {{ item[0] }}
+          <ion-badge color='light'>{{ count+1 }}</ion-badge> {{ item[1] }}
         </ion-card-header>
         <ion-card-content>
           <ion-grid>
             <!-- <ion-row *ngFor="let labelInCard of [ 'Product in Place', 'Description', 'Estimated completion date', 'Status' ]; let j = index;" class="ellipsis"> -->
             <ion-row *ngFor="let value of item; let j = index;" class="ellipsis">
               <ion-col col-5 col-lg-3 col-xl-3><div>{{ labels[i][1][j] }}</div></ion-col>
-              <ion-col col-7 col-lg-9 col-xl-9><div>{{ item[j+1] }}</div></ion-col>
+              <ion-col col-7 col-lg-9 col-xl-9><div>{{ item[j+2] }}</div></ion-col>
             </ion-row>
             <!-- <ion-row class="ellipsis">
               <ion-col col-5 col-lg-3 col-xl-3><div>Product in Place:</div></ion-col>

@@ -60,7 +60,7 @@ export class ServicePlacesPage {
 
   gotoSP(spId) {
     //console.log("sp id : ", spId);
-    this.navCtrl.push('ServicePlaceDetailsPage', {"spId": spId});
+    this.navCtrl.push('ServicePlaceDetailsPage', {"id": spId});
   }
 
   doRefresh(refresher) {

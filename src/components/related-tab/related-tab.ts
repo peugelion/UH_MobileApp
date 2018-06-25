@@ -18,6 +18,8 @@ export class RelatedTabComponent {
   @Input()
   active: number = -1 // (click) WOs or PIPs: 0 or 1
   @Input()
+  clickPages = []
+  @Input()
   labels = [
     // [
     //   ['Work Orders'],
@@ -64,10 +66,16 @@ export class RelatedTabComponent {
   }
 
   gotoItemPage(itemId) {
-    if (this.active) // 1 or 0 (pip or wo)
-      this.navCtrl.push('ProductInPlaceDetailsPage', {"id": itemId});
-    else
-      this.navCtrl.push('WorkorderDetailsPage', {"woId": itemId});
+    // if (this.active) // 1 or 0 (pip or wo)
+    //   this.navCtrl.push('ProductInPlaceDetailsPage', {"id": itemId});
+    // else
+    //   this.navCtrl.push('WorkorderDetailsPage', {"id": itemId});
+
+    console.log("this.clickPages", this.clickPages);
+    console.log("this.active", this.active);
+    console.log("this.itemId", itemId);
+
+    this.navCtrl.push(this.clickPages[this.active], {"id": itemId});
   }
 
 }

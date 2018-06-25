@@ -15,7 +15,7 @@ import { MapComponent } from '../../components/map/map';
 
 
 @IonicPage({
-  segment: 'ServicePlace/:spId',                 // https://ionicframework.com/docs/api/navigation/IonicPage/
+  segment: 'ServicePlace/:id',                 // https://ionicframework.com/docs/api/navigation/IonicPage/
   //defaultHistory: ['sp-list']
   //defaultHistory: ['ServicePlaceDetailsPage']
 })
@@ -35,7 +35,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     // "UH__position__Longitude__s" : string,
     // "UH__Address__c" : string,
   };
-  
+
   spPromise: Promise<any>;
 
   name: string;
@@ -60,19 +60,20 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
       ["Contact", "Product code", "Install Date"]
     ]
   ];
+  clickPages = ['WorkorderDetailsPage', 'ProductInPlacePage' ]
   //WOs; pips; AOs; AHs; NandAs: {}
   //WOs: Array<any>; PIPs: Array<any>;
   relatedArr: Array<any> = [];
 
 
-  @ViewChild(MapComponent) mapCmp;
+  //@ViewChild(MapComponent) mapCmp;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, private soService: SobjectServiceProvider, private spService: ServicePlacesServiceProvider) {
-    this.Id = this.navParams.data['spId']
+    this.Id = this.navParams.data['id']
   }
 
   ngAfterViewInit() {
-    console.log("ngAfterViewInit - this.map", this.mapCmp);
+    //console.log("ngAfterViewInit - this.map", this.mapCmp);
   }
 
   // ionViewDidLoad() {
@@ -170,7 +171,9 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
                 // tmp["Estimated completion date"] = item["UH__Deadline__c"]
                 // tmp["Status"]                    = item["UH__Status__c"]
                 
+                tmp.push( item["Id"] );
                 tmp.push( item["Name"] );
+
                 tmp.push( item["UH__productInPlace__r"] ? item["UH__productInPlace__r"]["Name"] : null );
                 tmp.push( item["UH__Description__c"] );
                 tmp.push( item["UH__Deadline__c"] );
@@ -192,7 +195,9 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
                 //console.log("el", item);
                 let tmp = [];
                 
+                tmp.push( item["Id"] );
                 tmp.push( item["Name"] );
+
                 tmp.push( item["UH__Contact__r"] ? item["UH__Contact__r"]["Name"] : null );
                 tmp.push( item["UH__Product__r"]["ProductCode"] );
                 
@@ -222,11 +227,11 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     });
   }
 
-  gotoItemPage(itemId) {
-    if (this.active) // 1 or 0 (pip or wo)
-      this.navCtrl.push('ProductInPlaceDetailsPage', {"id": itemId});
-    else
-      this.navCtrl.push('WorkorderDetailsPage', {"woId": itemId});
-  }
+  // gotoItemPage(itemId) {
+  //   if (this.active) // 1 or 0 (pip or wo)
+  //     this.navCtrl.push('ProductInPlaceDetailsPage', {"id": itemId});
+  //   else
+  //     this.navCtrl.push('WorkorderDetailsPage', {"id": itemId});
+  // }
 
 }

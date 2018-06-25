@@ -9,7 +9,7 @@ import { DeptInventoryComponent } from '../../components/dept-inventory/dept-inv
 import { DataService } from 'forcejs';
 
 @IonicPage({
-  segment: 'workorder-details/:woId'
+  segment: 'workorder-details/:id'
 })
 @Component({
   selector: 'page-workorder-details',
@@ -34,7 +34,7 @@ export class WorkorderDetailsPage {
   }
 
   ionViewDidLoad() {
-    this.getWODetails(this.navParams.data['woId']);
+    this.getWODetails(this.navParams.data['id']);
   }
 
   getWODetails(woID) {
