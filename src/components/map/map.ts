@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, Input, /*OnInit, SimpleChange,*/ SimpleChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 /**
@@ -28,19 +28,19 @@ export class MapComponent {
 
   constructor(private http:HttpClient) {
     // console.log(" spPromise - constructor", this.spPromise);
-    console.log(" lat - constructor", this.lat);
+    //console.log(" lat - constructor", this.lat);
   }
 
   ngOnInit() {
     // console.log(" spPromise - ngOnInit", this.spPromise); // undefined, ako stavim " | async" onda je null  // https://stackoverflow.com/questions/39933180/input-with-promise-angular2
-    console.log(" lat - ngOnInit", this.lat);
+    //console.log(" lat - ngOnInit", this.lat);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     try {
-      console.log(" ngOnChanges try", this.addr);
+      //console.log(" ngOnChanges try", this.addr);
       if (this.addr) {
-          console.log(" ima adresu -> initmap");
+          //console.log(" ima adresu -> initmap");
           this.initmap();
       }
     } catch(err) {
@@ -48,14 +48,12 @@ export class MapComponent {
     }
   }
 
-
   // BEGIN map
-
   initmap() {
 
-    console.log("USOu initmap", this.lat, this.lng, this.addr);
+    //console.log("USOu initmap", this.lat, this.lng, this.addr);
     if (!this.addr)
-    return console.log("  hmm, nema adrese ? promise ? ... return");
+      return console.log("  hmm, nema adrese, return... (promise ?)");
 
     // fetch lat\lng from sp address, if no lat\lng is set
     if (!this.lat) {
@@ -80,7 +78,7 @@ export class MapComponent {
       //this.spService.getLatLong("Bulevar umetnosti, 33, Novi Beograd").subscribe(
       this.getLatLongfromAddr(this.addr).subscribe(
         data => {
-          let latLng = data["results"][0]["locations"][0]["latLng"]; // 1st out of all the results
+          let latLng = data["results"][0]["locations"][0]["latLng"]; // multiple results - fetch 1st out of all the results
           resolve(latLng);
         },
         err => console.error(err),
@@ -98,7 +96,8 @@ export class MapComponent {
     //console.log('lat, lng', this.lat, this.lng);
     
     // init map
-    if (this.map) this.map.remove();   // tab reload fix
+    if (this.map) this.map.remove();                  // fix: tab reload
+    if (!document.getElementById('map_sp')) return;   // fix: tab change, 'map_sp missing' kad prebacis na related tab, pre nego je details zavrsion ucitavanje (crta mapu, a vec na related tabu)
     this.map = new L.Map('map_sp');    // attach to 'map_sp' element
 
     // create the tile layer with correct attribution

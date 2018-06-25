@@ -50,14 +50,22 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   //map;
 
   // RELATED TAB
+  //active: number = -1 // (click) WOs or PIPs: 0 or 1
+  labels = [
+    [
+      ['Work Orders'],
+      ["Product in Place", "Description", "Estimated completion date", "Status"],
+    ],
+    [
+      ['Products in Place'],
+      ["Contact", "Product code", "Install Date"]
+    ]
+  ];
   //WOs; pips; AOs; AHs; NandAs: {}
-  WOs: Array<any>; PIPs: Array<any>;
-  woLabels = [];
-  PIPsLabels = [];
-  active: number = -1 // (click) WOs or PIPs: 0 or 1
-  //activeObj: {}
+  //WOs: Array<any>; PIPs: Array<any>;
+  relatedArr: Array<any> = [];
 
-  asd;
+
   @ViewChild(MapComponent) mapCmp;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, private soService: SobjectServiceProvider, private spService: ServicePlacesServiceProvider) {
@@ -96,21 +104,12 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
               this.lat  = r["UH__position__Latitude__s"];
               this.lng  = r["UH__position__Longitude__s"];
 
-              //this.initmap();
               //this.map.initmap();
-              //let map = MapComponent.initmap(oauth, {useProxy:false});
-
-              // window.setTimeout(
-              //   function(){
-              //     this.mapCmp.initmap();
-              //   }.bind(this), 0
-              // );
 
               resolve(r);   // !!!
             });
 
-          cityPromise.
-            then(r => {
+          cityPromise.then(r => {
               // console.log(" cityDeptPromise resolve : ", r);
               this.city = r;
             });
@@ -154,22 +153,25 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
           let service = DataService.createInstance(oauth, {useProxy:false});
 
           let wosPromise  = this.spService.getRelatedWOs(service, this.Id);
-          let pipsPromise = this.spService.getRelated(service, this.Id, 'UH__ProductInPlace__c');
+          //let pipsPromise = this.spService.getRelated(service, 'UH__ProductInPlace__c', this.Id);
+          let pipsPromise = this.spService.getRelatedPiPs(service, this.Id);
+
+          //let pipsPromise = this.soService.getSobject(service, 'UH__ProductInPlace__c', this.Id, '');
 
           wosPromise.
             then(r => {
-              console.log(" wosPromise resolve : ", r);
-              this.WOs = r;
+              //console.log(" wosPromise resolve : ", r);
 
               let tmpArr = [];
               r.forEach(item => {
-                console.log("el", item);
+                //console.log("el", item);
                 let tmp = [];
                 // tmp["Product in Place"]          = item["UH__productInPlace__r"] ? item["UH__productInPlace__r"]["Name"] : null
                 // tmp["Description"]               = item["UH__Description__c"]
                 // tmp["Estimated completion date"] = item["UH__Deadline__c"]
                 // tmp["Status"]                    = item["UH__Status__c"]
                 
+                tmp.push( item["Name"] );
                 tmp.push( item["UH__productInPlace__r"] ? item["UH__productInPlace__r"]["Name"] : null );
                 tmp.push( item["UH__Description__c"] );
                 tmp.push( item["UH__Deadline__c"] );
@@ -177,19 +179,33 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
                 tmpArr.push(tmp);
               });
 
-              this.WOs = tmpArr;
-              this.woLabels = ["Product in Place", "Description", "Estimated completion date", "Status"];
+              //this.WOs = tmpArr;
+              this.relatedArr[0] = tmpArr;
 
-              console.log("     this.tmpArr", tmpArr);
-
-              resolve(r);
+              //resolve(r);
             });
           pipsPromise.
             then(r => {
-              console.log(" pipPromise resolve : ", r);
-              this.PIPs = r;
-              resolve(r);
-            });
+              //console.log(" pipPromise resolve : ", r);
+                
+              let tmpArr = [];
+              r.forEach(item => {
+                //console.log("el", item);
+                let tmp = [];
+                
+                tmp.push( item["Name"] );
+                tmp.push( item["UH__Contact__r"] ? item["UH__Contact__r"]["Name"] : null );
+                tmp.push( item["UH__Product__r"]["ProductCode"] );
+                
+                tmpArr.push(tmp);
+
+              });
+
+              //this.PIPs = tmpArr;
+              this.relatedArr[1] = tmpArr;
+              
+              //resolve(r);
+            })
 
             /* Attachment pokusaj (ContentDocument) */
 
@@ -201,12 +217,10 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
             //   resolve(r);
             // });
 
+            resolve(this.relatedArr);
+
       });
     });
-  }
-
-  toggleSection(i) {
-    this.active = (this.active != i) ?  i : -1; // WO (0), PiP (1), or none (-1)
   }
 
   gotoItemPage(itemId) {

@@ -1,0 +1,52 @@
+<!-- Generated template for the RelatedTabComponent component -->
+
+<div *ngIf="relatedListArr">
+<!-- First Level -->
+<!-- <ion-list-header *ngFor="let relatedList of [WOs, PIPs, AOs, AHs, NandAs]; let i = index;" no-lines no-padding> -->
+  <!-- <ion-item *ngFor="let relatedList of [WOs, PIPs]; let i = index;" no-lines > -->
+  <ion-item *ngFor="let relatedList of relatedListArr; let i = index;" no-lines >
+    <!-- Toggle Button -->
+    <button ion-item (click)="toggleSection(i)" detail-none [color]="(i == active) ? 'primary' : 'light'">
+      <ion-icon item-left name="arrow-forward" *ngIf="i != active"></ion-icon>
+      <ion-icon item-left name="arrow-down" *ngIf="i == active"></ion-icon>          
+      <!-- <div *ngFor="let list of ['Work Orders', 'Products in Place', 'Open Activities', 'Activity History', 'Notes & Attachments']; let j = index"> -->
+      <!-- <div *ngFor="let listLabel of ['Work Orders', 'Products in Place']; let j = index"> -->
+      <div *ngFor="let listLabels of labels; let j = index">
+        <div *ngIf="j == i">
+          <h2>{{ listLabels[0] }}&nbsp;<ion-badge color='twitter'>{{ relatedList?.length }}</ion-badge></h2>
+        </div>
+      </div>
+    </button>
+    <div *ngIf="relatedList && i == active" class="cards_container">
+
+      <ion-card *ngFor="let item of relatedList; let count = index" id={{item.Id}} (click)="gotoItemPage(item.Id)" color='light'>
+        <ion-card-header>
+          <!-- <ion-badge color='light'>{{ count+1 }}</ion-badge> {{ item.Name }} -->
+          <ion-badge color='light'>{{ count+1 }}</ion-badge> {{ item[0] }}
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <!-- <ion-row *ngFor="let labelInCard of [ 'Product in Place', 'Description', 'Estimated completion date', 'Status' ]; let j = index;" class="ellipsis"> -->
+            <ion-row *ngFor="let value of item; let j = index;" class="ellipsis">
+              <ion-col col-5 col-lg-3 col-xl-3><div>{{ labels[i][1][j] }}</div></ion-col>
+              <ion-col col-7 col-lg-9 col-xl-9><div>{{ item[j+1] }}</div></ion-col>
+            </ion-row>
+            <!-- <ion-row class="ellipsis">
+              <ion-col col-5 col-lg-3 col-xl-3><div>Product in Place:</div></ion-col>
+              <ion-col col-7 col-lg-9 col-xl-9><div>{{ item.UH__productInPlace__r?.Name }}</div></ion-col>
+            </ion-row>
+            <ion-row class="ellipsis">
+              <ion-col col-5 col-lg-3 col-xl-3><div>Description:</div></ion-col>
+              <ion-col col-7 col-lg-9 col-xl-9><div>{{ item.UH__Description__c }}</div></ion-col>
+            </ion-row>
+            <ion-row class="ellipsis">
+              <ion-col col-5 col-lg-3 col-xl-3><div>Estimated completion date:</div></ion-col>
+              <ion-col col-7 col-lg-9 col-xl-9><div>{{ item.UH__Deadline__c }}</div></ion-col>
+            </ion-row> -->
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+  </ion-item>
+</div>

@@ -32,32 +32,19 @@ export class ServicePlacesServiceProvider {
 
   //SELECT Id, Name FROM UH__WorkOrder__c WHERE UH__ServicePlace__c='a001500000hJsB2AAK'
   //SELECT Id, Name FROM UH__ProductInPlace__c WHERE UH__ServicePlace__c='a001500000hJsB2AAK'
-  getRelated(oauthCreds, Id, table) {
-    let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query(
-        `SELECT Id, Name
-         FROM ` +table+
-       ` WHERE UH__ServicePlace__c = '${Id}'`
-    )
-    .then(result => {
-        console.log('getRelated r:', result);
-        return result.records;
-    });
-  }
+//   getRelated(oauthCreds, table, spId) {
+//     let service = DataService.createInstance(oauthCreds, {useProxy:false});
+//     return service.query(
+//         `SELECT Id, Name
+//          FROM ` +table+
+//        ` WHERE UH__ServicePlace__c = '${spId}'`
+//     )
+//     .then(result => {
+//         console.log('getRelated r:', result);
+//         return result.records;
+//     });
+//   }
 
-  //SELECT Id, Name FROM UH__ProductInPlace__c WHERE UH__ServicePlace__c='a001500000hJsB2AAK'
-  // getRelatedPiPs(oauthCreds, Id) {
-  //   let service = DataService.createInstance(oauthCreds, {useProxy:false});
-  //   return service.query(
-  //       `SELECT Id, Name
-  //       FROM UH__ProductInPlace__c
-  //       WHERE UH__ServicePlace__c = '${Id}'`
-  //   )
-  //   .then(result => {
-  //       console.log('getRelatedWOs r:', result);
-  //       return result.records;
-  //   });
-  // }
   getRelatedWOs(oauthCreds, Id) {
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
     return service.query(
@@ -67,6 +54,20 @@ export class ServicePlacesServiceProvider {
     )
     .then(result => {
         console.log('getRelatedWOs result:', result);
+        return result.records;
+    });
+  }
+
+  //SELECT Id, Name FROM UH__ProductInPlace__c WHERE UH__ServicePlace__c='a001500000hJsB2AAK'
+  getRelatedPiPs(oauthCreds, spId) {
+    let service = DataService.createInstance(oauthCreds, {useProxy:false});
+    return service.query(
+        `SELECT Id, Name, UH__Contact__r.Name, UH__Product__r.ProductCode, UH__installedDate__c
+        FROM UH__ProductInPlace__c
+        WHERE UH__ServicePlace__c = '${spId}'`
+    )
+    .then(result => {
+        console.log('getRelatedPiPs r:', result);
         return result.records;
     });
   }
