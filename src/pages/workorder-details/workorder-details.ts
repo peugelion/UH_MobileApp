@@ -86,8 +86,6 @@ export class WorkorderDetailsPage {
             this.relatedData.push({"name": "WO Parts", "elements": woParts, "size": woParts.length});
             this.relatedData.push({"name": "WO Expenses", "elements": woExpenses, "size": woExpenses.length});
             this.relatedData.push({"name": "WO Labors", "elements": woLabors, "size": woLabors.length});
-
-            console.log('currWO === ', this.currWO);
           });
       });
   }
@@ -100,13 +98,8 @@ export class WorkorderDetailsPage {
     this.relatedData[i].open = !this.relatedData[i].open;
   }
 
-  gotoRecord(url, recordId, page) {
-    this.oauth.getOAuthCredentials()
-      .then(oauth => DataService.createInstance(oauth, {useProxy:false}).apexrest(`${url}${recordId}`))
-      .then(result => {
-        console.log('result of gotoRecord == ', result);
-        this.navCtrl.push(page, {"recordObj": result[0]});
-      });
+  gotoRecord(page, recordId) {
+    this.navCtrl.push(page, {"id": recordId});
   }
 
   changeWOStatus(status: string) {

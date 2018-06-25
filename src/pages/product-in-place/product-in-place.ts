@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the ProductInPlacePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
+import { DataService } from 'forcejs';
 
 @IonicPage()
 @Component({
@@ -15,13 +10,29 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ProductInPlacePage {
   tab: string = "details";
-  private recordObj: any;
+  private pipRecord: any;
+  relatedData: Array<any> = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.recordObj = this.navParams.data['recordObj'];
+  constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider) {
+    let pipId = this.navParams.data['id'];
+    this.getPiPDetails(pipId);
   }
 
   ionViewDidLoad() {
-    console.log("recordObj === ", this.navParams.data['recordObj']);
+    //console.log("pipRecord === ", this.navParams.data['dataObj'].pipRecord);
+  }
+
+  toggleSection(i: number) {
+    this.relatedData[i].open = !this.relatedData[i].open;
+  }
+
+  getPiPDetails(pipId: string): void {
+    this.oauth.getOAuthCredentials()
+      .then(oauth => DataService.createInstance(oauth, {useProxy:false}).apexrest(`/services/apexrest/UH/productInPlace/${pipId}`))
+      .then(result => {
+        this.pipRecord = result.pipRecord;
+        this.relatedData.push({"name": "Cases", "elements": result.cases, "size": result.cases.length});
+        this.relatedData.push({"name": "Workorders", "elements": result.workorders, "size": result.workorders.length});
+      });
   }
 }

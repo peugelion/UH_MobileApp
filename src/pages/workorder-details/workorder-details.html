@@ -90,14 +90,18 @@
         <ion-item>
           <h3>Product in place</h3>
           <p>
-            <a (click)="gotoRecord('/services/apexrest/UH/productInPlace/', currWO?.UH__productInPlace__c, 'ProductInPlacePage')">
+            <a (click)="gotoRecord('ProductInPlacePage', currWO?.UH__productInPlace__c)">
               {{currWO?.UH__productInPlace__r?.Name}}
             </a>
           </p>
         </ion-item>
         <ion-item>
           <h3>Service place</h3>
-          <p><a (click)="gotoRecord('UH__ServicePlace__c', currWO?.UH__ServicePlace__r?.attributes.url)">{{currWO?.UH__ServicePlace__r?.Name}}</a></p>
+          <p>
+            <a (click)="gotoRecord('ServicePlaceDetailsPage', currWO?.UH__ServicePlace__c)">
+              {{currWO?.UH__ServicePlace__r?.Name}}
+            </a>
+          </p>
         </ion-item>
         <ion-item>
           <h3>Status</h3>

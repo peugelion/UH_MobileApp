@@ -23,63 +23,63 @@
       <ion-list>
         <ion-item>
           <h3>Account</h3>
-          <p>{{recordObj?.UH__Account__r?.Name}}</p>
+          <p>{{pipRecord?.UH__Account__r?.Name}}</p>
         </ion-item>
         <ion-item>
           <h3>Service Place</h3>
-          <p>{{recordObj?.UH__ServicePlace__r?.Name}}</p>
+          <p>{{pipRecord?.UH__ServicePlace__r?.Name}}</p>
         </ion-item>
         <ion-item>
           <h3>Contact</h3>
-          <p>{{recordObj?.UH__Contact__r?.Name}}</p>
+          <p>{{pipRecord?.UH__Contact__r?.Name}}</p>
         </ion-item>
         <ion-item>
           <h3>Product</h3>
-          <p>{{recordObj?.UH__Product__r?.Name}}</p>
+          <p>{{pipRecord?.UH__Product__r?.Name}}</p>
         </ion-item>
         <ion-item>
           <h3>Product description</h3>
-          <p>{{recordObj?.UH__description__c}}</p>
+          <p>{{pipRecord?.UH__description__c}}</p>
         </ion-item>
         <ion-item>
           <h3>Product code</h3>
-          <p>{{recordObj?.UH__code__c}}</p>
+          <p>{{pipRecord?.UH__code__c}}</p>
         </ion-item>
         <ion-item>
           <h3>Serial Number</h3>
-          <p>{{recordObj?.UH__serial__c}}</p>
+          <p>{{pipRecord?.UH__serial__c}}</p>
         </ion-item>
         <ion-item>
           <h3>Product in Place Name</h3>
-          <p>{{recordObj?.Name}}</p>
+          <p>{{pipRecord?.Name}}</p>
         </ion-item>
         <ion-item>
           <h3>Status</h3>
-          <p>{{recordObj?.UH__status__c}}</p>
+          <p>{{pipRecord?.UH__status__c}}</p>
         </ion-item>
         <ion-item>
           <h3>Service Contract</h3>
-          <p>{{recordObj?.UH__serviceContract__r?.Name}}</p>
+          <p>{{pipRecord?.UH__serviceContract__r?.Name}}</p>
         </ion-item>
         <ion-item>
           <h3>Purchase Date</h3>
-          <p>{{recordObj?.UH__purchaseDate__c}}</p>
+          <p>{{pipRecord?.UH__purchaseDate__c}}</p>
         </ion-item>
         <ion-item>
           <h3>Shipped Date</h3>
-          <p>{{recordObj?.UH__shippedDate__c}}</p>
+          <p>{{pipRecord?.UH__shippedDate__c}}</p>
         </ion-item>
         <ion-item>
           <h3>Usage end date</h3>
-          <p>{{recordObj?.UH__endDate__c}}</p>
+          <p>{{pipRecord?.UH__endDate__c}}</p>
         </ion-item>
         <ion-item>
           <h3>Quantity</h3>
-          <p>{{recordObj?.UH__Quantity__c}}</p>
+          <p>{{pipRecord?.UH__Quantity__c}}</p>
         </ion-item>
         <ion-item>
           <h3>PM Plan</h3>
-          <p>{{recordObj?.UH__pmPlan__c}}</p>
+          <p>{{pipRecord?.UH__pmPlan__c}}</p>
         </ion-item>
       </ion-list>
     </div>
@@ -87,43 +87,46 @@
     <!-- related tab -->
     <ion-list *ngSwitchCase="'related'" class="accordion-list">
       <!-- First Level -->
-      <ion-list-header *ngFor="let item of relatedData; let i = index;" no-lines no-padding>
-        <!-- Toggle Button -->
-        <button ion-item (click)="toggleSection(i)" detail-none [ngClass]="{'section-active': item.open, 'section': !item.open}">
-          <ion-icon item-left name="arrow-forward" *ngIf="!item.open"></ion-icon>
-          <ion-icon item-left name="arrow-down" *ngIf="item.open"></ion-icon>
-            {{ item.name }} <ion-badge color='twitter'>{{item.size}}</ion-badge>
+      <ion-list-header no-lines no-padding>
+        <!-- Toggle Button cases -->
+        <button ion-item (click)="toggleSection(0)" detail-none [ngClass]="{'section-active': relatedData[0].open, 'section': !relatedData[0].open}">
+          <ion-icon item-left name="arrow-forward" *ngIf="!relatedData[0].open"></ion-icon>
+          <ion-icon item-left name="arrow-down" *ngIf="relatedData[0].open"></ion-icon>
+            {{ relatedData[0].name }} <ion-badge color='twitter'>{{relatedData[0].size}}</ion-badge>
         </button>
-        <ion-list *ngIf="item.elements && item.open">
-          <!-- <button ion-button outline item-end (click)="buyItem(child)">{{ child.price }}</button> -->
-          <!-- <ion-item *ngFor="let element of item.elements" ion-item detail-none class="element-item">
+        <ion-list *ngIf="relatedData[0].elements && relatedData[0].open">
+          <ion-item *ngFor="let element of relatedData[0].elements" ion-item detail-none class="element-item">
             <ion-grid>
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Name:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.relatedName }}</div></ion-col>
-              </ion-row>              
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Type:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.type }}</div></ion-col>
+              <ion-row>
+                <ion-col col-12><div>{{element.CaseNumber}}</div></ion-col>
               </ion-row>
               <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Cost:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.cost }}</div></ion-col>
-              </ion-row>              
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Quantity:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.quantity }}</div></ion-col>
-              </ion-row>
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Total cost:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.totalCost }}</div></ion-col>
+                <ion-col col-5 col-lg-3 col-xl-3><div>Subject:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{element.Subject}}</div></ion-col>
               </ion-row>              
               <ion-row class="ellipsis">
                 <ion-col col-5 col-lg-3 col-xl-3><div>Created date:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.createdDate }}</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{element.CreatedDate}}</div></ion-col>
+              </ion-row>
+              <ion-row class="ellipsis">
+                <ion-col col-5 col-lg-3 col-xl-3><div>Priority:</div></ion-col>
+                <ion-col col-7 col-lg-9 col-xl-9><div>{{element.Priority}}</div></ion-col>
               </ion-row>
             </ion-grid>
-          </ion-item> -->
+          </ion-item>
+        </ion-list>
+      </ion-list-header>
+      <ion-list-header no-lines no-padding>
+        <!-- Toggle Button workorders -->
+        <button ion-item (click)="toggleSection(1)" detail-none [ngClass]="{'section-active': relatedData[1].open, 'section': !relatedData[1].open}">
+          <ion-icon item-left name="arrow-forward" *ngIf="!relatedData[1].open"></ion-icon>
+          <ion-icon item-left name="arrow-down" *ngIf="relatedData[1].open"></ion-icon>
+            {{ relatedData[1].name }} <ion-badge color='twitter'>{{relatedData[1].size}}</ion-badge>
+        </button>
+        <ion-list *ngIf="relatedData[1].elements && relatedData[1].open">
+          <ion-item *ngFor="let WO of relatedData[1].elements" ion-item detail-none class="element-item" (click)="gotoWO(WO.Id)">
+            <workorder-info [workorder]="WO"></workorder-info>
+          </ion-item>
         </ion-list>
       </ion-list-header>
     </ion-list>

@@ -3,9 +3,10 @@ import { IonicPageModule } from 'ionic-angular';
 import { WorkorderInfoPage } from './workorder-info';
 
 @NgModule({
-  declarations: [],
+  declarations: [WorkorderInfoPage],
   imports: [
     IonicPageModule.forChild(WorkorderInfoPage),
   ],
+  exports: [WorkorderInfoPage]
 })
 export class WorkorderInfoPageModule {}
