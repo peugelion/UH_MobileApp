@@ -61,6 +61,6 @@ export class WorkordersPage {
   }
 
   gotoWO(woId) {
-    this.navCtrl.push('WorkorderDetailsPage', {"woId": woId});
+    this.navCtrl.push('WorkorderDetailsPage', {"id": woId});
   }
 }

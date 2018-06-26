@@ -15,7 +15,7 @@ import { MapComponent } from '../../components/map/map';
 
 
 @IonicPage({
-  segment: 'ServicePlace/:spId',                 // https://ionicframework.com/docs/api/navigation/IonicPage/
+  segment: 'ServicePlace/:id',                 // https://ionicframework.com/docs/api/navigation/IonicPage/
   //defaultHistory: ['sp-list']
   //defaultHistory: ['ServicePlaceDetailsPage']
 })
@@ -68,7 +68,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   @ViewChild(MapComponent) mapCmp;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, private soService: SobjectServiceProvider, private spService: ServicePlacesServiceProvider) {
-    this.Id = this.navParams.data['spId']
+    this.Id = this.navParams.data['id']
   }
 
   ngAfterViewInit() {
@@ -222,11 +222,11 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     });
   }
 
-  gotoItemPage(itemId) {
-    if (this.active) // 1 or 0 (pip or wo)
-      this.navCtrl.push('ProductInPlaceDetailsPage', {"id": itemId});
-    else
-      this.navCtrl.push('WorkorderDetailsPage', {"woId": itemId});
-  }
+  // gotoItemPage(itemId) {
+  //   if (this.active) // 1 or 0 (pip or wo)
+  //     this.navCtrl.push('ProductInPlaceDetailsPage', {"id": itemId});
+  //   else
+  //     this.navCtrl.push('WorkorderDetailsPage', {"woId": itemId});
+  // }
 
 }
