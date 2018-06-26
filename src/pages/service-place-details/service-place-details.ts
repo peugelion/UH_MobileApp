@@ -96,7 +96,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
 
           this.spPromise.
             then(r => {
-              console.log(" spPromise resolve : ", r);
+              //console.log(" spPromise resolve : ", r);
 
               this.tel  = r["UH__Phone__c"];
               this.name = r["Name"];

@@ -8,7 +8,7 @@ export class SobjectServiceProvider {
   getSobject(service, table, id, relatedTable) {
     return new Promise((resolve, reject) => {
         let urlMapping: string = '/services/data/v41.0/sobjects/'+table+'/'+id+'/'+ relatedTable; // ex.:  '/services/data/v41.0/sobjects/UH__Technician__c/a0C15000014tWvvEAE/UH__defaultDepartment__r'
-        console.log("urlMapping : ", urlMapping);
+        //console.log("urlMapping : ", urlMapping);
         resolve(service.apexrest(urlMapping));
     });
   };

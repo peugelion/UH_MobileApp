@@ -37,15 +37,13 @@ export class RelatedTabComponent {
 
 
   constructor(public navCtrl: NavController) {
-    console.log('Hello RelatedTabComponent Component');
-    this.text = 'Hello World';
-    console.log("inputs", this.active, this.labels, this.relatedListArr);
+    //console.log("inputs", this.active, this.labels, this.relatedListArr);
   }
 
   ngOnInit() {
     // console.log(" spPromise - ngOnInit", this.spPromise); // undefined, ako stavim " | async" onda je null  // https://stackoverflow.com/questions/39933180/input-with-promise-angular2
     //console.log(" lat - ngOnInit", this.lat);
-    console.log("inputs ngOnInit", this.active, this.labels, this.relatedListArr);
+    //console.log("inputs ngOnInit", this.active, this.labels, this.relatedListArr);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -53,7 +51,7 @@ export class RelatedTabComponent {
       // if (this.addr) {
       //     this.initmap();
       // }
-      console.log("inputs ngOnChanges", this.active, this.labels, this.relatedListArr);
+      //console.log("inputs ngOnChanges", this.active, this.labels, this.relatedListArr);
     } catch(err) {
       console.log(err);
     }
@@ -70,10 +68,6 @@ export class RelatedTabComponent {
     //   this.navCtrl.push('ProductInPlaceDetailsPage', {"id": itemId});
     // else
     //   this.navCtrl.push('WorkorderDetailsPage', {"id": itemId});
-
-    console.log("this.clickPages", this.clickPages);
-    console.log("this.active", this.active);
-    console.log("this.itemId", itemId);
 
     this.navCtrl.push(this.clickPages[this.active], {"id": itemId});
   }
