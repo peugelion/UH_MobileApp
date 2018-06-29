@@ -15,7 +15,9 @@ export class DeptInventoryComponent {
   private unitsInStock:   Array<any>;
   private userWarehouses: Array<any>;
 
-  constructor(private oauth: OAuthServiceProvider, private viewCtrl: ViewController) {
+  constructor(private oauth: OAuthServiceProvider, private viewCtrl: ViewController) {}
+
+  ionViewDidLoad() {
     this.getWarehouseAndStock();
   }
 

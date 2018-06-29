@@ -5,8 +5,9 @@ import { WorkordersServiceProvider } from '../../providers/workorders-service/wo
 
 import { AddExpenseComponent } from '../../components/add-expense/add-expense';
 import { DeptInventoryComponent } from '../../components/dept-inventory/dept-inventory';
-
+import { AddLaborComponent } from '../../components/add-labor/add-labor';
 import { DataService } from 'forcejs';
+
 
 @IonicPage({
   segment: 'workorder-details/:id'
@@ -43,7 +44,7 @@ export class WorkorderDetailsPage {
         this.woService.getWODetails(oauth, woID)
           .then(result => {
             this.currWO = result.currWO;
-            this.currentWOStatus = result.currWO.status__c;
+            this.currentWOStatus = result.currWO.UH__Status__c;
             this.statusClassMap = result.statusesMap;
             this.statusClassMap.Arrived = result.statusesMap["Arrived on place"];
 
@@ -78,7 +79,7 @@ export class WorkorderDetailsPage {
               obj["createdDate"] = new Date(woLabor.CreatedDate).toDateString();
               obj["quantity"] = woLabor.UH__hoursCount__c;
               obj["totalCost"] = woLabor.UH__totalCost__c;
-              obj["type"] = woLabor.UH__Labor__r.UH__Type__c;
+              obj["type"] = woLabor.UH__Labor__r.UH__Type__c + ' - ' + woLabor.UH__Labor__r.Name;
               obj["relatedObjectURL"] = woLabor.attributes.url;
               return obj;
             });
@@ -116,7 +117,6 @@ export class WorkorderDetailsPage {
   }
 
   executeAction(action) {
-    console.log("action == ", action);
     this[`${action}`]();
   }
 
@@ -142,7 +142,24 @@ export class WorkorderDetailsPage {
   }
 
   addLabour() {
-    console.log("I got inside addLabour!");
+    let labourModal = this.modalCtrl.create(AddLaborComponent, { woId: this.currWO.Id });
+    labourModal.onDidDismiss(data => {
+      if(!data.isCanceled) {
+        // push newly created labour into its related list
+        let relatedWOLabour = this.relatedData[2];
+        relatedWOLabour.elements.push(data.createdLabour);
+        relatedWOLabour.size += 1;
+
+        // present the message from a addLabour modal
+        let toast = this.toastCtrl.create({
+          message: data.message,
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+      }
+    });
+    labourModal.present();
   }
 
   addExpense() {

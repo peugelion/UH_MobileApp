@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input } from '@angular/core';
-import { IonicPage, NavController, Platform } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 import { DataService } from 'forcejs';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
@@ -19,7 +19,7 @@ declare var $A:any;
 })
 export class HomePage {
   
-  @ViewChild('myWarehouse') myWarehouse: any;
+  @ViewChild('deptStock') deptStock;
 
   workOrders : any;
   oauthCreds : any; 
@@ -42,6 +42,7 @@ export class HomePage {
     this.oauth.getOAuthCredentials().
       then((oauth) => {
         this.initMap();
+        this.deptStock.getWarehouseAndStock();
         this.showListWOs(oauth);
         this.loadLtngApp(oauth.accessToken);
       });
