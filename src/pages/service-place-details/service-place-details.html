@@ -59,17 +59,17 @@
             <!-- <h2><a target="_blank" href="https://maps.google.com/?ll={{ sp?.UH__position__Latitude__s }},{{ sp?.UH__position__Longitude__s }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
             <!-- <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&query={{ sp?.UH__position__Latitude__s }},{{ sp?.UH__position__Longitude__s }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
             <!-- <h2><a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ sp?.UH__Address__c }} {{ city?.Name }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
-            <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ name }}">{{ addr }}  <ion-icon [name]="addr ? 'flag':''"></ion-icon></a>&nbsp;</h2>
+            <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ cityName }}">{{ addr }}  <ion-icon [name]="addr ? 'flag':''"></ion-icon></a>&nbsp;</h2>
           </ion-item>
           <ion-item>
             <p>City</p>
-            <h2>{{ name }}&nbsp;</h2>
+            <h2>{{ cityName }}&nbsp;</h2>
           </ion-item>
           <ion-item>
             <!-- <div id="map_sp"></div> -->
             <!-- <map [spPromisesArr]="[spPromise]"></map> -->
             <!-- <map [spPromise]="spPromise | async"></map> -->
-            <map [lat]="lat" [lng]="lng" [addr]="addr"></map>
+            <map [lat]="lat" [lng]="lng" [addr]="addr" [cityName]="cityName" [countryName]="countryName"></map>
           </ion-item>
       </ion-list>
 
@@ -113,7 +113,7 @@
 
         <ion-col no-padding>
           <button ion-button color="primary" clear icon-only>
-            <a href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ name }}">
+            <a href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ cityName }}">
               <ion-icon name="map"></ion-icon>
               <label>Directions</label>
             </a>

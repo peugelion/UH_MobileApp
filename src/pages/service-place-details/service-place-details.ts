@@ -1,10 +1,10 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, /*ViewChild,*/ AfterViewInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { SobjectServiceProvider } from '../../providers/sobject-service/sobject-service';
 import { ServicePlacesServiceProvider } from '../../providers/service-places-service/service-places-service';
 import { DataService } from 'forcejs';
-import { MapComponent } from '../../components/map/map';
+//import { MapComponent } from '../../components/map/map';
 
 /**
  * Generated class for the ServicePlaceDetailsPage page.
@@ -15,9 +15,8 @@ import { MapComponent } from '../../components/map/map';
 
 
 @IonicPage({
-  segment: 'ServicePlace/:id',                 // https://ionicframework.com/docs/api/navigation/IonicPage/
-  //defaultHistory: ['sp-list']
-  //defaultHistory: ['ServicePlaceDetailsPage']
+  segment: 'sp/:id',                 // https://ionicframework.com/docs/api/navigation/IonicPage/
+  defaultHistory: ['ServicePlacesPage']
 })
 @Component({
   selector: 'page-service-place-details',
@@ -45,7 +44,9 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   lng: string;
 
   contact: {};
-  city: {};
+  //city: {};
+  cityName: string;
+  countryName: string;
 
   //map;
 
@@ -83,6 +84,20 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     this.loadServicePlace();
   }
 
+  onSegmentChanged(toptabs) {
+    (this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated();
+  }
+
+  doRefresh(refresher) {
+    let reloadPromise = (this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated();
+    reloadPromise.
+      then(r => {
+        refresher.complete();
+      });
+  }
+
+  //
+
   loadServicePlace() {
     return new Promise((resolve, reject) => {
       this.oauth.getOAuthCredentials().
@@ -92,6 +107,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
 
           this.spPromise      = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, '');
           let cityPromise     = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r');
+          let countryPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r/UH__Country__r');
           let contactPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__Contact__r');
 
           this.spPromise.
@@ -110,8 +126,14 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
             });
 
           cityPromise.then(r => {
-              // console.log(" cityDeptPromise resolve : ", r);
-              this.city = r;
+              //console.log(" cityDeptPromise resolve : ", r);
+              //this.city = r;
+              this.cityName = r["Name"];
+            });
+          countryPromise.then(r => {
+              //console.log(" countryPromise resolve : ", r);
+              //this.city = r;
+              this.countryName = r["Name"];
             });
 
           contactPromise.
@@ -120,26 +142,12 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
               this.contact = r;
             }).
             catch( reason => {
-              console.error( 'contactPromise: onRejected function called: ', reason );
+              console.warn( 'contactPromise: onRejected function called: ', reason );
               this.contact = null;
             });
 
       });
     });
-  }
-
-
-
-  onSegmentChanged(toptabs) {
-    (this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated();
-  }
-
-  doRefresh(refresher) {
-    let reloadPromise = (this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated();
-    reloadPromise.
-      then(r => {
-        refresher.complete();
-      });
   }
 
 

@@ -7,10 +7,10 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
-import { TechniciansPage } from '../pages/technicians/technicians';
+//import { TechniciansPage } from '../pages/technicians/technicians';
 import { WorkordersPage } from '../pages/workorders/workorders';
 import { WorkorderDetailsPageModule } from '../pages/workorder-details/workorder-details.module';
-import { ServicePlacesPage } from '../pages/service-places/service-places';
+//import { ServicePlacesPage } from '../pages/service-places/service-places';
 import { ProductInPlacePageModule } from '../pages/product-in-place/product-in-place.module';
 
 import { TechniciansServiceProvider } from '../providers/technicians-service/technicians-service';
@@ -34,9 +34,9 @@ import { WorkorderInfoPageModule } from '../pages/workorder-info/workorder-info.
     MyApp,
     HomePage,
     ListPage,
-    TechniciansPage,
+    //TechniciansPage,
     WorkordersPage,
-    ServicePlacesPage
+    //ServicePlacesPage
   ],
   imports: [
     BrowserModule,
@@ -53,9 +53,9 @@ import { WorkorderInfoPageModule } from '../pages/workorder-info/workorder-info.
     MyApp,
     HomePage,
     ListPage,
-    TechniciansPage,
+    //TechniciansPage,
     WorkordersPage,
-    ServicePlacesPage
+    //ServicePlacesPage
   ],
   providers: [
     StatusBar,
