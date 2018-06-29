@@ -8,14 +8,12 @@
 </ion-header>
 
 <ion-content>
-    <ion-refresher (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
-
-  <!-- <ion-card #myWarehouse>
-    <div id="myWarehouseDiv"></div>
-  </ion-card> -->
-  <dept-inventory [showCloseBtn]="false"></dept-inventory>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <!-- Show warehouse stock -->
+  <dept-inventory [showCloseBtn]="false" #deptStock></dept-inventory>
+  <!-- show map -->
   <ion-card #mapComponent>
     <ion-card-content>
       <!-- <div id="mapComponent"></div> -->
@@ -23,6 +21,7 @@
       </ion-content>
     </ion-card-content>
   </ion-card>
+  <!-- show recently assigned workorders  -->
   <ion-card>
     <ion-card-header>
       Recently assigned Workorders
@@ -30,7 +29,7 @@
     <ion-card-content>
       <ion-list>
         <ion-item-sliding *ngFor="let WO of workOrders">
-          <ion-item  (click)="gotoWO(WO.Id)">
+          <ion-item>
             <workorder-info [workorder]="WO"></workorder-info>
           </ion-item>
           <ion-item-options>

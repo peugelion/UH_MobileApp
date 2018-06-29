@@ -1,10 +1,11 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { SobjectServiceProvider } from '../../providers/sobject-service/sobject-service';
 import { ServicePlacesServiceProvider } from '../../providers/service-places-service/service-places-service';
 import { DataService } from 'forcejs';
 import { MapComponent } from '../../components/map/map';
+import { WorkorderFormComponent } from '../../components/workorder-form/workorder-form';
 
 /**
  * Generated class for the ServicePlaceDetailsPage page.
@@ -43,6 +44,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   addr: string;
   lat: string;
   lng: string;
+  accountId: string;
 
   contact: {};
   city: {};
@@ -68,7 +70,15 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
 
   //@ViewChild(MapComponent) mapCmp;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, private soService: SobjectServiceProvider, private spService: ServicePlacesServiceProvider) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private oauth : OAuthServiceProvider,
+    private soService: SobjectServiceProvider,
+    private spService: ServicePlacesServiceProvider,
+    public modalCtrl: ModalController,
+    private toastCtrl: ToastController
+  ) {
     this.Id = this.navParams.data['id']
   }
 
@@ -103,6 +113,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
               this.addr = r["UH__Address__c"];
               this.lat  = r["UH__position__Latitude__s"];
               this.lng  = r["UH__position__Longitude__s"];
+              this.accountId = r["UH__Account__c"];
 
               //this.map.initmap();
 
@@ -225,6 +236,22 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
 
       });
     });
+  }
+
+  createWO(spId: string, spName: string, accountId: string): void {
+    let createWOModal = this.modalCtrl.create(WorkorderFormComponent, { id: spId, spName: spName, accId: accountId });
+    createWOModal.onDidDismiss(data => {
+      if(!data.isCanceled) {
+        // present the message from a addExpense modal
+        let toast = this.toastCtrl.create({
+          message: data.message,
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+      }
+    });
+    createWOModal.present();
   }
 
   // gotoItemPage(itemId) {

@@ -15,7 +15,7 @@ declare var $A:any;
 })
 export class HomePage {
   
-  @ViewChild('myWarehouse') myWarehouse: any;
+  @ViewChild('deptStock') deptStock;
 
   workOrders : any;
   oauthCreds : any; 
@@ -30,6 +30,7 @@ export class HomePage {
   initPage(){
     this.oauth.getOAuthCredentials().
       then((oauth) => {
+        this.deptStock.getWarehouseAndStock();
         this.showListWOs(oauth);
         this.loadLtngApp(oauth.accessToken);
       });

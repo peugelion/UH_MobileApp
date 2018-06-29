@@ -43,7 +43,7 @@ export class WorkorderDetailsPage {
         this.woService.getWODetails(oauth, woID)
           .then(result => {
             this.currWO = result.currWO;
-            this.currentWOStatus = result.currWO.status__c;
+            this.currentWOStatus = result.currWO.UH__Status__c;
             this.statusClassMap = result.statusesMap;
             this.statusClassMap.Arrived = result.statusesMap["Arrived on place"];
 
@@ -116,7 +116,6 @@ export class WorkorderDetailsPage {
   }
 
   executeAction(action) {
-    console.log("action == ", action);
     this[`${action}`]();
   }
 

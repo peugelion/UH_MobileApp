@@ -18,7 +18,7 @@
     <ion-list-header>
       {{listLabel}}
     </ion-list-header>
-    <ion-item *ngFor="let WO of workorders" (click)="gotoWO(WO.Id)">
+    <ion-item *ngFor="let WO of workorders"> 
       <workorder-info [workorder]="WO"></workorder-info>
     </ion-item>
   </ion-list>

@@ -70,6 +70,10 @@
           <p>{{pipRecord?.UH__shippedDate__c}}</p>
         </ion-item>
         <ion-item>
+          <h3>Shipped Date</h3>
+          <p>{{pipRecord?.UH__installedDate__c}}</p>
+        </ion-item>
+        <ion-item>
           <h3>Usage end date</h3>
           <p>{{pipRecord?.UH__endDate__c}}</p>
         </ion-item>
@@ -124,7 +128,7 @@
             {{ relatedData[1].name }} <ion-badge color='twitter'>{{relatedData[1].size}}</ion-badge>
         </button>
         <ion-list *ngIf="relatedData[1].elements && relatedData[1].open">
-          <ion-item *ngFor="let WO of relatedData[1].elements" ion-item detail-none class="element-item" (click)="gotoWO(WO.Id)">
+          <ion-item *ngFor="let WO of relatedData[1].elements" ion-item detail-none class="element-item">
             <workorder-info [workorder]="WO"></workorder-info>
           </ion-item>
         </ion-list>

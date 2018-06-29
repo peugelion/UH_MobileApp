@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams} from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -16,4 +16,7 @@ export class WorkorderInfoPage {
     console.log('ionViewDidLoad WorkorderInfoPage');
   }
 
+  gotoWorkorder(id: string) {
+    this.navCtrl.push('WorkorderDetailsPage', {"id": id});
+  }
 }
