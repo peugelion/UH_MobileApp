@@ -9,19 +9,18 @@
 
 <ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+      <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <!-- Show warehouse stock -->
   <dept-inventory [showCloseBtn]="false" #deptStock></dept-inventory>
   <!-- show map -->
-  <ion-card #mapComponent>
+  <map [lat]="techLat" [lng]="techLng" [addr]="addr"></map>
+  <!-- <ion-card #mapComponent>
     <ion-card-content>
-      <!-- <div id="mapComponent"></div> -->
       <ion-content ng-controller="MapController" id="mapComponent">
       </ion-content>
     </ion-card-content>
-  </ion-card>
-  <!-- show recently assigned workorders  -->
+  </ion-card> -->
   <ion-card>
     <ion-card-header>
       Recently assigned Workorders

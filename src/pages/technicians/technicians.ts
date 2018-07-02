@@ -2,15 +2,18 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { TechniciansServiceProvider } from '../../providers/technicians-service/technicians-service';
-//import { SingleTechnicianPage } from '../single-technician/single-technician';
 
-@IonicPage()
+@IonicPage({
+  name: 'TechniciansPage',
+  segment: 'technicians'
+})
 @Component({
   selector: 'page-technicians',
   templateUrl: 'technicians.html',
   //entryComponents:[ SingleTechnicianPage ]
 })
 export class TechniciansPage {
+
   items: Array<{Id: string, Name: any}>;  // Technicians
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private techService: TechniciansServiceProvider, private oauth : OAuthServiceProvider, private loadingCtrl: LoadingController) {
@@ -18,7 +21,7 @@ export class TechniciansPage {
 
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TechniciansPage');
+    //console.log('ionViewDidLoad TechniciansPage');
 
     let loading = this.loadingCtrl.create({
       spinner: 'bubbles',
@@ -37,8 +40,7 @@ export class TechniciansPage {
         then(oauth => {
           this.techService.loadTechnicians(oauth)   //
             .then(results => {
-              console.log(results);
-              this.items = results;
+              this.items = results;       //console.log(results);
               resolve(this.items);
             });
         });
@@ -47,8 +49,7 @@ export class TechniciansPage {
 
   gotoSingleTechnician(id) {
     //this.navCtrl.push(SingleTechnicianPage, {Id: id});
-    //this.navCtrl.push('SingleTechnicianPage', {Id: id})
-    this.navCtrl.push('SingleTechnicianPage', {"techId": id});
+    this.navCtrl.push('SingleTechnicianPage', {"id": id});
   }
 
   

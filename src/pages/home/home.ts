@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Input } from '@angular/core';
 import { NavController, Platform } from 'ionic-angular';
 import { DataService } from 'forcejs';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
@@ -9,6 +9,10 @@ import { ActionSheetController } from 'ionic-angular'
 declare var $Lightning:any;
 declare var $A:any;
 
+// @IonicPage({
+//   name: 'HomePage',
+//   segment: '#'
+// })
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -20,6 +24,13 @@ export class HomePage {
   workOrders : any;
   oauthCreds : any; 
 
+  @Input()
+  techLat: string;
+  @Input()
+  techLng: string;
+  @Input()
+  addr: string = "";
+
   constructor(
     private woService: WorkordersServiceProvider,
     public navCtrl: NavController,
@@ -30,10 +41,24 @@ export class HomePage {
   initPage(){
     this.oauth.getOAuthCredentials().
       then((oauth) => {
+        this.initMap();
         this.deptStock.getWarehouseAndStock();
         this.showListWOs(oauth);
         this.loadLtngApp(oauth.accessToken);
       });
+  }
+
+  initMap() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition( position => {
+        console.log("position", position, position.coords.latitude, position.coords.longitude);
+        this.techLat = position.coords.latitude.toString();
+        this.techLng = position.coords.longitude.toString();
+        console.log(this.techLat, this.techLng, this);
+      });
+    } else {
+      alert('Geolocation is not supported.');
+    }
   }
 
   showListWOs(oauth) {

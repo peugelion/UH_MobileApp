@@ -22,7 +22,7 @@ export class ServicePlacesServiceProvider {
         + (all ? `` : ` WHERE LastViewedDate = LAST_YEAR OR LastViewedDate = THIS_YEAR`)
     )
     .then(result => {
-        console.log(result);
+        //console.log("loadServicePlaces query result", result);
         return result.records;
     });
   }
@@ -53,7 +53,7 @@ export class ServicePlacesServiceProvider {
          WHERE UH__ServicePlace__c = '${Id}'`
     )
     .then(result => {
-        console.log('getRelatedWOs result:', result);
+        //console.log('getRelatedWOs result:', result);
         return result.records;
     });
   }
@@ -67,7 +67,7 @@ export class ServicePlacesServiceProvider {
         WHERE UH__ServicePlace__c = '${spId}'`
     )
     .then(result => {
-        console.log('getRelatedPiPs r:', result);
+        //console.log('getRelatedPiPs r:', result);
         return result.records;
     });
   }

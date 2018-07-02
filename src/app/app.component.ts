@@ -8,7 +8,7 @@ import { ListPage } from '../pages/list/list';
 import { TechniciansPage } from '../pages/technicians/technicians';
 // import { SingleTechnicianPage } from '../pages/single-technician/single-technician';
 import { WorkordersPage } from '../pages/workorders/workorders';
-import { ServicePlacesPage } from '../pages/service-places/service-places';
+//import { ServicePlacesPage } from '../pages/service-places/service-places';
 
 @Component({
   templateUrl: 'app.html'
@@ -29,8 +29,8 @@ export class MyApp {
       { icon: 'list-box', title: 'List', component: ListPage },
       { icon: 'briefcase', title: 'Accounts', component: TechniciansPage },
       { icon: 'hammer', title: 'Work Orders', component: WorkordersPage },
-      { icon: 'build', title: 'Technicians', component: TechniciansPage },
-      { icon: 'construct', title: 'Service Places', component: ServicePlacesPage },
+      { icon: 'build', title: 'Technicians', component: 'TechniciansPage' },
+      { icon: 'construct', title: 'Service Places', component: 'ServicePlacesPage' },
       { icon: 'share', title: 'Departments', component: TechniciansPage }
     ];
 

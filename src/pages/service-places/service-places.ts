@@ -11,8 +11,8 @@ import { ServicePlacesServiceProvider } from '../../providers/service-places-ser
  */
 
 @IonicPage({
-  segment: 'ServicePlaces/',
-  //name: 'sp-list'
+  name: 'ServicePlacesPage',
+  segment: 'service-places'
 })
 @Component({
   selector: 'page-service-places',
@@ -46,9 +46,8 @@ export class ServicePlacesPage {
     return new Promise((resolve, reject) => {
       this.oauth.getOAuthCredentials().
         then(oauth => {
-          this.spService.loadServicePlaces(oauth, filter)   //
-            .then(results => {
-              console.log(results);
+          this.spService.loadServicePlaces(oauth, filter)
+            .then(results => {                              //console.log(results);
               this.items = results;
               this.listLabel = (filter ? "All" : "Recently Viewed") + " Service Places";
               this.filter = filter;

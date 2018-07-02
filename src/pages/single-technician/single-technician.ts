@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-// import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { SobjectServiceProvider } from '../../providers/sobject-service/sobject-service';
 //import { PipeTransform, Pipe } from '@angular/core';
 import { DataService } from 'forcejs';
 
 @IonicPage({
-  segment: 'Technician/:techId',                 // https://ionicframework.com/docs/api/navigation/IonicPage/
+  segment: 'tech/:id',                 // https://ionicframework.com/docs/api/navigation/IonicPage/
+  defaultHistory: ['TechniciansPage']
 })
 @Component({
   selector: 'page-single-technician',
@@ -36,21 +36,12 @@ export class SingleTechnicianPage {
   //@Input dataObject;
   constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, private soService: SobjectServiceProvider) {
     //this.Id = navParams.get("Id");
-    this.Id = this.navParams.data['techId']
+    this.Id = this.navParams.data['id']
   }
 
   ionViewDidLoad(id) {
-   console.log('ionViewDidLoad SingleTechnicianPage, id : ', id);
-
-    // let loading = this.loadingCtrl.create({
-    //   spinner: 'bubbles',
-    //   content: 'Loading, please wait...'
-    // });
-    // loading.present();
+    //console.log('ionViewDidLoad SingleTechnicianPage, id : ', id);
     this.loadTechnician()
-      // .then(r => {
-      //   loading.dismiss();
-      // });
   }
 
   loadTechnician() {
@@ -62,35 +53,36 @@ export class SingleTechnicianPage {
           let techPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, '');
           let defDeptPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__defaultDepartment__r');
           let userPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__User__r');
-          console.log("techPromise:, ", techPromise);
+          //console.log("techPromise:, ", techPromise);
 
           Promise.all([techPromise, userPromise])
             .then((arrayOfResults) => {
-              console.log('arrayOfResults', arrayOfResults);
-              this.technician = arrayOfResults[0];              console.log("this.technician", this.technician);
-              this.user = arrayOfResults[1];                    console.log("this.user", this.user);              
+              //console.log('arrayOfResults', arrayOfResults);
+              this.technician = arrayOfResults[0];              //console.log("this.technician", this.technician);
+              this.user = arrayOfResults[1];                    //console.log("this.user", this.user);              
               //resolve(arrayOfResults); // puca ako nije admin (default department pravo)
               resolve(techPromise); // !!!
             })
             .catch(error => {
-              this.department = null;             console.log("arrayOfResults promisee err", error);
+              this.department = null;
+              console.log("arrayOfResults promisee err", error);
             });
           //resolve(userPromise);
 
           defDeptPromise
           .then((r) => {
-            this.defaultDepartment = r;       console.log("this.defDeptPromise", this.defaultDepartment);
+            this.defaultDepartment = r;         //console.log("this.defDeptPromise", this.defaultDepartment);
 
             this.department = {};
             let departmentId = this.defaultDepartment['UH__Department__c'];
             this.soService.getSobject(service, 'UH__Department__c', departmentId, '')
               .then(r => {
-                this.department = r;                          console.log("this.department", this.department);
+                this.department = r;            //console.log("this.department", this.department);
                 resolve(this.department);
               });
           })
           .catch(error => {
-            this.department = null;             console.log("defDeptPromise", error);
+            this.department = null;             //console.log("defDeptPromise", error);
           });
 
       });
