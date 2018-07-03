@@ -6,6 +6,7 @@ import { DeptInventoryComponent } from './dept-inventory/dept-inventory';
 import { RelatedTabComponent } from './related-tab/related-tab';
 import { WorkorderFormComponent } from './workorder-form/workorder-form';
 import { AddLaborComponent } from './add-labor/add-labor';
+import { RejectWorkorderComponent } from './reject-workorder/reject-workorder';
 
 @NgModule({
 	declarations: [
@@ -14,13 +15,15 @@ import { AddLaborComponent } from './add-labor/add-labor';
 		MapComponent,
     RelatedTabComponent,
     WorkorderFormComponent,
-    AddLaborComponent
+    AddLaborComponent,
+    RejectWorkorderComponent
 	],
 	entryComponents: [
     AddExpenseComponent,
     DeptInventoryComponent,
     WorkorderFormComponent,
-    AddLaborComponent
+    AddLaborComponent,
+    RejectWorkorderComponent
   ],
 	imports: [IonicPageModule],
 	exports: [
@@ -29,7 +32,8 @@ import { AddLaborComponent } from './add-labor/add-labor';
 		MapComponent,
     RelatedTabComponent,
     WorkorderFormComponent,
-    AddLaborComponent
+    AddLaborComponent,
+    RejectWorkorderComponent
 	]
 })
 export class ComponentsModule {}

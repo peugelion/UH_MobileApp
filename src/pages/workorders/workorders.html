@@ -7,7 +7,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-list>
     <ion-item *ngFor="let list of ['All', 'Recently assigned WOs', 'All opened workorders','Todays workorders']" (click)="showListWOs(list)">
       <ion-icon name="ios-list" item-start></ion-icon>{{list}}

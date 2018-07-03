@@ -6,8 +6,9 @@ import { WorkordersServiceProvider } from '../../providers/workorders-service/wo
 import { AddExpenseComponent } from '../../components/add-expense/add-expense';
 import { DeptInventoryComponent } from '../../components/dept-inventory/dept-inventory';
 import { AddLaborComponent } from '../../components/add-labor/add-labor';
+import { RejectWorkorderComponent } from '../../components/reject-workorder/reject-workorder';
 import { DataService } from 'forcejs';
-
+import { WorkordersPage } from '../workorders/workorders';
 
 @IonicPage({
   segment: 'workorder-details/:id'
@@ -129,7 +130,21 @@ export class WorkorderDetailsPage {
   }
 
   rejectWO() {
-    console.log("I got inside rejectWO!");
+    let modal = this.modalCtrl.create(RejectWorkorderComponent, { woId: this.currWO.Id });
+    modal.onDidDismiss(data => {
+      if(!data.isCanceled) {
+        // present the message from a modal
+        let toast = this.toastCtrl.create({
+          message: data.message,
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+        // get back to workorders list and not to currently rejected workorder
+        this.navCtrl.setRoot(WorkordersPage);
+      }
+    });
+    modal.present();
   }
 
   checkInventory() {

@@ -35,14 +35,15 @@ export class WorkordersPage {
     let selectCond: string = '';
     switch(listName) {
       case 'Recently assigned WOs': 
-        selectCond = 'WHERE UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK'; 
+        selectCond = "WHERE UH__Status__c <> 'Reject' AND (UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK)"; 
         break;
       case 'All opened workorders': 
         selectCond = "WHERE UH__Status__c = 'Opened'"; 
         break;
       case 'Todays workorders':
-        selectCond = 'WHERE UH__startTime__c = TODAY'; 
+        selectCond = "WHERE UH__startTime__c = TODAY AND UH__Status__c <> 'Reject'"; 
         break;
+      default: selectCond = "WHERE UH__Status__c <> 'Reject'";
     }
     this.oauth.getOAuthCredentials().
       then(oauth => {
