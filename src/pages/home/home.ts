@@ -3,6 +3,7 @@ import { NavController, Platform } from 'ionic-angular';
 import { DataService } from 'forcejs';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
+import { SobjectServiceProvider } from '../../providers/sobject-service/sobject-service';
 
 import { ActionSheetController } from 'ionic-angular'
 
@@ -36,19 +37,56 @@ export class HomePage {
     public navCtrl: NavController,
     private oauth : OAuthServiceProvider,
     public actionSheetCtrl: ActionSheetController,
-    public platform: Platform) {}
+    public platform: Platform,
+    private soService: SobjectServiceProvider) {}
 
   initPage(){
     this.oauth.getOAuthCredentials().
       then((oauth) => {
-        this.initMap();
+        this.initMap(oauth);
         this.deptStock.getWarehouseAndStock();
         this.showListWOs(oauth);
         this.loadLtngApp(oauth.accessToken);
       });
   }
 
-  initMap() {
+
+  loadWOsSPs(oauth){
+    let service = DataService.createInstance(oauth, {useProxy:false});
+    return service.query(`SELECT id, name, uh__servicePlace__r.Id, uh__servicePlace__r.Name, uh__servicePlace__r.UH__Address__c, uh__servicePlace__r.UH__position__c, uh__servicePlace__r.UH__City__r.Name
+    FROM uh__workOrder__c
+    WHERE uh__status__c = 'Accept' AND UH__Technician__r.UH__User__r.Id = '`+oauth['userId']+`'`);
+  }
+
+  initMap(oauth) {
+
+    let service = DataService.createInstance(oauth, {useProxy:false});
+    console.log("oauth", oauth, oauth["userId"]);
+    //console.log("loadWOsSPs", this.loadWOsSPs(oauth) );
+
+    this.loadWOsSPs(oauth).
+    then( r => {
+
+      console.log("loadWOsSPs", r);
+      var flags = {};
+      let filteredWOs = r["records"].filter(function(entry) {
+          if (flags[entry.UH__ServicePlace__r.Id]) {
+              return false;
+          }
+          flags[entry.UH__ServicePlace__r.Id] = true;
+          return true;
+      });
+
+      console.log("filteredWOs", filteredWOs);
+
+
+});
+    
+    // let SPsPromise  = this.soService.getSobject(service, 'uh__workOrder__c', this.Id, 'UH__ServicePlace__r');
+    // let SPsPromise  = this.soService.getSobject(service, 'uh__workOrder__c', this.Id, 'UH__ServicePlace__r');
+
+    
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition( position => {
         console.log("position", position, position.coords.latitude, position.coords.longitude);

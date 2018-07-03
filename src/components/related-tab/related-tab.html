@@ -12,7 +12,7 @@
       <!-- <div *ngFor="let listLabel of ['Work Orders', 'Products in Place']; let j = index"> -->
       <div *ngFor="let listLabels of labels; let j = index">
         <div *ngIf="j == i">
-          <h2>{{ listLabels[0] }}&nbsp;<ion-badge color='twitter'>{{ relatedList?.length }}</ion-badge></h2>
+          <h2>{{ listLabels[0][0] }}&nbsp;<ion-badge color='twitter'>{{ relatedList?.length }}</ion-badge></h2>
         </div>
       </div>
     </button>

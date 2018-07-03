@@ -58,8 +58,8 @@ export class SingleTechnicianPage {
           Promise.all([techPromise, userPromise])
             .then((arrayOfResults) => {
               //console.log('arrayOfResults', arrayOfResults);
-              this.technician = arrayOfResults[0];              //console.log("this.technician", this.technician);
-              this.user = arrayOfResults[1];                    //console.log("this.user", this.user);              
+              this.technician = arrayOfResults[0];              console.log("this.technician", this.technician);
+              this.user = arrayOfResults[1];                    console.log("this.user", this.user);              
               //resolve(arrayOfResults); // puca ako nije admin (default department pravo)
               resolve(techPromise); // !!!
             })

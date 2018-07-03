@@ -69,7 +69,8 @@ export class RelatedTabComponent {
     // else
     //   this.navCtrl.push('WorkorderDetailsPage', {"id": itemId});
 
-    this.navCtrl.push(this.clickPages[this.active], {"id": itemId});
+    //this.navCtrl.push(this.clickPages[this.active], {"id": itemId});
+    this.navCtrl.push(this.labels[this.active][0][1], {"id": itemId});
   }
 
 }
