@@ -80,40 +80,60 @@
           <p>{{currWO?.Name}}</p>
         </ion-item>
         <ion-item>
-          <h3>Created Date</h3>
-          <p>{{currWO?.CreatedDate}}</p>
-        </ion-item>
-        <ion-item>
           <h3>Description</h3>
           <p>{{currWO?.UH__Description__c}}</p>
-        </ion-item>
-        <ion-item>
-          <h3>Product in place</h3>
-          <p>
-            <a (click)="gotoRecord('ProductInPlacePage', currWO?.UH__productInPlace__c)">
-              {{currWO?.UH__productInPlace__r?.Name}}
-            </a>
-          </p>
-        </ion-item>
-        <ion-item>
-          <h3>Service place</h3>
-          <p>
-            <a (click)="gotoRecord('ServicePlaceDetailsPage', currWO?.UH__ServicePlace__c)">
-              {{currWO?.UH__ServicePlace__r?.Name}}
-            </a>
-          </p>
         </ion-item>
         <ion-item>
           <h3>Status</h3>
           <p>{{currWO?.UH__Status__c}}</p>
         </ion-item>
         <ion-item>
+          <h3>Contact</h3>
+          <p>
+            <a (click)="gotoRecord('ContactPage', currWO?.UH__Contact__c, currWO?.UH__Contact__r.attributes.url)">
+              {{currWO?.UH__Contact__r?.Name}}
+            </a>
+          </p>
+        </ion-item>
+        <ion-item>
+          <h3>Service place</h3>
+          <p>
+            <a (click)="gotoRecord('ServicePlaceDetailsPage', currWO?.UH__ServicePlace__c, currWO?.UH__ServicePlace__r.attributes.url)">
+              {{currWO?.UH__ServicePlace__r?.Name}}
+            </a>
+          </p>
+        </ion-item>
+        <ion-item>
+          <h3>Product in place</h3>
+          <p>
+            <a (click)="gotoRecord('ProductInPlacePage', currWO?.UH__productInPlace__c, currWO?.UH__productInPlace__r.attributes.url)">
+              {{currWO?.UH__productInPlace__r?.Name}}
+            </a>
+          </p>
+        </ion-item>
+        <ion-item>
           <h3>Technician</h3>
           <p>{{currWO?.UH__Technician__r?.UH__User__r.Name}}</p>
         </ion-item>
         <ion-item>
+          <h3>Service Team</h3>
+          <p>{{currWO?.UH__serviceTeam__r?.Name}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Service contract</h3>
+          <p>{{currWO?.UH__coveredByContract__r?.Name}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Created Date</h3>
+          <p>{{currWO?.CreatedDate}}</p>
+        </ion-item>        
+        <ion-item>
           <h3>Start time</h3>
           <p>{{currWO?.UH__startTime__c}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Additional comments</h3>
+          <p>{{currWO?.UH__Comments__c}}</p>
         </ion-item>
         <ion-item>
           <h3>Deadline</h3>
@@ -123,53 +143,24 @@
           <h3>Closed on</h3>
           <p>{{currWO?.UH__ClosedOn__c}}</p>
         </ion-item>
+        <ion-item>
+          <h3>Cancellation date</h3>
+          <p>{{currWO?.UH__dateCancelled__c}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Cancelled By</h3>
+          <p>{{currWO?.UH__cancelledBy__r?.Name}}</p>
+        </ion-item>
       </ion-list>
     </div>
     <!-- details tab end -->
     <!-- related tab -->
-    <ion-list *ngSwitchCase="'related'" class="accordion-list">
-      <!-- First Level -->
-      <ion-list-header *ngFor="let item of relatedData; let i = index;" no-lines no-padding>
-        <!-- Toggle Button -->
-        <button ion-item (click)="toggleSection(i)" detail-none [ngClass]="{'section-active': item.open, 'section': !item.open}">
-          <ion-icon item-left name="arrow-forward" *ngIf="!item.open"></ion-icon>
-          <ion-icon item-left name="arrow-down" *ngIf="item.open"></ion-icon>
-            {{ item.name }} <ion-badge color='twitter'>{{item.size}}</ion-badge>
-        </button>
-        <ion-list *ngIf="item.elements && item.open">
-          <!-- <button ion-button outline item-end (click)="buyItem(child)">{{ child.price }}</button> -->
-          <ion-item *ngFor="let element of item.elements" ion-item detail-none class="element-item">
-            <ion-grid>
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Name:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.relatedName }}</div></ion-col>
-              </ion-row>              
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Type:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.type }}</div></ion-col>
-              </ion-row>
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Cost:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.cost }}</div></ion-col>
-              </ion-row>              
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Quantity:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.quantity }}</div></ion-col>
-              </ion-row>
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Total cost:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.totalCost }}</div></ion-col>
-              </ion-row>              
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Created date:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{ element.createdDate }}</div></ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-        </ion-list>
-      </ion-list-header>
-    </ion-list>
+    <accordion *ngSwitchCase="'related'" [relatedData]="relatedData"></accordion>
     <!-- related tab end -->
   </div>
 </ion-content>
-<workorder-footer-actions [woStatus]="currentWOStatus" (onActionDispatch)="executeAction($event)"></workorder-footer-actions>
+<ion-footer text-center>
+  <ion-toolbar>
+    <workorder-footer-actions [woStatus]="currentWOStatus" (onActionDispatch)="executeAction($event)"></workorder-footer-actions>
+  </ion-toolbar>
+</ion-footer>

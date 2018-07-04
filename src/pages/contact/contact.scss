@@ -1,0 +1,14 @@
+page-contact {
+  .ellipsis{
+    div{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 1.4rem;
+    }
+  }
+  
+  [padding] h3:first-child {
+    margin-top: 5px;
+  }
+}

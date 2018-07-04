@@ -9,6 +9,8 @@ import { AddLaborComponent } from '../../components/add-labor/add-labor';
 import { RejectWorkorderComponent } from '../../components/reject-workorder/reject-workorder';
 import { DataService } from 'forcejs';
 import { WorkordersPage } from '../workorders/workorders';
+import { EditWorkorderComponent } from '../../components/edit-workorder/edit-workorder';
+import { RelatedListsDataProvider } from '../../providers/related-lists-data/related-lists-data';
 
 @IonicPage({
   segment: 'workorder-details/:id'
@@ -20,6 +22,7 @@ import { WorkordersPage } from '../workorders/workorders';
 export class WorkorderDetailsPage {
 
   tab: string = "details";
+  id: string;
   currWO: any;
   currentWOStatus: string = 'Open';
   relatedData: Array<any> = [];
@@ -32,11 +35,15 @@ export class WorkorderDetailsPage {
     public modalCtrl: ModalController,
     private oauth : OAuthServiceProvider, 
     private woService: WorkordersServiceProvider,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    private relDataService: RelatedListsDataProvider) 
+  {
+    this.id = this.navParams.data['id']
   }
 
   ionViewDidLoad() {
-    this.getWODetails(this.navParams.data['id']);
+    this.getWODetails(this.id);
+    this.getRelatedData();
   }
 
   getWODetails(woID) {
@@ -51,45 +58,60 @@ export class WorkorderDetailsPage {
 
             // so ugly because I wanted to use existing functions to get required data
             // and data structures are different, so I needed to do this
-            let woParts = result.woParts.map(woPart => {
-              let obj = {};
-              obj["relatedName"] = woPart.Name;
-              obj["cost"] = woPart.UH__Cost__c;
-              obj["createdDate"] = new Date(woPart.CreatedDate).toDateString();
-              obj["quantity"] = woPart.UH__Quantity__c;
-              obj["totalCost"] = woPart.UH__totalCost__c;
-              obj["type"] = woPart.UH__Part__r.UH__Type__c;
-              obj["relatedObjectURL"] = woPart.attributes.url;
-              return obj;
-            });
-            let woExpenses = result.woExpenses.map(woExpense => {
-              let obj = {};
-              obj["relatedName"] = woExpense.Name;
-              obj["cost"] = woExpense.UH__Cost__c;
-              obj["createdDate"] = new Date(woExpense.CreatedDate).toDateString();
-              obj["quantity"] = woExpense.UH__Quantity__c;
-              obj["totalCost"] = woExpense.UH__totalCost__c;
-              obj["type"] = woExpense.UH__expenseType__c;
-              obj["relatedObjectURL"] = woExpense.attributes.url;
-              return obj;
-            });
-            let woLabors = result.woLabors.map(woLabor => {
-              let obj = {};
-              obj["relatedName"] = woLabor.Name;
-              obj["cost"] = woLabor.UH__Cost__c;
-              obj["createdDate"] = new Date(woLabor.CreatedDate).toDateString();
-              obj["quantity"] = woLabor.UH__hoursCount__c;
-              obj["totalCost"] = woLabor.UH__totalCost__c;
-              obj["type"] = woLabor.UH__Labor__r.UH__Type__c + ' - ' + woLabor.UH__Labor__r.Name;
-              obj["relatedObjectURL"] = woLabor.attributes.url;
-              return obj;
-            });
+            // let woParts = result.woParts.map(woPart => {
+            //   let obj = {};
+            //   obj["relatedName"] = woPart.Name;
+            //   obj["cost"] = woPart.UH__Cost__c;
+            //   obj["createdDate"] = new Date(woPart.CreatedDate).toDateString();
+            //   obj["quantity"] = woPart.UH__Quantity__c;
+            //   obj["totalCost"] = woPart.UH__totalCost__c;
+            //   obj["type"] = woPart.UH__Part__r.UH__Type__c;
+            //   obj["relatedObjectURL"] = woPart.attributes.url;
+            //   return obj;
+            // });
+            // let woExpenses = result.woExpenses.map(woExpense => {
+            //   let obj = {};
+            //   obj["relatedName"] = woExpense.Name;
+            //   obj["cost"] = woExpense.UH__Cost__c;
+            //   obj["createdDate"] = new Date(woExpense.CreatedDate).toDateString();
+            //   obj["quantity"] = woExpense.UH__Quantity__c;
+            //   obj["totalCost"] = woExpense.UH__totalCost__c;
+            //   obj["type"] = woExpense.UH__expenseType__c;
+            //   obj["relatedObjectURL"] = woExpense.attributes.url;
+            //   return obj;
+            // });
+            // let woLabors = result.woLabors.map(woLabor => {
+            //   let obj = {};
+            //   obj["relatedName"] = woLabor.Name;
+            //   obj["cost"] = woLabor.UH__Cost__c;
+            //   obj["createdDate"] = new Date(woLabor.CreatedDate).toDateString();
+            //   obj["quantity"] = woLabor.UH__hoursCount__c;
+            //   obj["totalCost"] = woLabor.UH__totalCost__c;
+            //   obj["type"] = woLabor.UH__Labor__r.UH__Type__c + ' - ' + woLabor.UH__Labor__r.Name;
+            //   obj["relatedObjectURL"] = woLabor.attributes.url;
+            //   return obj;
+            // });
 
-            this.relatedData.push({"name": "WO Parts", "elements": woParts, "size": woParts.length});
-            this.relatedData.push({"name": "WO Expenses", "elements": woExpenses, "size": woExpenses.length});
-            this.relatedData.push({"name": "WO Labors", "elements": woLabors, "size": woLabors.length});
+            // this.relatedData.push({"name": "WO Parts", "elements": woParts, "size": woParts.length});
+            // this.relatedData.push({"name": "WO Expenses", "elements": woExpenses, "size": woExpenses.length});
+            // this.relatedData.push({"name": "WO Labors", "elements": woLabors, "size": woLabors.length});
           });
       });
+  }
+
+  getRelatedData() {
+    this.oauth.getOAuthCredentials().then(oauth => {
+      let whereCond: string = `WHERE UH__WorkOrder__c = '${this.id}'`;
+      this.relDataService.getRelatedWOParts(oauth, whereCond).then(result => {
+        this.relatedData.push({"name": "WO Parts", "elements": result.records, "size": result.records.length}); 
+      });
+      this.relDataService.getRelatedWOExpenses(oauth, whereCond).then(result => {
+        this.relatedData.push({"name": "WO Expenses", "elements": result.records, "size": result.records.length}); 
+      });
+      this.relDataService.getRelatedWOLabours(oauth, whereCond).then(result => {
+        this.relatedData.push({"name": "WO Labors", "elements": result.records, "size": result.records.length}); 
+      });
+    }); 
   }
 
   toggleSection(i) {
@@ -100,8 +122,8 @@ export class WorkorderDetailsPage {
     this.relatedData[i].open = !this.relatedData[i].open;
   }
 
-  gotoRecord(page, recordId) {
-    this.navCtrl.push(page, {"id": recordId});
+  gotoRecord(page, recordId, url) {
+    this.navCtrl.push(page, {"id": recordId, "url": url});
   }
 
   changeWOStatus(status: string) {
@@ -126,7 +148,19 @@ export class WorkorderDetailsPage {
   }
 
   editWO() {
-    console.log("I got inside editWO!");
+    let modal = this.modalCtrl.create(EditWorkorderComponent, { workorder: this.currWO });
+    modal.onDidDismiss(data => {
+      if(!data.isCanceled) {
+        // present the message from a modal
+        let toast = this.toastCtrl.create({
+          message: data.message,
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+      }
+    });
+    modal.present();
   }
 
   rejectWO() {

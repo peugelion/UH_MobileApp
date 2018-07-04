@@ -17,7 +17,6 @@ export class WorkordersPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad WorkordersPage');
     this.showListWOs('Recently assigned WOs');
   }
 
@@ -60,8 +59,4 @@ export class WorkordersPage {
           });
       });
   }
-
-  // gotoWO(woId) {
-  //   this.navCtrl.push('WorkorderDetailsPage', {"id": woId});
-  // }
 }

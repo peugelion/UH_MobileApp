@@ -10,7 +10,6 @@ import { ListPage } from '../pages/list/list';
 import { TechniciansPage } from '../pages/technicians/technicians';
 import { WorkordersPage } from '../pages/workorders/workorders';
 import { WorkorderDetailsPageModule } from '../pages/workorder-details/workorder-details.module';
-//import { ServicePlacesPage } from '../pages/service-places/service-places';
 import { ProductInPlacePageModule } from '../pages/product-in-place/product-in-place.module';
 
 import { TechniciansServiceProvider } from '../providers/technicians-service/technicians-service';
@@ -21,22 +20,17 @@ import { WorkordersServiceProvider } from '../providers/workorders-service/worko
 import { ServicePlacesServiceProvider } from '../providers/service-places-service/service-places-service';
 
 import { HttpClientModule } from  '@angular/common/http';
-
-// import { Geolocation } from '@ionic-native/geolocation';
-
-//import { WorkorderInfoPage } from '../pages/workorder-info/workorder-info';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '../components/components.module';
-import { WorkorderInfoPageModule } from '../pages/workorder-info/workorder-info.module';
+import { AccordionComponentModule } from '../components/accordion-component.module';
+import { RelatedListsDataProvider } from '../providers/related-lists-data/related-lists-data';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     ListPage,
-    //TechniciansPage,
-    WorkordersPage,
-    //ServicePlacesPage
+    WorkordersPage
   ],
   imports: [
     BrowserModule,
@@ -46,16 +40,14 @@ import { WorkorderInfoPageModule } from '../pages/workorder-info/workorder-info.
     ReactiveFormsModule,
     ComponentsModule,
     ProductInPlacePageModule,
-    WorkorderInfoPageModule
+    AccordionComponentModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
     ListPage,
-    //TechniciansPage,
-    WorkordersPage,
-    //ServicePlacesPage
+    WorkordersPage
   ],
   providers: [
     StatusBar,
@@ -66,6 +58,7 @@ import { WorkorderInfoPageModule } from '../pages/workorder-info/workorder-info.
     OAuthServiceProvider,
     WorkordersServiceProvider,
     ServicePlacesServiceProvider,
+    RelatedListsDataProvider,
   ]
 })
 export class AppModule {}

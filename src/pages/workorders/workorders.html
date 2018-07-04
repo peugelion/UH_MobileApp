@@ -19,7 +19,7 @@
       {{listLabel}}
     </ion-list-header>
     <ion-item *ngFor="let WO of workorders"> 
-      <workorder-info [workorder]="WO"></workorder-info>
+      <workorder-info [workorder]="WO" [inAccordion]="false"></workorder-info>
     </ion-item>
   </ion-list>
 </ion-content>
