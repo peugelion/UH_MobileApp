@@ -9,6 +9,8 @@ import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { TechniciansPage } from '../pages/technicians/technicians';
 import { WorkordersPage } from '../pages/workorders/workorders';
+import { ContactsPage } from '../pages/contacts/contacts';
+import { AccountsPage } from '../pages/accounts/accounts';
 import { WorkorderDetailsPageModule } from '../pages/workorder-details/workorder-details.module';
 import { ProductInPlacePageModule } from '../pages/product-in-place/product-in-place.module';
 
@@ -30,7 +32,9 @@ import { RelatedListsDataProvider } from '../providers/related-lists-data/relate
     MyApp,
     HomePage,
     ListPage,
-    WorkordersPage
+    WorkordersPage,
+    ContactsPage,
+    AccountsPage
   ],
   imports: [
     BrowserModule,
@@ -47,7 +51,9 @@ import { RelatedListsDataProvider } from '../providers/related-lists-data/relate
     MyApp,
     HomePage,
     ListPage,
-    WorkordersPage
+    WorkordersPage,
+    ContactsPage,
+    AccountsPage
   ],
   providers: [
     StatusBar,

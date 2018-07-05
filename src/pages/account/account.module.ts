@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { ContactPage } from './contact';
+import { AccountPage } from './account';
 import { AccordionComponentModule } from '../../components/accordion-component.module';
 
 @NgModule({
   declarations: [
-    ContactPage,
+    AccountPage,
   ],
   imports: [
     AccordionComponentModule,
-    IonicPageModule.forChild(ContactPage),
+    IonicPageModule.forChild(AccountPage),
   ],
 })
-export class ContactPageModule {}
+export class AccountPageModule {}

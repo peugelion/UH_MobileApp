@@ -5,16 +5,16 @@ import { RelatedListsDataProvider } from '../../providers/related-lists-data/rel
 import { DataService } from 'forcejs';
 
 @IonicPage({
-  segment: 'contact/:id'
+  segment: 'account/:id'
 })
 @Component({
-  selector: 'page-contact',
-  templateUrl: 'contact.html',
+  selector: 'page-account',
+  templateUrl: 'account.html',
 })
-export class ContactPage {
+export class AccountPage {
   tab: string = "details";
   private id: string;
-  private contact: any;
+  private account: any;
   relatedData: Array<any> = [];
 
   constructor(
@@ -23,18 +23,19 @@ export class ContactPage {
     private oauth : OAuthServiceProvider,
     private relDataService: RelatedListsDataProvider) 
   {
-    let contactUrl = this.navParams.data['url'];
+    let accountUrl = this.navParams.data['url'];
     this.id = this.navParams.data['id'];
 
-    this.getContactDetails(contactUrl);
-    this.getRelatedData();
+    this.getAccountDetails(accountUrl);
+    //this.getRelatedData();
   }
 
-  getContactDetails(contactUrl: string) {
+  getAccountDetails(accountUrl: string) {
     this.oauth.getOAuthCredentials()
-      .then(oauth => DataService.createInstance(oauth, {useProxy:false}).apexrest(contactUrl))
+      .then(oauth => DataService.createInstance(oauth, {useProxy:false}).apexrest(accountUrl))
       .then(result => {
-        this.contact = result;
+        console.log("result === ", result);
+        this.account = result;
       });
   }
 
