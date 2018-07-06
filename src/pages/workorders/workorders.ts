@@ -3,7 +3,9 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 
-@IonicPage()
+@IonicPage({
+  segment: 'workorders'
+})
 @Component({
   selector: 'page-workorders',
   templateUrl: 'workorders.html',

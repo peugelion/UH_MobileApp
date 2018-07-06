@@ -1,13 +1,9 @@
 import { Component, ViewChild, Input } from '@angular/core';
 import { NavController, Platform } from 'ionic-angular';
-import { DataService } from 'forcejs';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
 
 import { ActionSheetController } from 'ionic-angular'
-
-declare var $Lightning:any;
-declare var $A:any;
 
 // @IonicPage({
 //   name: 'HomePage',
@@ -44,7 +40,6 @@ export class HomePage {
         this.initMap();
         this.deptStock.getWarehouseAndStock();
         this.showListWOs(oauth);
-        this.loadLtngApp(oauth.accessToken);
       });
   }
 
@@ -78,39 +73,7 @@ export class HomePage {
       });
   }
 
-  loadLtngApp(accessToken) {
-    $Lightning.use(
-      "c:LtngOutDependencyApp",
-      this.createLtngCmps,
-      "https://simple-urbanhawks.lightning.force.com",
-      accessToken
-    );
-  }
-
-  createLtngCmps() {
-    if (!document.getElementById('mapComponent')) {
-      console.log('  #mapComponent || #myWarehouseDiv missing, prekini ucitavanje LtngCmps za homepage');
-      return;
-    }
-
-    // $Lightning.createComponent(
-    //   "c:showMyWarehouses",
-    //   {},
-    //   "myWarehouseDiv", // this.myWarehouse.nativeElement
-    //   function(component) {
-    //     console.log("Added component = ", component);
-    //     console.log("component attr = ", component.get("v.stockUnits"));
-    //     console.log("is defined v.stockUnits = ", $A.util.isUndefined(component.get("v.stockUnits")));
-    //   }
-    // );
-
-    $Lightning.createComponent(
-      "c:smallWosMapLightening",
-      {},
-      "mapComponent",
-      function(component) {}
-    );
-  }
+  
 
   presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({

@@ -3,7 +3,9 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { DataService } from 'forcejs';
 
-@IonicPage()
+@IonicPage({
+  segment: 'contacts'
+})
 @Component({
   selector: 'page-contacts',
   templateUrl: 'contacts.html',

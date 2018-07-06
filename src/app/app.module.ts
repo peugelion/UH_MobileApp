@@ -6,11 +6,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { TechniciansPage } from '../pages/technicians/technicians';
-import { WorkordersPage } from '../pages/workorders/workorders';
-import { ContactsPage } from '../pages/contacts/contacts';
-import { AccountsPage } from '../pages/accounts/accounts';
 import { WorkorderDetailsPageModule } from '../pages/workorder-details/workorder-details.module';
 import { ProductInPlacePageModule } from '../pages/product-in-place/product-in-place.module';
 
@@ -30,11 +25,7 @@ import { RelatedListsDataProvider } from '../providers/related-lists-data/relate
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    ListPage,
-    WorkordersPage,
-    ContactsPage,
-    AccountsPage
+    HomePage
   ],
   imports: [
     BrowserModule,
@@ -49,11 +40,7 @@ import { RelatedListsDataProvider } from '../providers/related-lists-data/relate
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
-    ListPage,
-    WorkordersPage,
-    ContactsPage,
-    AccountsPage
+    HomePage
   ],
   providers: [
     StatusBar,
