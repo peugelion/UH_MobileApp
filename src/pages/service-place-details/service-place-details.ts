@@ -4,7 +4,7 @@ import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-serv
 import { SobjectServiceProvider } from '../../providers/sobject-service/sobject-service';
 import { ServicePlacesServiceProvider } from '../../providers/service-places-service/service-places-service';
 import { DataService } from 'forcejs';
-import { MapComponent } from '../../components/map/map';
+//import { MapComponent } from '../../components/map/map';
 import { WorkorderFormComponent } from '../../components/workorder-form/workorder-form';
 
 /**
@@ -29,14 +29,9 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   toptabs: string = "details";
 
   Id: string;
-  sp: {
-    // "Name"  : string,
-    // "UH__position__Latitude__s"  : string,
-    // "UH__position__Longitude__s" : string,
-    // "UH__Address__c" : string,
-  };
+  sp: {};
 
-  spPromise: Promise<any>;
+  //spPromise: Promise<any>;
 
   name: string;
   tel: string;
@@ -45,17 +40,12 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   lng: string;
   accountId: string;
 
-  contact: {};
-  //city: {};
   cityName: string;
   countryName: string;
-
-  //map;
+  contact: {};
 
   // RELATED TAB
-  labels = [];                  // labele
-  clickPages = []               // click funkcije za otvaranje pojdinacne stavke... stringovi
-  relatedArr: Array<any> = [];  // [ WOsArray, PIPsArray ] podaci, niz treceg reda
+  relatedData: Array<any> = [];
 
 
   //@ViewChild(MapComponent) mapCmp;
@@ -105,12 +95,12 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
 
           let service = DataService.createInstance(oauth, {useProxy:false});
 
-          this.spPromise      = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, '');
+          let spPromise      = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, '');
           let cityPromise     = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r');
           let countryPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r/UH__Country__r');
           let contactPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__Contact__r');
 
-          this.spPromise.
+          spPromise.
             then(r => {
               //console.log(" spPromise resolve : ", r);
               this.tel  = r["UH__Phone__c"];
@@ -119,9 +109,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
               this.lat  = r["UH__position__Latitude__s"];
               this.lng  = r["UH__position__Longitude__s"];
               this.accountId = r["UH__Account__c"];
-
               //this.map.initmap();
-
               resolve(r);   // !!!
             });
 
@@ -148,55 +136,26 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   
   loadRelated() {
     return new Promise((resolve, reject) => {
-
-      this.labels = [
-        [
-          ['Work Orders', 'WorkorderDetailsPage'],
-          ["Product in Place", "Description", "Estimated completion date", "Status"],
-        ],
-        [
-          ['Products in Place', 'ProductInPlacePage'],
-          ["Contact", "Product code", "Install Date"]
-        ]
-      ];
-
       this.oauth.getOAuthCredentials().
         then(oauth => {
 
           let service = DataService.createInstance(oauth, {useProxy:false});
 
-          this.spService.getRelatedWOs(service, this.Id).
-            then(r => {
-              this.relatedArr[0] = r.map(item => (
-                [
-                  item["Id"],
-                  item["Name"],
-                  item["UH__productInPlace__r"] ? item["UH__productInPlace__r"]["Name"] : null,
-                  item["UH__Description__c"],
-                  item["UH__Deadline__c"],
-                  item["UH__Status__c"]
-                ]
-              ));
-            });
+          this.spService.getRelatedWOs(service, this.Id).then(r => {
+            this.relatedData[0] = r
+          });
 
-          this.spService.getRelatedPiPs(service, this.Id).
-            then(r => {
-              this.relatedArr[1] = r.map(item => (
-                [
-                  item["Id"],
-                  item["Name"],
-                  item["UH__Contact__r"] ? item["UH__Contact__r"]["Name"] : null,
-                  item["UH__Description__c"],
-                  item["UH__Product__r"]["ProductCode"]
-                ]
-              ));
-            })
+          this.spService.getRelatedPiPs(service, this.Id).then(r => {
+            this.relatedData[1] = r;
+          });
 
-          resolve(this.relatedArr);
-
+          //console.log("relatedArr", this.relatedArr);
+          resolve(this.relatedData);
       });
     });
   }
+
+  // ACTIONS
 
   createWO(spId: string, spName: string, accountId: string): void {
     let createWOModal = this.modalCtrl.create(WorkorderFormComponent, { id: spId, spName: spName, accId: accountId });

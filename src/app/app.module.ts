@@ -28,6 +28,7 @@ import { HttpClientModule } from  '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '../components/components.module';
 import { WorkorderInfoPageModule } from '../pages/workorder-info/workorder-info.module';
+import { MapServiceProvider } from '../providers/map-service/map-service';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { WorkorderInfoPageModule } from '../pages/workorder-info/workorder-info.
     OAuthServiceProvider,
     WorkordersServiceProvider,
     ServicePlacesServiceProvider,
+    MapServiceProvider,
   ]
 })
 export class AppModule {}

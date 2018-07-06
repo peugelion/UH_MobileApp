@@ -65,12 +65,7 @@
             <p>City</p>
             <h2>{{ cityName }}&nbsp;</h2>
           </ion-item>
-          <ion-item>
-            <!-- <div id="map_sp"></div> -->
-            <!-- <map [spPromisesArr]="[spPromise]"></map> -->
-            <!-- <map [spPromise]="spPromise | async"></map> -->
-            <map [lat]="lat" [lng]="lng" [addr]="addr" [cityName]="cityName" [countryName]="countryName"></map>
-          </ion-item>
+          <map [lat]="lat" [lng]="lng" [addr]="addr" [cityName]="cityName" [countryName]="countryName"></map>
       </ion-list>
 
     </ion-list>
@@ -80,7 +75,7 @@
     <!-- related tab -->
     <ion-list *ngSwitchCase="'related'" class="accordion-list">
       <!-- <related-tab [active]="active" [labels]="labels" [relatedListArr]="['WOs', 'PIPs']" ></related-tab> -->
-      <related-tab [active]="active" [labels]="labels" [relatedListArr]="relatedArr" ></related-tab>
+      <related-tab [relatedListArr]="relatedData" ></related-tab>
     </ion-list>
     <!-- related tab end -->
 
