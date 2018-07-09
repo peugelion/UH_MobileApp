@@ -14,7 +14,9 @@
   <!-- Show warehouse stock -->
   <dept-inventory [showCloseBtn]="false" #deptStock></dept-inventory>
   <!-- show map -->
-  <map [isHomePage]=true></map>
+  <ion-card>
+    <map [isHomePage]=true></map>
+  </ion-card>
   <!-- <ion-card #mapComponent>
     <ion-card-content>
       <ion-content ng-controller="MapController" id="mapComponent">

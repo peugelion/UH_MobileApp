@@ -16,9 +16,9 @@ export class WorkorderInfoComponent {
 
   itemClicked() {
     if(!this.inAccordion) {
-      this.navCtrl.push('WorkorderDetailsPage', {"id": this.workorder.Id});
+      this.navCtrl.push('WorkorderDetailsPage', {id: this.workorder.Id});
     } else {
-      let emitObj = {'page': "from workorder-info"};
+      let emitObj = {page: 'WorkorderDetailsPage', id: this.workorder.Id};
       this.onItemClicked.emit(emitObj);
     }
   }

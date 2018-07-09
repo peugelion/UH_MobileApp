@@ -93,6 +93,7 @@ export class WorkorderFormComponent {
           .then(response => {
             // send the message back and close the modal
             let data = {
+              woId: response.id, 
               isCanceled: false,
               message: "You successfully created workorder."
             };
