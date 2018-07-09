@@ -40,7 +40,7 @@ export class TechniciansPage {
         then(oauth => {
           this.techService.loadTechnicians(oauth)   //
             .then(results => {
-              this.items = results;       //console.log(results);
+              this.items = results;       console.log(results);
               resolve(this.items);
             });
         });

@@ -19,6 +19,7 @@ import { ServicePlacesServiceProvider } from '../providers/service-places-servic
 import { HttpClientModule } from  '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '../components/components.module';
+import { MapServiceProvider } from '../providers/map-service/map-service';
 import { AccordionComponentModule } from '../components/accordion-component.module';
 import { RelatedListsDataProvider } from '../providers/related-lists-data/related-lists-data';
 
@@ -51,6 +52,7 @@ import { RelatedListsDataProvider } from '../providers/related-lists-data/relate
     OAuthServiceProvider,
     WorkordersServiceProvider,
     ServicePlacesServiceProvider,
+    MapServiceProvider,
     RelatedListsDataProvider,
   ]
 })

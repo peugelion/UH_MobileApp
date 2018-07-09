@@ -1,4 +1,17 @@
+@mixin portrait() {
+    @media screen and (orientation:portrait) { @content; }
+}
+
+@mixin landscape() {
+    @media screen and (orientation:landscape) { @content; }
+}
+
 page-single-technician {
+    //max-width: 60vh;
+    //@include portrait {
+    //    max-width: 100%;
+    //}
+
     ion-app.md [padding-vertical] {
         padding: 16px 0;
     }

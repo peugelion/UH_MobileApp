@@ -30,21 +30,6 @@ export class ServicePlacesServiceProvider {
 
   // RELATED TAB
 
-  //SELECT Id, Name FROM UH__WorkOrder__c WHERE UH__ServicePlace__c='a001500000hJsB2AAK'
-  //SELECT Id, Name FROM UH__ProductInPlace__c WHERE UH__ServicePlace__c='a001500000hJsB2AAK'
-//   getRelated(oauthCreds, table, spId) {
-//     let service = DataService.createInstance(oauthCreds, {useProxy:false});
-//     return service.query(
-//         `SELECT Id, Name
-//          FROM ` +table+
-//        ` WHERE UH__ServicePlace__c = '${spId}'`
-//     )
-//     .then(result => {
-//         console.log('getRelated r:', result);
-//         return result.records;
-//     });
-//   }
-
   getRelatedWOs(oauthCreds, Id) {
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
     return service.query(
@@ -52,13 +37,26 @@ export class ServicePlacesServiceProvider {
          FROM UH__WorkOrder__c 
          WHERE UH__ServicePlace__c = '${Id}'`
     )
-    .then(result => {
-        //console.log('getRelatedWOs result:', result);
-        return result.records;
+    .then(r => {
+        let labels = [
+            ['Work Orders', 'WorkorderDetailsPage'],
+            ["Product in Place", "Contact", "Description", "Estimated completion date", "Status"]
+        ];
+        let dataArr = r.records.map(item => (
+            [
+                item["Id"],
+                item["Name"],
+                item["UH__productInPlace__r"] ? item["UH__productInPlace__r"]["Name"] : null,
+                item["UH__Contact__r"] ? item["UH__Contact__r"]["Name"] : null,
+                item["UH__Description__c"],
+                item["UH__Deadline__c"],
+                item["UH__Status__c"]
+            ]
+        ));
+        return [labels, dataArr]
     });
   }
 
-  //SELECT Id, Name FROM UH__ProductInPlace__c WHERE UH__ServicePlace__c='a001500000hJsB2AAK'
   getRelatedPiPs(oauthCreds, spId) {
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
     return service.query(
@@ -66,9 +64,21 @@ export class ServicePlacesServiceProvider {
         FROM UH__ProductInPlace__c
         WHERE UH__ServicePlace__c = '${spId}'`
     )
-    .then(result => {
-        //console.log('getRelatedPiPs r:', result);
-        return result.records;
+    .then(r => {        
+        let labels = [
+            ['Products in Place', 'ProductInPlacePage'],
+            ["Contact", "Product code", "Install Date"]
+        ];
+        let data = r.records.map(item => (
+            [
+                item["Id"],
+                item["Name"],
+                item["UH__Contact__r"] ? item["UH__Contact__r"]["Name"] : null,
+                item["UH__Description__c"],
+                item["UH__Product__r"] ? item["UH__Product__r"]["ProductCode"] : null
+            ]
+        ));
+        return [labels, data]
     });
   }
 
