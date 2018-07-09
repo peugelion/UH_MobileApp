@@ -3,8 +3,8 @@
   <ion-list-header *ngFor="let item of relatedData; let i = index;" no-lines no-padding>
     <!-- Toggle Button -->
     <button ion-item (click)="toggleSection(i)" detail-none [ngClass]="{'section-active': item.open, 'section': !item.open}">
-      <ion-icon item-left name="arrow-forward" *ngIf="!item.open"></ion-icon>
-      <ion-icon item-left name="arrow-down" *ngIf="item.open"></ion-icon>
+      <ion-icon item-left name="arrow-dropright" *ngIf="!item.open"></ion-icon>
+      <ion-icon item-left name="arrow-dropdown" *ngIf="item.open"></ion-icon>
         {{ item.name }} <ion-badge color='twitter'>{{item.size}}</ion-badge>
     </button>
     <ion-list *ngIf="item.elements && item.open && item.name == 'Workorders'">
@@ -14,22 +14,32 @@
     </ion-list>
     <ion-list *ngIf="item.elements && item.open && item.name == 'Cases'">
       <ion-item *ngFor="let case of item.elements" ion-item detail-none class="element-item">
-        <case-info [case]="case" (onItemClicked)="gotoRecord($event)"></case-info>
+        <case-info [case]="case"></case-info>  <!--- (onItemClicked)="gotoRecord($event)" -->
       </ion-item>
     </ion-list>
     <ion-list *ngIf="item.elements && item.open && item.name == 'WO Parts'">
-      <ion-item *ngFor="let part of item.elements" ion-item detail-none class="element-item">
-        <workorder-part-info [woPart]="part" (onItemClicked)="gotoRecord($event)"></workorder-part-info>
+      <ion-item *ngFor="let part of item.elements" ion-item detail-none class ="element-item">
+        <workorder-part-info [woPart]="part"></workorder-part-info> <!--- (onItemClicked)="gotoRecord($event)" -->
       </ion-item>
     </ion-list>
     <ion-list *ngIf="item.elements && item.open && item.name == 'WO Expenses'">
       <ion-item *ngFor="let expense of item.elements" ion-item detail-none class="element-item">
-        <workorder-expense-info [woExpense]="expense" (onItemClicked)="gotoRecord($event)"></workorder-expense-info>
+        <workorder-expense-info [woExpense]="expense"></workorder-expense-info> <!--- (onItemClicked)="gotoRecord($event)" -->
       </ion-item>
     </ion-list>
     <ion-list *ngIf="item.elements && item.open && item.name == 'WO Labors'">
       <ion-item *ngFor="let labour of item.elements" ion-item detail-none class="element-item">
-        <workorder-labour-info [woLabour]="labour" (onItemClicked)="gotoRecord($event)"></workorder-labour-info>
+        <workorder-labour-info [woLabour]="labour"></workorder-labour-info> <!--- (onItemClicked)="gotoRecord($event)" -->
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="item.elements && item.open && item.name == 'Contacts'">
+      <ion-item *ngFor="let contact of item.elements" ion-item detail-none class="element-item">
+        <contact-info [contact]="contact" (onItemClicked)="gotoRecord($event)"></contact-info>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="item.elements && item.open && item.name == 'Service Places'">
+      <ion-item *ngFor="let servicePlace of item.elements" ion-item detail-none class="element-item">
+        <service-place-info [servicePlace]="servicePlace" (onItemClicked)="gotoRecord($event)"></service-place-info>
       </ion-item>
     </ion-list>
   </ion-list-header>

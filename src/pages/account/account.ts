@@ -27,24 +27,24 @@ export class AccountPage {
     this.id = this.navParams.data['id'];
 
     this.getAccountDetails(accountUrl);
-    //this.getRelatedData();
+    this.getRelatedData();
   }
 
   getAccountDetails(accountUrl: string) {
     this.oauth.getOAuthCredentials()
       .then(oauth => DataService.createInstance(oauth, {useProxy:false}).apexrest(accountUrl))
       .then(result => {
-        console.log("result === ", result);
         this.account = result;
       });
   }
 
   getRelatedData() {
     this.oauth.getOAuthCredentials().then(oauth => {
-      let whereCond: string = `WHERE ContactId = '${this.id}'`;
+      let whereCond: string = `WHERE AccountId = '${this.id}'`;
       this.relDataService.getRelatedCases(oauth, whereCond).then(result => { this.relatedData.push({"name": "Cases", "elements": result.records, "size": result.records.length}); });
-      whereCond =  `WHERE UH__Contact__c = '${this.id}'`;
-      this.relDataService.getRelatedWOs(oauth, whereCond).then(result => { this.relatedData.push({"name": "Workorders", "elements": result.records, "size": result.records.length}); });
+      this.relDataService.getRelatedContacts(oauth, whereCond).then(result => { this.relatedData.push({"name": "Contacts", "elements": result.records, "size": result.records.length}); });
+      whereCond =  `WHERE UH__Account__c = '${this.id}'`;
+      this.relDataService.getRelatedSP(oauth, whereCond).then(result => { this.relatedData.push({"name": "Service Places", "elements": result.records, "size": result.records.length}); });
     }); 
   }
 }

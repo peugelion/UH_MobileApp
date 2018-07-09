@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { NavController, NavParams} from 'ionic-angular';
 
 @Component({
   selector: 'accordion',
@@ -7,7 +8,7 @@ import { Component, Input } from '@angular/core';
 export class AccordionComponent {
   @Input() relatedData: Array<any>;
 
-  constructor() {}
+  constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
   toggleSection(i) {
     this.relatedData.forEach((elem, idx) => {
@@ -18,6 +19,6 @@ export class AccordionComponent {
   }
 
   gotoRecord(event:any) {
-    console.log("event === ", event);
+    this.navCtrl.push(event.page, {"id": event.id, "url": event.url});
   }
 }

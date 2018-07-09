@@ -9,6 +9,6 @@ workorder-info {
   }
 
   h1 {
-    color: $md-orange !important;
+    color: color($colors, md-orange) !important;
   }
 }

@@ -6,6 +6,8 @@ import { WorkorderInfoComponent } from './workorder-info/workorder-info';
 import { WorkorderPartInfoComponent } from './workorder-part-info/workorder-part-info';
 import { WorkorderExpenseInfoComponent } from './workorder-expense-info/workorder-expense-info';
 import { WorkorderLabourInfoComponent } from './workorder-labour-info/workorder-labour-info';
+import { ContactInfoComponent } from './contact-info/contact-info';
+import { ServicePlaceInfoComponent } from './service-place-info/service-place-info';
 
 @NgModule({
 	declarations: [
@@ -14,7 +16,9 @@ import { WorkorderLabourInfoComponent } from './workorder-labour-info/workorder-
     WorkorderInfoComponent,
     WorkorderPartInfoComponent,
     WorkorderExpenseInfoComponent,
-    WorkorderLabourInfoComponent
+    WorkorderLabourInfoComponent,
+    ContactInfoComponent,
+    ServicePlaceInfoComponent
 	],
 	entryComponents: [],
 	imports: [IonicPageModule],
@@ -24,7 +28,9 @@ import { WorkorderLabourInfoComponent } from './workorder-labour-info/workorder-
     WorkorderInfoComponent,
     WorkorderPartInfoComponent,
     WorkorderExpenseInfoComponent,
-    WorkorderLabourInfoComponent
+    WorkorderLabourInfoComponent,
+    ContactInfoComponent,
+    ServicePlaceInfoComponent
 	]
 })
 export class AccordionComponentModule {}

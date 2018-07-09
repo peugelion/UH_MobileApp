@@ -57,7 +57,8 @@ $colors: (
   md-teal:        #00897B,
   md-gray:        #455A64,  //#6e6e6e
   md-blue:        #1976d2,
-  md-green:       #388E3C
+  md-green:       #388E3C,
+  md-orange:      #DC6A01
 );
 
 
@@ -81,12 +82,11 @@ $md-yellow: #FBC02D;
 //$md-orange: #E64A19;
 $md-brown:  #5D4037;
 
-$md-orange: #DC6A01;
-
-$toolbar-background: $md-orange;
+$toolbar-background: color($colors, md-orange);
 //$toolbar-md-title-text-color: #000;
 $card-md-border-radius: 5px;
-$card-md-background-color: color($colors, grayish);
+$card-md-background-color: color($colors, light);
+$card-md-header-color: color($colors, md-orange);
 $menu-md-background: color($colors, md-green);
 
 

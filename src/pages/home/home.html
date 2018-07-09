@@ -25,28 +25,26 @@
     <ion-card-header>
       Recently assigned Workorders
     </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item-sliding *ngFor="let WO of workOrders">
-          <ion-item>
-            <workorder-info [workorder]="WO"></workorder-info>
-          </ion-item>
-          <ion-item-options>
-            <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
-              <ion-icon name="ios-more"></ion-icon>
-            </button>
-            <button ion-button color="primary" clear icon-only>
-              <ion-icon name="text"></ion-icon>
-            </button>
-            <button ion-button color="secondary" clear icon-only>
-              <ion-icon name="create"></ion-icon>
-            </button>
-            <button ion-button color="danger" clear icon-only>
-              <ion-icon name='trash'></ion-icon>
-            </button>
-          </ion-item-options>
-        </ion-item-sliding>
-      </ion-list>
-    </ion-card-content>
+    <ion-list>
+      <ion-item-sliding *ngFor="let WO of workOrders">
+        <ion-item>
+          <workorder-info [workorder]="WO"></workorder-info>
+        </ion-item>
+        <ion-item-options>
+          <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
+            <ion-icon name="ios-more"></ion-icon>
+          </button>
+          <button ion-button color="primary" clear icon-only>
+            <ion-icon name="text"></ion-icon>
+          </button>
+          <button ion-button color="secondary" clear icon-only>
+            <ion-icon name="create"></ion-icon>
+          </button>
+          <button ion-button color="danger" clear icon-only>
+            <ion-icon name='trash'></ion-icon>
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
   </ion-card>
 </ion-content>

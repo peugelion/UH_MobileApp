@@ -38,4 +38,23 @@ export class RelatedListsDataProvider {
                           FROM UH__WO_Labor__c ${selectCond}`);
   }
 
+  getRelatedContacts(oauthCreds, selectCond) {
+    let service = DataService.createInstance(oauthCreds, {useProxy:false});
+    return service.query(`SELECT ID, Name, Title, Email, Phone
+                          FROM Contact ${selectCond}`);
+  }
+
+  getRelatedSP(oauthCreds, selectCond) {
+    let service = DataService.createInstance(oauthCreds, {useProxy:false});
+    return service.query(`SELECT ID, Name, UH__Address__c, UH__City__c, UH__Contact__r.Name
+                          FROM UH__ServicePlace__c ${selectCond}`);
+  }
+
+  getNotesAttachments(oauthCreds, selectCond) {
+    let service = DataService.createInstance(oauthCreds, {useProxy:false});
+    return service.query(`SELECT ID, Name, UH__WorkOrder__c, UH__Labor__c, UH__Labor__r.Name, UH__Labor__r.UH__Type__c, format(UH__Cost__c),
+                                 format(UH__TotalCost__c), UH__hoursCount__c, format(CreatedDate) 
+                          FROM UH__WO_Labor__c ${selectCond}`);
+  } 
+
 }

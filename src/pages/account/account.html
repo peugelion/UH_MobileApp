@@ -22,60 +22,104 @@
       <div *ngSwitchCase="'details'">
         <ion-list>
           <ion-item>
-            <h3>Name</h3>
+            <h3>Account Name</h3>
             <p>{{account?.Name}}</p>
           </ion-item>
           <ion-item>
-            <h3>Title</h3>
-            <p>{{account?.Title}}</p>
+            <h3>Account Number</h3>
+            <p>{{account?.AccountNumber}}</p>
           </ion-item>
           <ion-item>
-            <h3>Department</h3>
-            <p>{{account?.Department}}</p>
+            <h3>Account Site</h3>
+            <p>{{account?.Site}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Preferred Technician</h3>
+            <p>{{account?.UH__preferredTech__r?.Name}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Type</h3>
+            <p>{{account?.Type}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Industry</h3>
+            <p>{{account?.Industry}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Rating</h3>
+            <p>{{account?.Rating}}</p>
           </ion-item>
           <ion-item>
             <h3>Phone</h3>
             <p>{{account?.Phone}}</p>
           </ion-item>
           <ion-item>
-            <h3>Home phone</h3>
-            <p>{{account?.HomePhone}}</p>
-          </ion-item>
-          <ion-item>
-            <h3>Mobile</h3>
-            <p>{{account?.MobilePhone}}</p>
-          </ion-item>
-          <ion-item>
-            <h3>Other phone</h3>
-            <p>{{account?.OtherPhone}}</p>
-          </ion-item>
-          <ion-item>
             <h3>Fax</h3>
             <p>{{account?.Fax}}</p>
           </ion-item>
           <ion-item>
-            <h3>Email</h3>
-            <p>{{account?.Email}}</p>
+            <h3>Website</h3>
+            <p>{{account?.Website}}</p>
           </ion-item>
           <ion-item>
-            <h3>Birthdate</h3>
-            <p>{{account?.Birthdate}}</p>
+            <h3>Annual Revenue</h3>
+            <p>{{account?.AnnualRevenue}}</p>
           </ion-item>
           <ion-item>
-            <h3>Lead Source</h3>
-            <p>{{account?.LeadSource}}</p>
+            <h3>Employees</h3>
+            <p>{{account?.NumberOfEmployees}}</p>
           </ion-item>
           <ion-item>
-            <h3>Mailing Address</h3>
-            <p>{{account?.MailingAddress}}</p>
+            <h3>Number of locations</h3>
+            <p>{{account?.UH__NumberofLocations__c}}</p>
           </ion-item>
           <ion-item>
-            <h3>Other Address</h3>
-            <p>{{account?.OtherAddress}}</p>
+            <h3>Billing City</h3>
+            <p>{{account?.BillingCity}}</p>
           </ion-item>
           <ion-item>
-            <h3>Description</h3>
-            <p>{{account?.Description}}</p>
+            <h3>Billing Street</h3>
+            <p>{{account?.BillingStreet}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Postal Code Billing</h3>
+            <p>{{account?.BillingPostalCode}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Shipping City</h3>
+            <p>{{account?.ShippingCity}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Shipping Street</h3>
+            <p>{{account?.ShippingStreet}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Postal Code Shipping</h3>
+            <p>{{account?.ShippingPostalCode}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Service Contract</h3>
+            <p>{{account?.UH__serviceContract__r?.Name}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Customer Priority</h3>
+            <p>{{account?.UH__CustomerPriority__c}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>SLA</h3>
+            <p>{{account?.UH__SLA__c}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>SLA Serial Number</h3>
+            <p>{{account?.UH__SLASerialNumber__c}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Upsell Opportunity</h3>
+            <p>{{account?.UH__UpsellOpportunity__c}}</p>
+          </ion-item>
+          <ion-item>
+            <h3>Ticker Symbol</h3>
+            <p>{{account?.TickerSymbol}}</p>
           </ion-item>
         </ion-list>
       </div>

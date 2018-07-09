@@ -1,0 +1,19 @@
+<ion-card>
+  <ion-grid (click)="itemClicked()">
+    <ion-row>
+      <ion-col col-12><div>{{servicePlace?.Name}}</div></ion-col>
+    </ion-row>
+    <ion-row class="ellipsis">
+      <ion-col col-5 col-lg-3 col-xl-3><div>Address:</div></ion-col>
+      <ion-col col-7 col-lg-9 col-xl-9><div>{{servicePlace?.UH__Address__c}}</div></ion-col>
+    </ion-row>              
+    <ion-row class="ellipsis">
+      <ion-col col-5 col-lg-3 col-xl-3><div>City:</div></ion-col>
+      <ion-col col-7 col-lg-9 col-xl-9><div>{{servicePlace?.UH__City__c}}</div></ion-col>
+    </ion-row>
+    <ion-row class="ellipsis">
+      <ion-col col-5 col-lg-3 col-xl-3><div>Contact:</div></ion-col>
+      <ion-col col-7 col-lg-9 col-xl-9><div>{{servicePlace?.UH__Contact_r?.Name}}</div></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-card>
