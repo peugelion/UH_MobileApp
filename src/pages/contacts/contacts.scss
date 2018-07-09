@@ -1,0 +1,14 @@
+page-contacts {
+  .ellipsis{
+    div{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 1.4rem;
+    }
+  }
+
+  h1 {
+    color: #dc6a01 !important;
+  }
+}

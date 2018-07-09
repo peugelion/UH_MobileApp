@@ -4,11 +4,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { TechniciansPage } from '../pages/technicians/technicians';
-// import { SingleTechnicianPage } from '../pages/single-technician/single-technician';
-import { WorkordersPage } from '../pages/workorders/workorders';
-//import { ServicePlacesPage } from '../pages/service-places/service-places';
 
 @Component({
   templateUrl: 'app.html'
@@ -26,12 +21,12 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { icon: 'home', title: 'Home', component: HomePage },
-      { icon: 'list-box', title: 'List', component: ListPage },
-      { icon: 'briefcase', title: 'Accounts', component: TechniciansPage },
-      { icon: 'hammer', title: 'Work Orders', component: WorkordersPage },
+      { icon: 'contact', title: 'Contacts', component: 'ContactsPage' },
+      { icon: 'briefcase', title: 'Accounts', component: 'AccountsPage' },
+      { icon: 'hammer', title: 'Work Orders', component: 'WorkordersPage' },
       { icon: 'build', title: 'Technicians', component: 'TechniciansPage' },
       { icon: 'construct', title: 'Service Places', component: 'ServicePlacesPage' },
-      { icon: 'share', title: 'Departments', component: TechniciansPage }
+      { icon: 'share', title: 'Departments', component: 'DepartmentsPage' }
     ];
 
   }

@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Contact - {{contact?.Salutation}} {{contact?.FirstName}} {{contact?.LastName}}</ion-title>
+  </ion-navbar>
+
+  <ion-segment [(ngModel)]="tab">
+    <ion-segment-button value="details">
+      Details
+    </ion-segment-button>
+    <ion-segment-button value="related">
+      Related
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+    
+<ion-content padding>
+  <div [ngSwitch]="tab">
+    <!-- details tab -->
+    <div *ngSwitchCase="'details'">
+      <ion-list>
+        <ion-item>
+          <h3>Name</h3>
+          <p>{{contact?.Salutation}} {{contact?.FirstName}} {{contact?.LastName}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Title</h3>
+          <p>{{contact?.Title}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Department</h3>
+          <p>{{contact?.Department}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Phone</h3>
+          <p>{{contact?.Phone}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Home phone</h3>
+          <p>{{contact?.HomePhone}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Mobile</h3>
+          <p>{{contact?.MobilePhone}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Other phone</h3>
+          <p>{{contact?.OtherPhone}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Fax</h3>
+          <p>{{contact?.Fax}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Email</h3>
+          <p>{{contact?.Email}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Birthdate</h3>
+          <p>{{contact?.Birthdate}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Lead Source</h3>
+          <p>{{contact?.LeadSource}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Mailing Address</h3>
+          <p>{{contact?.MailingAddress}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Other Address</h3>
+          <p>{{contact?.OtherAddress}}</p>
+        </ion-item>
+        <ion-item>
+          <h3>Description</h3>
+          <p>{{contact?.Description}}</p>
+        </ion-item>
+        
+      </ion-list>
+    </div>
+    <!-- details tab end -->
+    <!-- related tab -->
+    <accordion *ngSwitchCase="'related'" [relatedData]="relatedData"></accordion>
+    <!-- related tab end -->
+  </div>
+</ion-content>

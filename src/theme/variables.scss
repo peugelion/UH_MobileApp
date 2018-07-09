@@ -34,38 +34,30 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:        #488aff,
+  primary:        #3e6aff,  //#488aff,      
   secondary:      #32db64,
   danger:         #f53d3d,
   light:          #f4f4f4,
   dark:           #222,
-  grayish:        #f0f0f0,
-  
-  materialRed:    #D32F2F,
-  materialPink:   #C2185B,
-  materialPurple: #512DA8,
-  materialIndigo: #303F9F,
-  materialBlue:   #1976D2,
-  materialCyan:   #0097A7,
-  materialTeal:   #00897B,
-  materialGreen:  #388E3C,
-  materialLime:   #AFB42B,
-  materialYellow: #FBC02D,
-  materialOrange: #E64A19,
-  materialBrown:  #5D4037,
-  materialGray:   #455A64,
-  
+  grayish:        #f0f0f0, // #f0f0f0,
   twitter: (
-    base: #55acee,  // Base acts as the background color and contrast acts as the text color for most components
-    contrast: #fff  // https://ionicframework.com/docs/theming/theming-your-app/
+    base:         #55acee,  // Base acts as the background color and contrast acts as the text color for most components
+    contrast:     #fff  // https://ionicframework.com/docs/theming/theming-your-app/
   ),
-  stable: #eee,
-  positive: #387ef5,
-  calm: #11c1f3,
-  balanced: #33cd5f,
-  energized: #ffc900,
-  assertive: #ef473a,
-  royal: #886aea,
+  stable:         #eee,
+  positive:       #387ef5,
+  calm:           #11c1f3,
+  balanced:       #33cd5f,
+  energized:      #ffc900,
+  assertive:      #ef473a,
+  royal:          #886aea,
+
+  //custom colors
+  md-red:         #D32F2F,
+  md-teal:        #00897B,
+  md-gray:        #455A64,  //#6e6e6e
+  md-blue:        #1976d2,
+  md-green:       #388E3C
 );
 
 
@@ -80,6 +72,22 @@ $colors: (
 // --------------------------------------------------
 // Material Design only Sass variables can go here
 
+$md-pink:   #C2185B;
+$md-purple: #512DA8;
+$md-indigo: #303F9F;
+$md-cyan:   #0097A7;
+$md-lime:   #AFB42B;
+$md-yellow: #FBC02D;
+//$md-orange: #E64A19;
+$md-brown:  #5D4037;
+
+$md-orange: #DC6A01;
+
+$toolbar-background: $md-orange;
+//$toolbar-md-title-text-color: #000;
+$card-md-border-radius: 5px;
+$card-md-background-color: color($colors, grayish);
+$menu-md-background: color($colors, md-green);
 
 
 

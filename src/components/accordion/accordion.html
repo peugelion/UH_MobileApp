@@ -1,0 +1,36 @@
+<ion-list class="accordion-list">
+  <!-- First Level -->
+  <ion-list-header *ngFor="let item of relatedData; let i = index;" no-lines no-padding>
+    <!-- Toggle Button -->
+    <button ion-item (click)="toggleSection(i)" detail-none [ngClass]="{'section-active': item.open, 'section': !item.open}">
+      <ion-icon item-left name="arrow-forward" *ngIf="!item.open"></ion-icon>
+      <ion-icon item-left name="arrow-down" *ngIf="item.open"></ion-icon>
+        {{ item.name }} <ion-badge color='twitter'>{{item.size}}</ion-badge>
+    </button>
+    <ion-list *ngIf="item.elements && item.open && item.name == 'Workorders'">
+      <ion-item *ngFor="let WO of item.elements" ion-item detail-none class="element-item">
+        <workorder-info [workorder]="WO" (onItemClicked)="gotoRecord($event)"></workorder-info>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="item.elements && item.open && item.name == 'Cases'">
+      <ion-item *ngFor="let case of item.elements" ion-item detail-none class="element-item">
+        <case-info [case]="case" (onItemClicked)="gotoRecord($event)"></case-info>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="item.elements && item.open && item.name == 'WO Parts'">
+      <ion-item *ngFor="let part of item.elements" ion-item detail-none class="element-item">
+        <workorder-part-info [woPart]="part" (onItemClicked)="gotoRecord($event)"></workorder-part-info>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="item.elements && item.open && item.name == 'WO Expenses'">
+      <ion-item *ngFor="let expense of item.elements" ion-item detail-none class="element-item">
+        <workorder-expense-info [woExpense]="expense" (onItemClicked)="gotoRecord($event)"></workorder-expense-info>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="item.elements && item.open && item.name == 'WO Labors'">
+      <ion-item *ngFor="let labour of item.elements" ion-item detail-none class="element-item">
+        <workorder-labour-info [woLabour]="labour" (onItemClicked)="gotoRecord($event)"></workorder-labour-info>
+      </ion-item>
+    </ion-list>
+  </ion-list-header>
+</ion-list>

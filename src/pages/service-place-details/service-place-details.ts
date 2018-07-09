@@ -65,10 +65,9 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   ngAfterViewInit() {
     //console.log("ngAfterViewInit - this.map", this.mapCmp);
   }
-
-  // ionViewDidLoad() {
+  ionViewDidLoad() {
   //   this.loadServicePlace();
-  // }
+  }
   ngOnInit() {
     this.loadServicePlace();
   }
@@ -85,7 +84,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
       });
   }
 
-  //
+  // DETAILS TAB
 
   loadServicePlace() {
     return new Promise((resolve, reject) => {
@@ -131,9 +130,8 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     });
   }
 
+  // RELATED TAB
 
-  // RELATED TAB/SEGMENT
-  
   loadRelated() {
     return new Promise((resolve, reject) => {
       this.oauth.getOAuthCredentials().
@@ -155,7 +153,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     });
   }
 
-  // ACTIONS
+  // FOOTER ACTIONS
 
   createWO(spId: string, spName: string, accountId: string): void {
     let createWOModal = this.modalCtrl.create(WorkorderFormComponent, { id: spId, spName: spName, accId: accountId });

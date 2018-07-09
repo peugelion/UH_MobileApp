@@ -41,8 +41,6 @@ export class AddExpenseComponent {
   }
 
   saveExpense(formData: any): void {
-    //console.log('new expense === ', formData);
-
     // save the expense
     this.oauth.getOAuthCredentials()
       .then(oauth => {

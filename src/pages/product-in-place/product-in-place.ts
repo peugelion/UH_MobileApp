@@ -18,9 +18,7 @@ export class ProductInPlacePage {
     this.getPiPDetails(pipId);
   }
 
-  ionViewDidLoad() {
-    //console.log("pipRecord === ", this.navParams.data['dataObj'].pipRecord);
-  }
+  ionViewDidLoad() {}
 
   toggleSection(i: number) {
     this.relatedData[i].open = !this.relatedData[i].open;

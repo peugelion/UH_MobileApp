@@ -89,51 +89,7 @@
     </div>
     <!-- details tab end -->
     <!-- related tab -->
-    <ion-list *ngSwitchCase="'related'" class="accordion-list">
-      <!-- First Level -->
-      <ion-list-header no-lines no-padding>
-        <!-- Toggle Button cases -->
-        <button ion-item (click)="toggleSection(0)" detail-none [ngClass]="{'section-active': relatedData[0].open, 'section': !relatedData[0].open}">
-          <ion-icon item-left name="arrow-forward" *ngIf="!relatedData[0].open"></ion-icon>
-          <ion-icon item-left name="arrow-down" *ngIf="relatedData[0].open"></ion-icon>
-            {{ relatedData[0].name }} <ion-badge color='twitter'>{{relatedData[0].size}}</ion-badge>
-        </button>
-        <ion-list *ngIf="relatedData[0].elements && relatedData[0].open">
-          <ion-item *ngFor="let element of relatedData[0].elements" ion-item detail-none class="element-item">
-            <ion-grid>
-              <ion-row>
-                <ion-col col-12><div>{{element.CaseNumber}}</div></ion-col>
-              </ion-row>
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Subject:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{element.Subject}}</div></ion-col>
-              </ion-row>              
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Created date:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{element.CreatedDate}}</div></ion-col>
-              </ion-row>
-              <ion-row class="ellipsis">
-                <ion-col col-5 col-lg-3 col-xl-3><div>Priority:</div></ion-col>
-                <ion-col col-7 col-lg-9 col-xl-9><div>{{element.Priority}}</div></ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-        </ion-list>
-      </ion-list-header>
-      <ion-list-header no-lines no-padding>
-        <!-- Toggle Button workorders -->
-        <button ion-item (click)="toggleSection(1)" detail-none [ngClass]="{'section-active': relatedData[1].open, 'section': !relatedData[1].open}">
-          <ion-icon item-left name="arrow-forward" *ngIf="!relatedData[1].open"></ion-icon>
-          <ion-icon item-left name="arrow-down" *ngIf="relatedData[1].open"></ion-icon>
-            {{ relatedData[1].name }} <ion-badge color='twitter'>{{relatedData[1].size}}</ion-badge>
-        </button>
-        <ion-list *ngIf="relatedData[1].elements && relatedData[1].open">
-          <ion-item *ngFor="let WO of relatedData[1].elements" ion-item detail-none class="element-item">
-            <workorder-info [workorder]="WO"></workorder-info>
-          </ion-item>
-        </ion-list>
-      </ion-list-header>
-    </ion-list>
+    <accordion *ngSwitchCase="'related'" [relatedData]="relatedData"></accordion>
     <!-- related tab end -->
   </div>
 </ion-content>

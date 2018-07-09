@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar color="header-background">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Accounts</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let list of ['All', 'Recently Viewed', 'New Last Week','New This Week']" (click)="showListAccounts(list)">
+      <ion-icon name="ios-list" item-start></ion-icon>{{list}}
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      {{listLabel}}
+    </ion-list-header>
+    <ion-item *ngFor="let account of accounts"> 
+      <ion-card>
+        <ion-grid (click)="gotoRecord($event, 'AccountPage', account.Id, account.attributes.url)">
+          <ion-row>
+            <ion-col col-12><h1>{{account.Name}}</h1></ion-col>
+          </ion-row>
+          <ion-row class="ellipsis">
+            <ion-col col-5 col-lg-3 col-xl-3><div>Account Type:</div></ion-col>
+            <ion-col col-7 col-lg-9 col-xl-9><div>{{account.Type}}</div></ion-col>
+          </ion-row>            
+          <ion-row class="ellipsis">
+            <ion-col col-5 col-lg-3 col-xl-3><div>Phone:</div></ion-col>
+            <ion-col col-7 col-lg-9 col-xl-9><div>{{account.Phone}}</div></ion-col>
+          </ion-row>
+          <ion-row class="ellipsis">
+            <ion-col col-5 col-lg-3 col-xl-3><div>Fax:</div></ion-col>
+            <ion-col col-7 col-lg-9 col-xl-9><div>{{account.Fax}}</div></ion-col>
+          </ion-row>
+          <ion-row class="ellipsis">
+            <ion-col col-5 col-lg-3 col-xl-3><div>Website:</div></ion-col>
+            <ion-col col-7 col-lg-9 col-xl-9><div>{{account.Website}}</div></ion-col>
+          </ion-row>
+          <ion-row class="ellipsis">
+            <ion-col col-5 col-lg-3 col-xl-3><div>Number of locations::</div></ion-col>
+            <ion-col col-7 col-lg-9 col-xl-9><div>{{account.UH__NumberofLocations__c}}</div></ion-col>
+          </ion-row>
+          <ion-row class="ellipsis">
+            <ion-col col-5 col-lg-3 col-xl-3><div>Preferred Technician:</div></ion-col>
+            <ion-col col-7 col-lg-9 col-xl-9>
+              <div><a *ngIf="account.UH__preferredTech__c" (click)="gotoRecord($event, 'SingleTechnicianPage', account.UH__preferredTech__c, account.UH__preferredTech__r.attributes.url)">{{account.UH__preferredTech__r?.Name}}</a></div>
+            </ion-col>
+          </ion-row>              
+        </ion-grid>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+</ion-content>

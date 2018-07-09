@@ -1,7 +1,7 @@
-<ion-card color="grayish">
-  <ion-grid (click)="gotoWorkorder(workorder.Id)">
+<ion-card>
+  <ion-grid (click)="itemClicked()">
     <ion-row>
-      <ion-col col-12><div>{{workorder.Name}}</div></ion-col>
+      <ion-col col-12><h1>{{workorder.Name}}</h1></ion-col>
     </ion-row>
     <ion-row class="ellipsis">
       <ion-col col-5 col-lg-3 col-xl-3><div>Product in Place:</div></ion-col>

@@ -5,7 +5,6 @@ import { DataService } from 'forcejs';
 export class WorkordersServiceProvider {
 
   constructor() {
-    console.log('Hello WorkordersServiceProvider Provider');
   }
 
   loadWOs(oauthCreds){

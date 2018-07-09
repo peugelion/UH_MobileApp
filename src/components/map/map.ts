@@ -1,5 +1,5 @@
 import { Component, Input, /*OnInit, SimpleChange,*/ SimpleChanges } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+//import { HttpClient } from '@angular/common/http';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { MapServiceProvider } from '../../providers/map-service/map-service';
 
@@ -25,16 +25,16 @@ export class MapComponent {
 
   maxDistance: number = 50;   // in km; initial map zoom to show SPs that are max 50km far away
 
-  @Input() addr: string = null;
-  @Input() cityName: string = null;
-  @Input() countryName: string = null;
   @Input() lat: string = null;
   @Input() lng: string = null;
   
-  //@Input() WOs: Array<any> = []; // WOs array with service plce objects as WO object propertie {}
-  @Input() loadSPs: boolean = false;
+  @Input() addr: string = null;
+  @Input() cityName: string = null;
+  @Input() countryName: string = null;
+  
+  @Input() isHomePage: boolean = false;
 
-  constructor(private http:HttpClient, private oauth : OAuthServiceProvider, private mapService: MapServiceProvider,) {
+  constructor(/*private http:HttpClient,*/ private oauth : OAuthServiceProvider, private mapService: MapServiceProvider,) {
     // console.log(" spPromise - constructor", this.spPromise);
     //console.log(" lat - constructor", this.lat);
   }
@@ -60,43 +60,53 @@ export class MapComponent {
     //console.warn("  lat", this.lat, "lng", this.lng, "addr", this.addr, "city", this.cityName, "country", this.countryName,"map",this.map)
     if (this.lat) {
       if (!this.map)
-        window.setTimeout(
-          this.drawmap.bind(this), 0       // go
-        );
+          this.drawmap();       // go
       return;
     }
 
-    if (!this.addr)
-      return //console.warn("  hmm, nema adrese, return... ( ceka se city \ country promise )");
+    /* 1. home page: load current technicion location and WO Service places */
 
-    // fetch lat\lng from sp address, if no lat\lng is set
-    this.getLatLongPromise(this.addr, this.cityName, this.countryName).
-      then(r => {             //console.warn(" getLatLong resolve : ", r);        
-        this.lat = r["latitude"];
-        this.lng = r["longitude"];
-        window.setTimeout(
-          this.drawmap.bind(this), 0       // go!
-        );
-      }).
-      catch(e => {
-        console.error( 'getLatLongPromise: onRejected function called: ', e );
-      });
+    if (this.isHomePage) {
+      if (navigator.geolocation)
+        navigator.geolocation.getCurrentPosition(position => {
+          this.lat = position.coords.latitude.toString();  //technician Lat
+          this.lng = position.coords.longitude.toString(); //technician Lng
+          this.initmap();       // go
+        })
+      else
+        alert('Geolocation is not supported.');
+      return;
+    }
+
+    /* 2. serice place page: load from address */
+
+    if (this.addr) {
+      // if no lat\lng is set : fetch it from address,
+      this.getLatLongPromise(this.addr, this.cityName, this.countryName).
+        then(r => {             //console.warn(" getLatLong resolve : ", r);        
+          this.lat = r["latitude"];
+          this.lng = r["longitude"];
+          this.initmap();       // go
+        }).
+        catch(e => {
+          console.error( 'getLatLongPromise: onRejected function called: ', e );
+        });
+    }
   }
 
   drawmap() {
-    //let map = this.map;
-    //let plotlist;
-    //let plotlayers=[];
-    //console.log('           map.drawmap() ... lat, lng', this.lat, this.lng, this.addr, this.cityName, this.countryName);
+
+    if (!document.getElementById('map_sp')) {
+      window.setTimeout(
+        this.drawmap.bind(this), 0       // retry
+      );
+    }
+
     // init map
     if (this.map) this.map.remove();                  // fix: tab reload
     //if (!document.getElementById('map_sp')) return;   // fix: tab change, 'map_sp missing' kad prebacis na related tab, pre nego je details zavrsion ucitavanje (crta mapu, a vec na related tabu)
     this.map = new L.Map('map_sp');    // attach to 'map_sp' element
 
-    
-    // window.setTimeout(
-    //   this.drawmap.bind(this), 0       // go
-    // );
 
     // create the tile layer with correct attribution
     const osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -121,14 +131,14 @@ export class MapComponent {
       popupAnchor: [0,-18]
     });
 
-    //let spMarker = L.marker([lat, lng], {riseOnHover:true, riseOffset: 30, icon: spIcon})
     L.marker([this.lat, this.lng], {riseOnHover:true, riseOffset: 30, icon: centerIcon})
       .addTo(this.map)
       .bindPopup(popup);
     
-    // Service places markers
-    if (this.loadSPs) {
-      //console.log("  loadSPs ...");
+    /* add extra service places markers on Home Page */
+
+    if (this.isHomePage) {
+      //console.log("  isHomePage ...");
       this.oauth.getOAuthCredentials()
       .then(oauth => {
         return this.mapService.loadWOsWithUniqueSPs(oauth)
@@ -178,11 +188,10 @@ export class MapComponent {
     //console.log("loadWOsSPs 2. filteredWOs:",filteredWOs);
     let tmp = [];
     filteredWOs.forEach(el => {
-      //let pos = element["UH__ServicePlace__r"]["UH__position__c"];
       let pos = el["position"];
-      if (pos) {
+      if (pos)
         tmp.push(el)
-      } else {
+      else {
         let addr = el["address"];
         let city = el["city"];
         let country = el["country"];

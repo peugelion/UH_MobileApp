@@ -27,7 +27,6 @@ export class DeptInventoryComponent {
         let service = DataService.createInstance(oauth, {useProxy:false});
         service.apexrest('/services/apexrest/UH/deptWarehouseCtrl/')
           .then(response => {
-            console.log('response == ', response);
             this.userWarehouses = response.userWarehouses;
             this.unitsInStock = response.unitsInStock;
           })

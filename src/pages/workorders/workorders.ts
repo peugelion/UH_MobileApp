@@ -3,7 +3,9 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 
-@IonicPage()
+@IonicPage({
+  segment: 'workorders'
+})
 @Component({
   selector: 'page-workorders',
   templateUrl: 'workorders.html',
@@ -17,7 +19,6 @@ export class WorkordersPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad WorkordersPage');
     this.showListWOs('Recently assigned WOs');
   }
 
@@ -60,8 +61,4 @@ export class WorkordersPage {
           });
       });
   }
-
-  // gotoWO(woId) {
-  //   this.navCtrl.push('WorkorderDetailsPage', {"id": woId});
-  // }
 }
