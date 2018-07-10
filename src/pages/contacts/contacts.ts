@@ -46,7 +46,7 @@ export class ContactsPage {
         });
         loading.present();
         let service = DataService.createInstance(oauth, {useProxy:false});
-        service.query(`SELECT Id, Name, Title, Phone, MobilePhone, Email, Account.Name
+        service.query(`SELECT Id, Name, Title, Phone, MobilePhone, Email, AccountId, Account.Name
                        FROM Contact ${selectCond}`)
         .then(result => {
             this.contacts = result.records;

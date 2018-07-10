@@ -1,15 +1,23 @@
 <ion-card>
-  <ion-grid (click)="itemClicked()">
+  <ion-grid (click)="itemClicked($event, 'WorkorderDetailsPage', workorder.Id, workorder.attributes.url)">
     <ion-row>
       <ion-col col-12><h1>{{workorder.Name}}</h1></ion-col>
     </ion-row>
     <ion-row class="ellipsis">
       <ion-col col-5 col-lg-3 col-xl-3><div>Product in Place:</div></ion-col>
-      <ion-col col-7 col-lg-9 col-xl-9><div>{{workorder.UH__productInPlace__r?.Name}}</div></ion-col>
+      <ion-col col-7 col-lg-9 col-xl-9>
+        <div><a (click)="itemClicked($event, 'ProductInPlacePage', workorder.UH__productInPlace__c, workorder.UH__productInPlace__r?.attributes.url)">
+            {{workorder.UH__productInPlace__r?.Name}}</a>
+        </div>
+      </ion-col>
     </ion-row>              
     <ion-row class="ellipsis">
       <ion-col col-5 col-lg-3 col-xl-3><div>Service Place:</div></ion-col>
-      <ion-col col-7 col-lg-9 col-xl-9><div>{{workorder.UH__ServicePlace__r?.Name}}</div></ion-col>
+      <ion-col col-7 col-lg-9 col-xl-9>
+        <div><a (click)="itemClicked($event, 'ServicePlaceDetailsPage', workorder.UH__ServicePlace__c, workorder.UH__ServicePlace__r?.attributes.url)">
+            {{workorder.UH__ServicePlace__r?.Name}}</a>
+        </div>
+      </ion-col>
     </ion-row>
     <ion-row class="ellipsis">
       <ion-col col-5 col-lg-3 col-xl-3><div>Description:</div></ion-col>
