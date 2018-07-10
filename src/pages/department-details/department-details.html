@@ -17,8 +17,55 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding-vertical>
+  
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
+  <ion-list id={{department?.Id}}>
+    <ion-item>
+      <p>Email</p>
+      <h2>{{ department?.UH__Email__c }}&nbsp;</h2>
+    </ion-item>
+    <ion-item>
+      <p>Fax</p>
+      <h2>{{ department?.UH__Fax__c }}&nbsp;</h2>
+    </ion-item>
+    <ion-item>
+      <p>Mobile Phone Number</p>
+      <h2>{{ department?.UH__mobile__c }}&nbsp;</h2>
+    </ion-item>
+    <ion-item>
+      <p>Company</p>
+      <h2>{{ companyName }}&nbsp;</h2>
+    </ion-item>
+    <ion-item>
+      <p>City</p>
+      <h2>{{ department?.UH__City__c }}&nbsp;</h2>
+    </ion-item>
+    <ion-item>
+      <p>Street</p>
+      <h2>{{ department?.UH__Street__c }}&nbsp;</h2>
+    </ion-item>
+    <ion-item>
+      <p>Department Sign</p>
+      <h2>{{ department?.UH__DepartmentSign__c }}&nbsp;</h2>
+    </ion-item>
+    <ion-item>
+      <p>Department Type</p>
+      <h2>{{ department?.UH__type__c }}&nbsp;</h2>
+    </ion-item>
+    <ion-item>
+      <p>Parent</p>
+      <h2>{{ department?.UH__Parent__c }}&nbsp;</h2>
+    </ion-item>
+    <ion-item>
+      <p>Web Page</p>
+      <h2>{{ department?.UH__webPage__c }}&nbsp;</h2>
+    </ion-item>
+  </ion-list>
+  <!-- <dept-inventory [showCloseBtn]="false" #deptStock></dept-inventory> -->
 </ion-content>
 
 <ion-footer no-border>
@@ -26,25 +73,14 @@
     <ion-title></ion-title>
     <ion-buttons start>
       <button ion-button color="save">
-        SAVE
+        <div>
+          <ion-icon name="create"></ion-icon>
+          <label>Manual Stock Entry</label>
+        </div>
       </button>
     </ion-buttons>
 
     <ion-buttons end>
-      <button ion-button color="primary" clear icon-only>
-        <!-- <ion-icon name="text"></ion-icon> -->
-        <div>
-          <ion-icon name="text"></ion-icon>
-          <label>Text</label>
-        </div>
-      </button>
-      <button ion-button color="secondary" clear icon-only>
-        <!-- <ion-icon name="create"></ion-icon> -->
-        <div>
-          <ion-icon name="create"></ion-icon>
-          <label>Create</label>
-        </div>
-      </button>
       <button ion-button color="danger" clear icon-only>
         <!-- <ion-icon name='trash'></ion-icon> -->
         <div>
@@ -57,13 +93,6 @@
         <div>
             <ion-icon name="flash"></ion-icon>
             <label>Flash</label>
-        </div>
-      </button>
-      <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
-        <!-- <ion-icon name="ios-more"></ion-icon> -->
-        <div>
-            <ion-icon name="ios-more"></ion-icon>
-            <label>More</label>
         </div>
       </button>
     </ion-buttons>

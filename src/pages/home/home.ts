@@ -48,12 +48,11 @@ export class HomePage {
   // https://blog.ionicframework.com/pull-to-refresh-directive/
   doRefresh(refresher) {
     this.oauth.getOAuthCredentials().
-      then((oauth) => {
+      then(oauth => {
         this.showListWOs(oauth);
         refresher.complete();
       });
   }
-
   
 
   presentActionSheet() {

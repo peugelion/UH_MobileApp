@@ -21,47 +21,32 @@ export class TechniciansPage {
 
 
   ionViewDidLoad() {
-    //console.log('ionViewDidLoad TechniciansPage');
-
     let loading = this.loadingCtrl.create({
       spinner: 'bubbles',
       content: 'Loading, please wait...'
     });
     loading.present();
     this.loadTechnicians()
-      .then(r => {
-        loading.dismiss();
-      });
+      .then(r => loading.dismiss())
+      .then(r => console.table(this.items));
   }
 
   loadTechnicians() {
     return new Promise((resolve, reject) => {
-      this.oauth.getOAuthCredentials().
-        then(oauth => {
-          this.techService.loadTechnicians(oauth)   //
-            .then(results => {
-              this.items = results;       console.log(results);
-              resolve(this.items);
-            });
-        });
-      });
+      this.oauth.getOAuthCredentials()
+      .then(oauth => this.techService.loadTechnicians(oauth))
+      .then(results => resolve(this.items = results));
+    });
   }
 
   gotoSingleTechnician(id) {
-    //this.navCtrl.push(SingleTechnicianPage, {Id: id});
     this.navCtrl.push('SingleTechnicianPage', {"id": id});
   }
 
-  
-  
   // https://blog.ionicframework.com/pull-to-refresh-directive/
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
-    this.loadTechnicians().
-    then(refresher.complete());
-    // then(r => {
-    //   console.log(" refresher resolve : ", r);
-    //   refresher.complete();
-    // })
+    this.loadTechnicians()
+      .then(refresher.complete());
   }
 }

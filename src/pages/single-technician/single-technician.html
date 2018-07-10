@@ -16,7 +16,7 @@
       </ion-navbar>
 
       <!-- <ion-toolbar> -->
-        <ion-segment [(ngModel)]="toptabs">
+        <ion-segment [(ngModel)]="toptabs" (ionChange)="onSegmentChanged(toptabs)">
           <ion-segment-button value="details">
             Details
           </ion-segment-button>
@@ -54,24 +54,10 @@
           </ion-list>
 
         </ion-list>
-
+ 
+        <!-- related tab -->
         <ion-list *ngSwitchCase="'related'">
-
-          <ion-card-content>
-            <ion-list>
-              <ion-item-sliding>
-                <ion-item>
-                  <ion-grid>
-                    <ion-row class="ellipsis">
-                        <ion-col col-5 col-lg-3 col-xl-3><div>Service teams:</div></ion-col>
-                        <ion-col col-7 col-lg-9 col-xl-9><div>  TODO </div></ion-col>
-                    </ion-row>
-                    </ion-grid>
-                </ion-item>
-              </ion-item-sliding>
-            </ion-list>
-          </ion-card-content>
-
+          <related-tab [relatedListArr]="relatedData"></related-tab>
         </ion-list>
 
       </div>

@@ -1,6 +1,26 @@
 dept-inventory {
+  ion-icon+label {
+      display:block;
+      font-size: 1.1rem;
+      line-height: .9rem;
+  }
+  button {
+      a {
+          text-decoration: none;
+      }
+  }
+  ion-app.md [padding-vertical] {
+      padding: 16px 0;
+  }
+
   h2 {
     font-size: 2rem !important;
     line-height: 2;
+  }
+
+  ion-footer {
+      border-top-width: 2px;
+      border-top-style: solid;
+      border-top-color: rgba(0, 0, 0, 0.1);
   }
 }

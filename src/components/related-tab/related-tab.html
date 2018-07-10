@@ -1,42 +1,37 @@
 <!-- Generated template for the RelatedTabComponent component -->
 
-<div *ngIf="relatedListArr">
+<div *ngIf="relatedListArr" class="accordion-list">
 <!-- First Level -->
   <!-- <ion-item *ngFor="let relatedList of [WOs, PIPs, AOs, AHs, NandAs]; let i = index;" no-lines > -->
   <ion-item *ngFor="let relatedList of relatedListArr; let i = index;" no-lines >
     <!-- Toggle Button -->
-    <button ion-item (click)="toggleSection(i)" detail-none [color]="(i == active) ? 'primary' : 'light'">
-      <ion-icon item-left name="arrow-forward" *ngIf="i != active"></ion-icon>
-      <ion-icon item-left name="arrow-down" *ngIf="i == active && relatedList[1]?.length"></ion-icon>          
-      <!-- <div *ngFor="let list of ['Work Orders', 'Products in Place', 'Open Activities', 'Activity History', 'Notes & Attachments']; let j = index"> -->
-      <!-- <div *ngFor="let listLabel of ['Work Orders', 'Products in Place']; let j = index"> -->
-      <!-- <div *ngFor="let listLabels of labels; let j = index"> -->
+    <button ion-item (click)="toggleSection(i)" detail-none [color]="(i == active || (relatedListArr.length == 1 && relatedListArr[0][1].length) ) ? 'primary' : 'light'" [ngClass]="{'section-active': (i == active || (relatedListArr.length == 1 && relatedListArr[0][1].length) )}">
+      <ion-icon item-left name="arrow-forward" *ngIf="i != active && relatedListArr.length !== 1"></ion-icon>
+      <ion-icon item-left name="arrow-down" *ngIf="i == active && relatedList[1]?.length && relatedListArr.length !== 1"></ion-icon>
       <div *ngIf="relatedList">
         <div *ngFor="let listLabels of relatedList[0]; let j = index">
           <h2 *ngIf="relatedList && j == 0">{{ listLabels[0] }}&nbsp;<ion-badge color='twitter'>{{ relatedList[1]?.length }}</ion-badge></h2>
         </div>
       </div>
     </button>
-    <div *ngIf="relatedList && i == active" class="cards_container">
+    <div *ngIf="relatedList && i == active || relatedListArr.length == 1" class="cards_container">
 
-      <!-- <ion-card *ngFor="let item of relatedList; let count = index" id={{item.Id}} (click)="gotoItemPage(item.Id)" color='light'> -->
       <ion-card *ngFor="let item of relatedList[1]; let count = index" id={{item[0]}} (click)="gotoItemPage( item[0] )" color='light'>
+        <!-- <ion-card-header text-center> -->
         <ion-card-header>
-          <!-- <ion-badge color='light'>{{ count+1 }}</ion-badge> {{ item.Name }} -->
-          <ion-badge color='light'>{{ count+1 }}</ion-badge> {{ item[1] }}
+          <!-- <ion-badge color='stable'>{{ count+1 }}</ion-badge> {{ item[1] }} -->
+          {{ item[1] }}
         </ion-card-header>
         <ion-card-content>
           <ion-grid>
             <!-- <ion-row *ngFor="let labelInCard of [ 'Product in Place', 'Description', 'Estimated completion date', 'Status' ]; let j = index;" class="ellipsis"> -->
-            <!-- <ion-row *ngFor="let label of labels[i][1]; let j = index;" class="ellipsis"> -->
             <ion-row *ngFor="let label of relatedList[0][1]; let j = index;" class="ellipsis">
               <ion-col col-5 col-lg-3 col-xl-3><div>{{ label }}</div></ion-col>
-              <ion-col col-7 col-lg-9 col-xl-9><div>{{ item[j+2] }}</div></ion-col>
+              <ion-col col-7 col-lg-9 col-xl-9>
+                <ng-template #stringTemplate><div>{{ item[j+2] }}</div></ng-template>
+                <ion-item *ngIf="item[j+2] == true || item[j+2] == false; else stringTemplate" color="light"><ion-checkbox [checked]="item[j+2]" disabled></ion-checkbox></ion-item>
+              </ion-col>
             </ion-row>
-            <!-- <ion-row class="ellipsis">
-              <ion-col col-5 col-lg-3 col-xl-3><div>Product in Place:</div></ion-col>
-              <ion-col col-7 col-lg-9 col-xl-9><div>{{ item.UH__productInPlace__r?.Name }}</div></ion-col>
-            </ion-row> -->
           </ion-grid>
         </ion-card-content>
       </ion-card>

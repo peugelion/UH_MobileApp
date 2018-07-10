@@ -17,14 +17,14 @@ export class MapServiceProvider {
 
   loadWOsWithUniqueSPs(oauth){
     let service = DataService.createInstance(oauth, {useProxy:false});
-    return service.query(`SELECT id, name, uh__servicePlace__r.Id, uh__servicePlace__r.Name, uh__servicePlace__r.UH__Address__c, uh__servicePlace__r.UH__position__c, uh__servicePlace__r.UH__City__r.Name, uh__servicePlace__r.UH__City__r.UH__Country__r.Name
+    return service.query(`SELECT id, name, UH__Status__c, UH__productInPlace__r.Name, uh__servicePlace__r.Id, uh__servicePlace__r.Name, uh__servicePlace__r.UH__Address__c, uh__servicePlace__r.UH__position__c, uh__servicePlace__r.UH__City__r.Name, uh__servicePlace__r.UH__City__r.UH__Country__r.Name
       FROM uh__workOrder__c
       WHERE uh__status__c = 'Accept' AND UH__Technician__r.UH__User__r.Id = '`+oauth['userId']+`'`).
     then(r => {
       //console.log("loadWOsSPs 1. query:", r);
       let tmp = {};
-      // filter out duplicate service places
-      // https://stackoverflow.com/questions/18773778/create-array-of-unique-objects-by-property
+      /* filter out duplicate service places
+         https://stackoverflow.com/questions/18773778/create-array-of-unique-objects-by-property */
       return r["records"].filter(function(entry) {
         if (tmp[entry.UH__ServicePlace__r.Id]) {
           return false;
@@ -34,11 +34,14 @@ export class MapServiceProvider {
       });
     })
     .then( filteredWOs => {
-      //console.log("filteredWOsfilteredWOs",filteredWOs);
+      console.log("filteredWOsfilteredWOs",filteredWOs);
       let remaped = filteredWOs.map(entry => ({
           id:       entry["Id"],      // wo id (go button on popup)
-          name:     entry["Name"],  // wo name
-          position: entry["UH__ServicePlace__r"]["UH__position__c"],
+          woName:   entry["Name"],  // wo name,
+          status:   entry["UH__Status__c"],
+          pip:      entry["UH__productInPlace__r"]["Name"],
+          spName: entry.UH__ServicePlace__r.Name,
+          position: entry.UH__ServicePlace__r.UH__position__c,
           addr:     entry.UH__ServicePlace__r.UH__Address__c,
           city:     entry.UH__ServicePlace__r.UH__City__r.Name,
           country:  entry.UH__ServicePlace__r.UH__City__r.UH__Country__r.Name

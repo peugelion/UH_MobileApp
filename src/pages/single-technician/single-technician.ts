@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { SobjectServiceProvider } from '../../providers/sobject-service/sobject-service';
+import { TechniciansServiceProvider } from '../../providers/technicians-service/technicians-service';
 //import { PipeTransform, Pipe } from '@angular/core';
 import { DataService } from 'forcejs';
 
@@ -27,113 +28,76 @@ export class SingleTechnicianPage {
     // UH__username__c: any
     // UH__defaultDepartment__r: any
   };
-  defaultDepartment: {};
+  //defaultDepartment: {};
   department: {};
   user: {};
 
   error: any;
 
-  //@Input dataObject;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, private soService: SobjectServiceProvider) {
+  // RELATED TAB
+  relatedData: Array<any> = [];
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, private soService: SobjectServiceProvider, private techService: TechniciansServiceProvider) {
     //this.Id = navParams.get("Id");
     this.Id = this.navParams.data['id']
   }
 
-  ionViewDidLoad(id) {
-    //console.log('ionViewDidLoad SingleTechnicianPage, id : ', id);
+  ionViewDidLoad() {
     this.loadTechnician()
+      .then(r => console.dir(this));
+  }
+
+  onSegmentChanged() {
+    if (this.toptabs != "details" && !this.relatedData.length)
+      this.loadRelated();
+  }
+
+  // https://blog.ionicframework.com/pull-to-refresh-directive/
+  doRefresh(refresher) {
+    ((this.toptabs == "details") ? this.loadTechnician() : this.loadRelated())
+      .then(r => refresher.complete());
   }
 
   loadTechnician() {
     return new Promise((resolve, reject) => {
-      this.oauth.getOAuthCredentials().
-        then(oauth => {
+      this.oauth.getOAuthCredentials()
+      .then( oauth => DataService.createInstance(oauth, {useProxy:false}) )
+      .then( service => {
+        let techPromise    = this.soService.getSobject(service, 'UH__Technician__c', this.Id, '');
+        let defDeptPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__defaultDepartment__r');
+        let userPromise    = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__User__r');
 
-          let service = DataService.createInstance(oauth, {useProxy:false});
-          let techPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, '');
-          let defDeptPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__defaultDepartment__r');
-          let userPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__User__r');
-          //console.log("techPromise:, ", techPromise);
+        Promise.all([techPromise, userPromise])
+        .then(arrayOfResults => {                          //console.log('arrayOfResults', arrayOfResults);
+          this.technician = arrayOfResults[0];             //console.log("this.technician", this.technician);
+          this.user = arrayOfResults[1];                   //console.log("this.user", this.user);
+          resolve(techPromise); // !!!
+        })
+        .catch(error => console.log("arrayOfResults promisee err", error));
 
-          Promise.all([techPromise, userPromise])
-            .then((arrayOfResults) => {
-              //console.log('arrayOfResults', arrayOfResults);
-              this.technician = arrayOfResults[0];              console.log("this.technician", this.technician);
-              this.user = arrayOfResults[1];                    console.log("this.user", this.user);              
-              //resolve(arrayOfResults); // puca ako nije admin (default department pravo)
-              resolve(techPromise); // !!!
-            })
-            .catch(error => {
-              this.department = null;
-              console.log("arrayOfResults promisee err", error);
-            });
-          //resolve(userPromise);
+        //
 
-          defDeptPromise
-          .then((r) => {
-            this.defaultDepartment = r;         //console.log("this.defDeptPromise", this.defaultDepartment);
-
-            this.department = {};
-            let departmentId = this.defaultDepartment['UH__Department__c'];
-            this.soService.getSobject(service, 'UH__Department__c', departmentId, '')
-              .then(r => {
-                this.department = r;            //console.log("this.department", this.department);
-                resolve(this.department);
-              });
-          })
-          .catch(error => {
-            this.department = null;             //console.log("defDeptPromise", error);
-          });
-
+        /* technician->default department->department veza */
+        defDeptPromise
+        .then(r => r['UH__Department__c'], err => this.department = null)
+        //.catch(error => this.department = null)             //console.log("defDeptPromise", error);
+        .then(departmentId => this.soService.getSobject(service, 'UH__Department__c', departmentId, ''))
+        .then(r => resolve(this.department = r));
       });
     });
   }
 
   loadDepartmentDetails(id, department) {
-    id ? this.navCtrl.push('DepartmentDetailsPage', {"deptId": id, "dept" : department}) : console.log(' no dept. id yet, try again');
+    id ? this.navCtrl.push('DepartmentDetailsPage', {"id": id, "dept" : department}) : console.warn(' no dept. id yet, try again');
   }
 
-  // loadTechnician(){
-  //   return new Promise((resolve, reject) => {
-  //     this.oauth.getOAuthCredentials().
-  //       then(oauth => {
-  //         resolve(this.soService.getTechnician(oauth, this.Id, 'UH__Technician__c'))
-  //           .then(results => {
-  //             this.technician = results;
-  //             resolve(results);
-  //           })
-  //           .catch(error => console.log(error));
-  //       })
-  //       .catch(error => console.log(error));
-  //   });
-  // }
-
-  // loadTechnicianDepartment(){
-  //   return new Promise((resolve, reject) => {
-  //     this.oauth.getOAuthCredentials().
-  //       then(oauth => {
-  //         this.soService.getTechnicianDepartment(oauth, this.Id, 'UH__Technician__c')
-  //           .then(results => {
-  //             this.technician = results;
-  //             resolve(results);
-  //             console.log("this.technician id: ", this.Id, "this.technician obj : ", this.technician);
-  //             console.log("this.technician id: ", this.Id, "this.technician obj['UH__defaultDepartment__r'] : ", this.technician['UH__defaultDepartment__r']);
-  //           })
-  //           .catch(error => console.log(error));
-  //       })
-  //       .catch(error => console.log(error));
-  //   });
-  // }
+  // related tab
   
-  // https://blog.ionicframework.com/pull-to-refresh-directive/
-  doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-    this.loadTechnician().
-      then(r => {
-        console.log(" refresher resolve : ", r);
-        refresher.complete();
-        console.log(" refresher.complete! ");
-      })
+  loadRelated() {
+    return new Promise((resolve, reject) => this.oauth.getOAuthCredentials()
+      .then(oauth => this.techService.loadServiceTeams(oauth, this.Id))
+      .then(r => resolve(this.relatedData[0] = r)) //console.table(r);
+    );
   }
 
 }

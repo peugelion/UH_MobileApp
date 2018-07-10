@@ -16,7 +16,7 @@
 
   <!-- <ion-toolbar> -->
     <!-- <ion-segment [(ngModel)]="toptabs" (ionChange)="onSegmentChanged($event)"> -->
-    <ion-segment [(ngModel)]="toptabs" (ionChange)="onSegmentChanged(toptabs)">
+    <ion-segment [(ngModel)]="toptabs" (ionChange)="onSegmentChanged()">
     <!-- <ion-segment [(ngModel)]="toptabs"> -->
       <ion-segment-button value="details">
         Details
@@ -75,7 +75,7 @@
     <!-- related tab -->
     <ion-list *ngSwitchCase="'related'" class="accordion-list">
       <!-- <related-tab [active]="active" [labels]="labels" [relatedListArr]="['WOs', 'PIPs']" ></related-tab> -->
-      <related-tab [relatedListArr]="relatedData" ></related-tab>
+      <related-tab [relatedListArr]="relatedData"></related-tab>
     </ion-list>
     <!-- related tab end -->
 

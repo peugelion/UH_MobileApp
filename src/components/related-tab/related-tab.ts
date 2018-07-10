@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 /**
@@ -12,30 +12,11 @@ import { NavController } from 'ionic-angular';
   templateUrl: 'related-tab.html'
 })
 export class RelatedTabComponent {
-
-  text: string;
   
   active: number = -1 // (click) WOs or PIPs: 0 or 1
-  //WOs: Array<any>; PIPs: Array<any>; AOs: Array<any>; AHs: Array<any>; NandAs: Array<any>
-  @Input() relatedListArr: Array<any>
+  @Input() relatedListArr: Array<any> //WOs: Array<any>; PIPs: Array<any>; AOs: Array<any>; AHs: Array<any>; NandAs: Array<any>
 
-
-  constructor(public navCtrl: NavController) {
-    //console.log("inputs", this.active, this.labels, this.relatedListArr);
-  }
-
-
-  ngOnChanges(changes: SimpleChanges) {
-    try {
-      // if (this.addr) {
-      //     this.initmap();
-      // }
-      //console.log("inputs ngOnChanges", this.active, this.relatedListArr);
-    } catch(err) {
-      console.log(err);
-    }
-  }
-
+  constructor(public navCtrl: NavController) {}
 
   toggleSection(i) {
     if (this.relatedListArr[i].length)
@@ -43,8 +24,6 @@ export class RelatedTabComponent {
   }
 
   gotoItemPage(itemId) {
-    //this.navCtrl.push(this.clickPages[this.active], {"id": itemId});
-    // this.navCtrl.push(this.labels[this.active][0][1], {"id": itemId});
     this.navCtrl.push(this.relatedListArr[this.active][0][0][1], {"id": itemId});
   }
 

@@ -47,7 +47,6 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   // RELATED TAB
   relatedData: Array<any> = [];
 
-
   //@ViewChild(MapComponent) mapCmp;
 
   constructor(
@@ -65,92 +64,67 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   ngAfterViewInit() {
     //console.log("ngAfterViewInit - this.map", this.mapCmp);
   }
-  ionViewDidLoad() {
-  //   this.loadServicePlace();
-  }
+  ionViewDidLoad() {}
   ngOnInit() {
-    this.loadServicePlace();
+    this.loadServicePlace()
+      .then(r => console.dir(this));
   }
 
-  onSegmentChanged(toptabs) {
-    (this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated();
+  onSegmentChanged() {
+    if (this.toptabs != "details" && !this.relatedData.length)
+      this.loadRelated();
   }
 
   doRefresh(refresher) {
-    let reloadPromise = (this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated();
-    reloadPromise.
-      then(r => {
-        refresher.complete();
-      });
+    ((this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated())
+      .then(r => refresher.complete());
   }
 
   // DETAILS TAB
 
   loadServicePlace() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => 
 
-      this.oauth.getOAuthCredentials().
-        then(oauth => {
+      this.oauth.getOAuthCredentials()
+      .then( oauth => DataService.createInstance(oauth, {useProxy:false}) )
+      .then( service => {
+        let spPromise       = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, '');
+        let cityPromise     = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r');
+        let countryPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r/UH__Country__r');
+        let contactPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__Contact__r');
 
-          let service = DataService.createInstance(oauth, {useProxy:false});
+        spPromise.then(r => {
+          //console.log(" spPromise resolve : ", r);
+          this.tel  = r["UH__Phone__c"];
+          this.name = r["Name"];
+          this.addr = r["UH__Address__c"];
+          this.lat  = r["UH__position__Latitude__s"];
+          this.lng  = r["UH__position__Longitude__s"];
+          this.accountId = r["UH__Account__c"];
+          //this.map.initmap();
+          resolve(r);   // !!!
+        });
+        cityPromise.then( r => this.cityName = r["Name"] );
+        countryPromise.then( r => this.countryName = r["Name"] );
+        contactPromise.then( r => this.contact = r, err => this.contact = null )
+        //.catch( r => this.contact = null );
+      })
 
-          let spPromise      = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, '');
-          let cityPromise     = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r');
-          let countryPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r/UH__Country__r');
-          let contactPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__Contact__r');
-
-          spPromise.
-            then(r => {
-              //console.log(" spPromise resolve : ", r);
-              this.tel  = r["UH__Phone__c"];
-              this.name = r["Name"];
-              this.addr = r["UH__Address__c"];
-              this.lat  = r["UH__position__Latitude__s"];
-              this.lng  = r["UH__position__Longitude__s"];
-              this.accountId = r["UH__Account__c"];
-              //this.map.initmap();
-              resolve(r);   // !!!
-            });
-
-          cityPromise.then(r => {
-            this.cityName = r["Name"];    //
-          });
-          countryPromise.then(r => {
-            this.countryName = r["Name"]; //
-          });
-
-          contactPromise.then(r => {
-            this.contact = r;             //
-          }).catch( reason => {
-            console.warn( 'contactPromise: onRejected function called: ', reason );
-            this.contact = null;
-          });
-
-      });
-    });
+    );
   }
 
   // RELATED TAB
 
   loadRelated() {
-    return new Promise((resolve, reject) => {
-      this.oauth.getOAuthCredentials().
-        then(oauth => {
-
-          let service = DataService.createInstance(oauth, {useProxy:false});
-
-          this.spService.getRelatedWOs(service, this.Id).then(r => {
-            this.relatedData[0] = r
-          });
-
-          this.spService.getRelatedPiPs(service, this.Id).then(r => {
-            this.relatedData[1] = r;
-          });
-
-          //console.log("relatedArr", this.relatedArr);
-          resolve(this.relatedData);
-      });
-    });
+    return new Promise((resolve, reject) =>
+      this.oauth.getOAuthCredentials()
+      .then( oauth => DataService.createInstance(oauth, {useProxy:false}) )
+      .then( service => {
+        this.spService.getRelatedWOs(service, this.Id).then( r => this.relatedData[0] = r );
+        this.spService.getRelatedPiPs(service, this.Id).then( r => this.relatedData[1] = r );
+        resolve(this.relatedData); //console.log("relatedArr", this.relatedArr);
+      })
+    );
   }
 
   // FOOTER ACTIONS

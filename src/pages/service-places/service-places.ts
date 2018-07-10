@@ -26,48 +26,38 @@ export class ServicePlacesPage {
   items: Array<{Id: string, Name: any}>; // service places
   filter: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private spService: ServicePlacesServiceProvider, private oauth : OAuthServiceProvider, private loadingCtrl: LoadingController) {
-  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, private spService: ServicePlacesServiceProvider, private oauth : OAuthServiceProvider, private loadingCtrl: LoadingController) {}
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ServicePlacesPage');
-
     let loading = this.loadingCtrl.create({
       spinner: 'bubbles',
       content: 'Loading, please wait...'
     });
     loading.present();
-    this.loadSPs(false) // load recent SPs
-    .then(r => {loading.dismiss()});
+    this.loadSPs(false)   // load recent SPs
+      .then(r => loading.dismiss())
+      .then(r => console.dir(this));
   }
 
 
   loadSPs(filter) {
     return new Promise((resolve, reject) => {
-      this.oauth.getOAuthCredentials().
-        then(oauth => {
-          this.spService.loadServicePlaces(oauth, filter)
-            .then(results => {                              //console.log(results);
-              this.items = results;
-              this.listLabel = (filter ? "All" : "Recently Viewed") + " Service Places";
-              this.filter = filter;
-              resolve(this.items);
-            });
-        });
+      this.oauth.getOAuthCredentials()
+      .then(oauth => this.spService.loadServicePlaces(oauth, filter))
+      .then(results => {          //console.log(results);
+        this.listLabel = (filter ? "All" : "Recently Viewed") + " Service Places";
+        this.filter = filter;
+        resolve(this.items = results);
       });
+    });
   }
 
   gotoSP(spId) {
-    //console.log("sp id : ", spId);
     this.navCtrl.push('ServicePlaceDetailsPage', {"id": spId});
   }
 
   doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
     this.loadSPs(this.filter).
-    // then(r => {      console.log(" refresher resolve : ", r);
-    //   refresher.complete();
-    // })
-    then(refresher.complete())
+      then(refresher.complete())
   }
 }
