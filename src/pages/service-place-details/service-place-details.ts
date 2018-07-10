@@ -140,6 +140,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
           position: 'top'
         });
         toast.present();
+        this.navCtrl.push('WorkorderDetailsPage', {id: data.woId});
       }
     });
     createWOModal.present();

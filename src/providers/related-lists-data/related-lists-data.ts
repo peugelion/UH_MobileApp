@@ -40,7 +40,7 @@ export class RelatedListsDataProvider {
 
   getRelatedContacts(oauthCreds, selectCond) {
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query(`SELECT ID, Name, Title, Email, Phone
+    return service.query(`SELECT Id, Name, Title, Phone, MobilePhone, Email, AccountId, Account.Name
                           FROM Contact ${selectCond}`);
   }
 

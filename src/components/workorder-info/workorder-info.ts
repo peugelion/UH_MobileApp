@@ -14,17 +14,12 @@ export class WorkorderInfoComponent {
     this.onItemClicked = new EventEmitter();
   }
 
-  itemClicked() {
+  itemClicked(event: any, page: string, id: string, url: string): void {
+    event.stopPropagation();
     if(!this.inAccordion) {
-      this.navCtrl.push('WorkorderDetailsPage', {"id": this.workorder.Id});
+      this.navCtrl.push(page, {id: id, url: url});
     } else {
-      let emitObj = {'page': "from workorder-info"};
-      this.onItemClicked.emit(emitObj);
+      this.onItemClicked.emit({page: page, id: id, url: url});
     }
   }
-
-  gotoWorkorder(id: string) {
-    this.navCtrl.push('WorkorderDetailsPage', {"id": id});
-  }
-
 }

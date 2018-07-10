@@ -65,9 +65,11 @@
             <p>City</p>
             <h2>{{ cityName }}&nbsp;</h2>
           </ion-item>
-          <map [lat]="lat" [lng]="lng" [addr]="addr" [cityName]="cityName" [countryName]="countryName"></map>
+          <!-- <map [lat]="lat" [lng]="lng" [addr]="addr" [cityName]="cityName" [countryName]="countryName"></map> -->
       </ion-list>
-
+      <ion-card>
+        <map [lat]="lat" [lng]="lng" [addr]="addr" [cityName]="cityName" [countryName]="countryName"></map>
+      </ion-card>
     </ion-list>
     <!-- details tab end -->
 
