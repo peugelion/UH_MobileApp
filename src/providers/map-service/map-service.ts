@@ -39,7 +39,7 @@ export class MapServiceProvider {
           id:       entry["Id"],      // wo id (go button on popup)
           woName:   entry["Name"],  // wo name,
           status:   entry["UH__Status__c"],
-          pip:      entry["UH__productInPlace__r"]["Name"],
+          pip:      ( entry["UH__productInPlace__r"] ) ? entry["UH__productInPlace__r"]["Name"] : null,
           spName: entry.UH__ServicePlace__r.Name,
           position: entry.UH__ServicePlace__r.UH__position__c,
           addr:     entry.UH__ServicePlace__r.UH__Address__c,
