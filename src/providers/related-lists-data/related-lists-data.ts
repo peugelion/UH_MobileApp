@@ -13,7 +13,8 @@ export class RelatedListsDataProvider {
 
   getRelatedWOs(oauthCreds, selectCond) {
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query(`SELECT id, name, uh__status__c, uh__servicePlace__r.Name, uh__productInPlace__r.Name, uh__description__c, format(UH__Deadline__c)
+    return service.query(`SELECT id, name, uh__status__c, uh__servicePlace__c, uh__servicePlace__r.Name, uh__servicePlace__r.UH__Address__c,
+                                 uh__Contact__c, uh__Contact__r.Name, uh__productInPlace__c, uh__productInPlace__r.Name, uh__description__c, format(UH__Deadline__c)
                           FROM UH__workOrder__c ${selectCond}`);
   }
 
@@ -48,6 +49,12 @@ export class RelatedListsDataProvider {
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
     return service.query(`SELECT ID, Name, UH__Address__c, UH__City__c, UH__Contact__r.Name
                           FROM UH__ServicePlace__c ${selectCond}`);
+  }
+
+  getRelatedPIPs(oauthCreds, selectCond) {
+    let service = DataService.createInstance(oauthCreds, {useProxy:false});        
+    return service.query(`SELECT Id, Name, UH__Contact__c, UH__Contact__r.Name, UH__Product__r.ProductCode, UH__installedDate__c
+                          FROM UH__ProductInPlace__c ${selectCond}`);
   }
 
   getNotesAttachments(oauthCreds, selectCond) {

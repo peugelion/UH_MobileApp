@@ -14,7 +14,7 @@ import { ActionSheetController } from 'ionic-angular'
 })
 export class HomePage {
   
-  @ViewChild('deptStock') deptStock;
+  //@ViewChild('deptStock') deptStock;
 
   workOrders : any;
   oauthCreds : any; 
@@ -32,7 +32,7 @@ export class HomePage {
   initPage(){
     this.oauth.getOAuthCredentials().
       then((oauth) => {
-        this.deptStock.getWarehouseAndStock();
+        //this.deptStock.getWarehouseAndStock();
         this.showListWOs(oauth);
       });
   }

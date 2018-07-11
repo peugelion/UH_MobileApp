@@ -1,12 +1,4 @@
-<!--
-  Generated template for the spDetailsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-
 <ion-header>
-
   <ion-navbar>
       <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
@@ -14,155 +6,80 @@
     <ion-title><ion-icon item-left name="construct"></ion-icon>&nbsp; {{ name }}</ion-title>
   </ion-navbar>
 
-  <!-- <ion-toolbar> -->
-    <!-- <ion-segment [(ngModel)]="toptabs" (ionChange)="onSegmentChanged($event)"> -->
-    <ion-segment [(ngModel)]="toptabs" (ionChange)="onSegmentChanged()">
-    <!-- <ion-segment [(ngModel)]="toptabs"> -->
-      <ion-segment-button value="details">
-        Details
-      </ion-segment-button>
-      <ion-segment-button value="related">
-        Related
-      </ion-segment-button>
-    </ion-segment>
-  <!-- </ion-toolbar> -->
-
+  <ion-segment [(ngModel)]="toptabs">
+    <ion-segment-button value="details">
+      Details
+    </ion-segment-button>
+    <ion-segment-button value="related">
+      Related
+    </ion-segment-button>
+  </ion-segment>
 </ion-header>
 
-
-<ion-content padding-vertical>
+<ion-content padding>
   <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div [ngSwitch]="toptabs" color="primary">
-    <ion-list *ngSwitchCase="'details'">
-
+  <div [ngSwitch]="toptabs">
+    <div *ngSwitchCase="'details'">
       <ion-list id={{sp?.Id}}>
-          <ion-item *ngIf="contact != null;else elsetag" id={{contact?.Id}} (click)="goToContact(contact?.Id)">
+        <ion-item *ngIf="contact != null;else elsetag" id={{contact?.Id}} (click)="goToContact(contact?.Id)">
+          <p>Contact</p>
+          <h2><a>{{ contact?.FirstName}}&nbsp;{{ contact?.LastName}}</a></h2>
+        </ion-item>
+        <ng-template #elsetag>
+          <ion-item>
             <p>Contact</p>
-            <h2><a>{{ contact?.FirstName}}&nbsp;{{ contact?.LastName}}</a></h2>
+            <h2>&nbsp;</h2>
           </ion-item>
-          <ng-template #elsetag>
-            <ion-item>
-              <p>Contact</p>
-              <h2>&nbsp;</h2>
-            </ion-item>
-          </ng-template>
+        </ng-template>
 
-          <ion-item>
-            <p>Phone</p>
-            <h2><a href="tel:{{ tel }}">{{ tel }}</a>&nbsp;</h2>
-          </ion-item>
-          <ion-item>
-            <p>Address</p>
-            <!-- <h2><a target="_blank" href="https://maps.google.com/?ll={{ sp?.UH__position__Latitude__s }},{{ sp?.UH__position__Longitude__s }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
-            <!-- <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&query={{ sp?.UH__position__Latitude__s }},{{ sp?.UH__position__Longitude__s }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
-            <!-- <h2><a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ sp?.UH__Address__c }} {{ city?.Name }}">{{ sp?.UH__Address__c }}</a>&nbsp;</h2> -->
-            <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ cityName }}">{{ addr }}  <ion-icon [name]="addr ? 'flag':''"></ion-icon></a>&nbsp;</h2>
-          </ion-item>
-          <ion-item>
-            <p>City</p>
-            <h2>{{ cityName }}&nbsp;</h2>
-          </ion-item>
-          <!-- <map [lat]="lat" [lng]="lng" [addr]="addr" [cityName]="cityName" [countryName]="countryName"></map> -->
+        <ion-item>
+          <p>Phone</p>
+          <h2><a href="tel:{{ tel }}">{{ tel }}</a>&nbsp;</h2>
+        </ion-item>
+        <ion-item>
+          <p>Address</p>
+          <h2><a target="_blank" href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ cityName }}">{{ addr }}  <ion-icon [name]="addr ? 'flag':''"></ion-icon></a>&nbsp;</h2>
+        </ion-item>
+        <ion-item>
+          <p>City</p>
+          <h2>{{ cityName }}&nbsp;</h2>
+        </ion-item>
       </ion-list>
       <ion-card>
         <map [lat]="lat" [lng]="lng" [addr]="addr" [cityName]="cityName" [countryName]="countryName"></map>
       </ion-card>
-    </ion-list>
+    </div>
     <!-- details tab end -->
-
-
     <!-- related tab -->
-    <ion-list *ngSwitchCase="'related'" class="accordion-list">
-      <!-- <related-tab [active]="active" [labels]="labels" [relatedListArr]="['WOs', 'PIPs']" ></related-tab> -->
-      <related-tab [relatedListArr]="relatedData"></related-tab>
-    </ion-list>
+    <accordion *ngSwitchCase="'related'" [relatedData]="relatedData"></accordion>
     <!-- related tab end -->
-
   </div>
 </ion-content>
-
-
-
 
 <!-- FOOTER -->
 
 <ion-footer no-border text-center>
-    <ion-toolbar color="light">
-      <!-- <ion-buttons start>
-        <button ion-button color="save">
-          SAVE
+  <ion-toolbar color="light">
+    <ion-row>
+      <ion-col col-6 col-lg-6 col-xl-6>
+        <button ion-button color="md-teal" clear icon-only (click)="createWO(Id, name, accountId)">
+          <div>
+            <ion-icon name="add-circle"></ion-icon>
+            <label>Create WO</label>
+          </div>
         </button>
-      </ion-buttons> -->
-  
-      <!-- <ion-buttons end> -->
-      <ion-row>
-        <ion-col no-padding>
-          <button ion-button color="primary" clear icon-only (click)="createWO(Id, name, accountId)">
-            <div>
-              <ion-icon name="add-circle"></ion-icon>
-              <label>Create WO</label>
-            </div>
-          </button>
-        </ion-col>
-
-        <ion-col no-padding>
-          <button ion-button color="primary" clear icon-only>
-            <a href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ cityName }}">
-              <ion-icon name="map"></ion-icon>
-              <label>Directions</label>
-            </a>
-          </button>
-        </ion-col>
-
-        <!-- <ion-col no-padding>
-          <button ion-button color="primary" clear icon-only>
-            <div>
-              <ion-icon name="text"></ion-icon>
-              <label>Create Work Order</label>
-            </div>
-          </button>
-        </ion-col> -->
-
-        <ion-col no-padding>
-          <!-- <button ion-button color="secondary" clear icon-only>
-            <div>
-              <ion-icon name="create"></ion-icon>
-              <label>Create</label>
-            </div>
-          </button> -->
-        </ion-col>
-
-        <ion-col no-padding>
-          <!-- <button ion-button color="danger" clear icon-only>
-            <div>
-              <ion-icon name="trash"></ion-icon>
-              <label>Trash</label>
-            </div>
-          </button> -->
-        </ion-col>
-
-        <ion-col no-padding>
-          <!-- <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
-            <div>
-                <ion-icon name="flash"></ion-icon>
-                <label>Flash</label>
-            </div>
-          </button> -->
-        </ion-col>
-
-        <ion-col no-padding>
-          <!-- <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
-            <div>
-                <ion-icon name="ios-more"></ion-icon>
-                <label>More</label>
-            </div>
-          </button> -->
-        </ion-col>
-      </ion-row>
-
-      <!-- </ion-buttons> -->
-    </ion-toolbar>
-  </ion-footer>
+      </ion-col>
+      <ion-col col-6 col-lg-6 col-xl-6>
+        <button ion-button color="md-gray" clear icon-only>
+          <a href="https://www.google.com/maps/dir/?api=1&destination={{ addr }} {{ cityName }}">
+            <ion-icon name="map"></ion-icon>
+            <label>Directions</label>
+          </a>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

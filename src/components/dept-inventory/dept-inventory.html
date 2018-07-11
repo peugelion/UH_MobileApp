@@ -1,17 +1,9 @@
-<!-- <ion-header>
-  <ion-navbar>
-    <ion-row text-center>
-        <ion-col col-12 col-lg-12 col-xl-12><ion-title>My Warehouse Stock</ion-title></ion-col>
-    </ion-row>
-  </ion-navbar>
-</ion-header> -->
-
 <ion-content>
-  <ion-card>
+  <ion-card *ngIf="inModal">
     <ion-card-header>
       <ion-row text-center>
         <ion-col col-9 col-lg-9 col-xl-9><h2>My Warehouse Stock</h2></ion-col>
-        <ion-col col-3 col-lg-3 col-xl-3><button *ngIf="showCloseBtn" ion-button color="dark" outline (click)="dismiss()">Close</button></ion-col>
+        <ion-col col-3 col-lg-3 col-xl-3><button ion-button color="dark" outline (click)="dismiss()">Close</button></ion-col>
       </ion-row>
     </ion-card-header>
     <ion-card-content>
@@ -24,7 +16,7 @@
             </button>
           </ion-col>
           <ion-col col-6 col-lg-6 col-xl-6>
-            <form>  <!--   [formGroup]="newExpense" (ngSubmit)="saveExpense(newExpense.value)"> -->
+            <form>
               <ion-item item-end>
                 <ion-label stacked>Select a warehouse</ion-label>
                 <ion-select>

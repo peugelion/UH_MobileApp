@@ -61,21 +61,11 @@ export class AddExpenseComponent {
               WHERE Id = '${response.id}'`
             )
             .then(res => {
-              let createdExpense = res.records[0];
-              let obj = {};
-              obj["relatedName"] = createdExpense.Name;
-              obj["cost"] = createdExpense.UH__Cost__c;
-              obj["createdDate"] = createdExpense.CreatedDate;
-              obj["quantity"] = createdExpense.UH__Quantity__c;
-              obj["totalCost"] = createdExpense.UH__totalCost__c;
-              obj["type"] = createdExpense.UH__expenseType__c;
-              obj["relatedObjectURL"] = createdExpense.attributes.url;
-
               // send the message back and close the modal
               let data = {
                 isCanceled: false,
                 message: "You successfully added expense.",
-                createdExpense: obj
+                createdExpense: res.records[0]
               };
               this.viewCtrl.dismiss(data);
             });

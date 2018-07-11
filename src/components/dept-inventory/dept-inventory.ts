@@ -10,12 +10,16 @@ import { ViewController } from 'ionic-angular';
 
 export class DeptInventoryComponent {
 
-  @Input() showCloseBtn: boolean = true;
+  @Input() inModal: boolean = true;
 
   private unitsInStock:   Array<any>;
   private userWarehouses: Array<any>;
 
   constructor(private oauth: OAuthServiceProvider, private viewCtrl: ViewController) {}
+
+  ngOnInit() {
+    this.getWarehouseAndStock();
+  }
 
   ionViewDidLoad() {
     this.getWarehouseAndStock();

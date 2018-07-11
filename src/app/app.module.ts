@@ -31,7 +31,9 @@ import { RelatedListsDataProvider } from '../providers/related-lists-data/relate
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      backButtonIcon: 'arrow-dropleft'
+    }),
     WorkorderDetailsPageModule,
     ReactiveFormsModule,
     ComponentsModule,

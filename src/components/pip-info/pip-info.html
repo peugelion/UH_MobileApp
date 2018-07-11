@@ -1,0 +1,23 @@
+<ion-card>
+  <ion-grid (click)="itemClicked($event, 'ProductInPlacePage', pip.Id, pip.attributes.url)">
+    <ion-row>
+      <ion-col col-12><h2>{{pip.Name}}</h2></ion-col>
+    </ion-row>
+    <ion-row class="ellipsis">
+      <ion-col col-5 col-lg-3 col-xl-3><div>Product code:</div></ion-col>
+      <ion-col col-7 col-lg-9 col-xl-9><div>{{pip.UH__Product__r?.ProductCode}}</div></ion-col>
+    </ion-row>
+    <ion-row class="ellipsis">
+      <ion-col col-5 col-lg-3 col-xl-3><div>Installation date:</div></ion-col>
+      <ion-col col-7 col-lg-9 col-xl-9><div>{{pip.UH__installedDate__c}}</div></ion-col>
+    </ion-row>
+    <ion-row class="ellipsis">
+      <ion-col col-5 col-lg-3 col-xl-3><div>Contact:</div></ion-col>
+      <ion-col col-7 col-lg-9 col-xl-9>
+        <div><a (click)="itemClicked($event, 'ContactPage', pip.UH__Contact__c, pip.UH__Contact__r?.attributes.url)">
+            {{pip.UH__Contact__r?.Name}}</a>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-card>

@@ -8,6 +8,7 @@ import { WorkorderExpenseInfoComponent } from './workorder-expense-info/workorde
 import { WorkorderLabourInfoComponent } from './workorder-labour-info/workorder-labour-info';
 import { ContactInfoComponent } from './contact-info/contact-info';
 import { ServicePlaceInfoComponent } from './service-place-info/service-place-info';
+import { PipInfoComponent } from './pip-info/pip-info';
 
 @NgModule({
 	declarations: [
@@ -18,7 +19,8 @@ import { ServicePlaceInfoComponent } from './service-place-info/service-place-in
     WorkorderExpenseInfoComponent,
     WorkorderLabourInfoComponent,
     ContactInfoComponent,
-    ServicePlaceInfoComponent
+    ServicePlaceInfoComponent,
+    PipInfoComponent
 	],
 	entryComponents: [],
 	imports: [IonicPageModule],
@@ -30,7 +32,8 @@ import { ServicePlaceInfoComponent } from './service-place-info/service-place-in
     WorkorderExpenseInfoComponent,
     WorkorderLabourInfoComponent,
     ContactInfoComponent,
-    ServicePlaceInfoComponent
+    ServicePlaceInfoComponent,
+    PipInfoComponent
 	]
 })
 export class AccordionComponentModule {}

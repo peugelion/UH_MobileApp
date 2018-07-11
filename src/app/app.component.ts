@@ -26,7 +26,7 @@ export class MyApp {
       { icon: 'hammer', title: 'Work Orders', component: 'WorkordersPage' },
       { icon: 'build', title: 'Technicians', component: 'TechniciansPage' },
       { icon: 'construct', title: 'Service Places', component: 'ServicePlacesPage' },
-      { icon: 'share', title: 'Departments', component: 'DepartmentsPage' }
+      { icon: 'filing', title: 'Stock Inventory', component: 'StockInventoryPage' }
     ];
 
   }
