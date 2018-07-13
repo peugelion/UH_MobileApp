@@ -118,7 +118,7 @@ export class MapComponent {
       .addTo(this.map)
       .bindPopup(popup);
     
-    /* add extra service places markers on Home Page */
+    /* add service places markers on Home Page */
 
     if (this.isHomePage) {
       //console.log("  isHomePage ...");

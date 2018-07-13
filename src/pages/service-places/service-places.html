@@ -31,8 +31,10 @@
     <ion-list-header>
       {{listLabel}}
     </ion-list-header>
-    <button ion-item [color]="odd? '' : 'light'" *ngFor="let item of items; let j = index; let odd = odd" id={{item.Id}} (click)="gotoSP(item.Id)">
-      <ion-icon item-left color='primary' name="construct"></ion-icon> <div>{{ item.Name }} </div>
-    </button>
+      <ion-item button *ngFor="let item of items; let j = index; let odd = odd" [color]="odd? '' : 'light'" id={{item.Id}} (click)="itemClicked($event, 'ServicePlaceDetailsPage', item?.Id )">
+        <ion-icon item-left color='primary' name="construct" color="md-orange"></ion-icon> <label>{{ item.name }}</label>
+        <div>{{ item.address }}</div>
+        <div *ngIf="item.phone"><a href='tel:{{ item.phone }}' (click)="itemClicked($event, 'tel', item?.phone, item?.phone )">{{ item.phone }}</a></div>
+      </ion-item>
   </ion-list>
 </ion-content>

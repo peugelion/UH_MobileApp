@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { ServicePlacesServiceProvider } from '../../providers/service-places-service/service-places-service';
@@ -26,6 +26,8 @@ export class ServicePlacesPage {
   items: Array<{Id: string, Name: any}>; // service places
   filter: boolean;
 
+  onItemClicked: EventEmitter<any>;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private spService: ServicePlacesServiceProvider, private oauth : OAuthServiceProvider, private loadingCtrl: LoadingController) {}
 
   ionViewDidLoad() {
@@ -39,6 +41,10 @@ export class ServicePlacesPage {
       .then(r => console.dir(this));
   }
 
+  doRefresh(refresher) {
+    this.loadSPs(this.filter).
+      then(refresher.complete())
+  }
 
   loadSPs(filter) {
     return new Promise((resolve, reject) => {
@@ -52,12 +58,15 @@ export class ServicePlacesPage {
     });
   }
 
-  gotoSP(spId) {
-    this.navCtrl.push('ServicePlaceDetailsPage', {"id": spId});
+  itemClicked(event: any, page: string, id: string): void {
+    event.stopPropagation();
+    if (page == "tel") 
+      document.location.href="tel:"+id;
+    else
+      this.navCtrl.push(page, {id: id});
   }
 
-  doRefresh(refresher) {
-    this.loadSPs(this.filter).
-      then(refresher.complete())
-  }
+  // gotoSP(spId) {
+  //   this.navCtrl.push('ServicePlaceDetailsPage', {"id": spId});
+  // }
 }

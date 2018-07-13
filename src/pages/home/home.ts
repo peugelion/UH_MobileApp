@@ -1,12 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, Platform } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { WorkordersServiceProvider } from '../../providers/workorders-service/workorders-service';
 import { ActionSheetController } from 'ionic-angular'
 
 // @IonicPage({
 //   name: 'HomePage',
-//   segment: '#'
+//   priority: 'high',
+//   //segment: '#'
 // })
 @Component({
   selector: 'page-home',

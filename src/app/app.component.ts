@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, App, Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -15,7 +15,7 @@ export class MyApp {
 
   pages: Array<{icon: string, title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public  app: App, public alertCtrl: AlertController) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -28,6 +28,38 @@ export class MyApp {
       { icon: 'construct', title: 'Service Places', component: 'ServicePlacesPage' },
       { icon: 'share', title: 'Departments', component: 'DepartmentsPage' }
     ];
+
+
+    platform.registerBackButtonAction(() => {
+ 
+      let appNav = app.getActiveNavs()[0];
+      let activeView = appNav.getActive();
+
+      if (appNav.canGoBack()) { //Can we go back?
+          appNav.pop();
+          return;
+      }
+
+      if (activeView.name !== "HomePage") {
+        //nav.popToRoot();
+        this.nav.setRoot(HomePage);
+      } else {
+        const alert = this.alertCtrl.create({
+            title: 'App termination',
+            message: 'Do you want to close the app?',
+            buttons: [{
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => console.log(app.getActiveNavs())
+            },{
+                text: 'Close App',
+                handler: () => this.platform.exitApp()  // Close app
+            }]
+        });
+        alert.present();
+      }
+
+    });
 
   }
 
