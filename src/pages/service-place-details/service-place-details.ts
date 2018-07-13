@@ -6,6 +6,7 @@ import { ServicePlacesServiceProvider } from '../../providers/service-places-ser
 import { DataService } from 'forcejs';
 //import { MapComponent } from '../../components/map/map';
 import { WorkorderFormComponent } from '../../components/workorder-form/workorder-form';
+import { RelatedListsDataProvider } from '../../providers/related-lists-data/related-lists-data';
 
 /**
  * Generated class for the ServicePlaceDetailsPage page.
@@ -56,7 +57,8 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     private soService: SobjectServiceProvider,
     private spService: ServicePlacesServiceProvider,
     public modalCtrl: ModalController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private relDataService: RelatedListsDataProvider
   ) {
     this.Id = this.navParams.data['id']
   }
@@ -68,15 +70,21 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   ngOnInit() {
     this.loadServicePlace()
       .then(r => console.dir(this));
+    this.getRelatedData();
   }
 
-  onSegmentChanged() {
-    if (this.toptabs != "details" && !this.relatedData.length)
-      this.loadRelated();
-  }
+  // onSegmentChanged() {
+  //   if (this.toptabs != "details" && !this.relatedData.length)
+  //     this.loadRelated();
+  // }
+
+  // doRefresh(refresher) {
+  //   ((this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated())
+  //     .then(r => refresher.complete());
+  // }
 
   doRefresh(refresher) {
-    ((this.toptabs == "details") ? this.loadServicePlace() : this.loadRelated())
+    if (this.toptabs == "details") this.loadServicePlace()
       .then(r => refresher.complete());
   }
 
@@ -115,16 +123,24 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
 
   // RELATED TAB
 
-  loadRelated() {
-    return new Promise((resolve, reject) =>
-      this.oauth.getOAuthCredentials()
-      .then( oauth => DataService.createInstance(oauth, {useProxy:false}) )
-      .then( service => {
-        this.spService.getRelatedWOs(service, this.Id).then( r => this.relatedData[0] = r );
-        this.spService.getRelatedPiPs(service, this.Id).then( r => this.relatedData[1] = r );
-        resolve(this.relatedData); //console.log("relatedArr", this.relatedArr);
-      })
-    );
+  // loadRelated() {
+  //   return new Promise((resolve, reject) =>
+  //     this.oauth.getOAuthCredentials()
+  //     .then( oauth => DataService.createInstance(oauth, {useProxy:false}) )
+  //     .then( service => {
+  //       this.spService.getRelatedWOs(service, this.Id).then( r => this.relatedData[0] = r );
+  //       this.spService.getRelatedPiPs(service, this.Id).then( r => this.relatedData[1] = r );
+  //       resolve(this.relatedData); //console.log("relatedArr", this.relatedArr);
+  //     })
+  //   );
+  // }
+
+  getRelatedData() {
+    this.oauth.getOAuthCredentials().then(oauth => {
+      let whereCond: string = `WHERE UH__ServicePlace__c = '${this.Id}'`;
+      this.relDataService.getRelatedWOs(oauth, whereCond).then(result => { this.relatedData.push({"name": "Workorders", "elements": result.records, "size": result.records.length}); });
+      this.relDataService.getRelatedPIPs(oauth, whereCond).then(result => { this.relatedData.push({"name": "Products in Place", "elements": result.records, "size": result.records.length}); });
+    }); 
   }
 
   // FOOTER ACTIONS

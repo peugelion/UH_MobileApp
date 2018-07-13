@@ -1,0 +1,14 @@
+pip-info {
+  .ellipsis{
+    div{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 1.4rem;
+    }
+  }
+
+  h1, h2, h3 {
+    color: color($colors, md-orange) !important;
+  }
+}

@@ -4,6 +4,7 @@ import { ServicePlaceDetailsPage } from './service-place-details';
 
 //import { MapComponent } from '../../components/map/map';
 import { ComponentsModule } from '../../components/components.module';
+import { AccordionComponentModule } from '../../components/accordion-component.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { ComponentsModule } from '../../components/components.module';
   ],
   imports: [
     IonicPageModule.forChild(ServicePlaceDetailsPage),
-    ComponentsModule
+    ComponentsModule,
+    AccordionComponentModule
   ],
 })
 export class ServicePlaceDetailsPageModule {}

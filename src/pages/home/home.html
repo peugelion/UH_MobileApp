@@ -12,11 +12,8 @@
       <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <!-- Show warehouse stock -->
-  <dept-inventory [showCloseBtn]="false" #deptStock></dept-inventory>
-  <!-- show map -->
-  <ion-card>
-    <map [isHomePage]=true></map>
-  </ion-card>
+  <!-- <dept-inventory [showCloseBtn]="false" #deptStock></dept-inventory> -->
+
   <!-- <ion-card #mapComponent>
     <ion-card-content>
       <ion-content ng-controller="MapController" id="mapComponent">
@@ -30,7 +27,7 @@
     <ion-list>
       <ion-item-sliding *ngFor="let WO of workOrders">
         <ion-item>
-          <workorder-info [workorder]="WO"></workorder-info>
+          <workorder-info [workorder]="WO" [inAccordion]="false"></workorder-info>
         </ion-item>
         <ion-item-options>
           <button ion-button color="dark" clear icon-only (click)="presentActionSheet()">
@@ -48,5 +45,9 @@
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
+  </ion-card>
+  <!-- show map -->
+  <ion-card>
+    <map [isHomePage]=true></map>
   </ion-card>
 </ion-content>

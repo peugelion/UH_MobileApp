@@ -64,27 +64,17 @@ export class AddLaborComponent {
           .then(response => {
             // get the details of newly created labour, to refresh related list upon closing the modal
             service.query(
-              `SELECT Id, Name, UH__Labor__r.Name, UH__Labor__r.UH__Type__c, format(UH__Cost__c), format(UH__totalCost__c), UH__hoursCount__c, 
-                      format(CreatedDate)
+              `SELECT Id, Name, UH__WorkOrder__c, UH__Labor__c, UH__Labor__r.Name, UH__Labor__r.UH__Type__c, 
+                      format(UH__Cost__c), format(UH__totalCost__c), UH__hoursCount__c, format(CreatedDate)
                FROM UH__WO_Labor__c 
                WHERE Id = '${response.id}'`
             )
             .then(res => {
-              let createdLabour = res.records[0];
-              let obj = {};
-              obj["relatedName"] = createdLabour.Name;
-              obj["cost"] = createdLabour.UH__Cost__c;
-              obj["createdDate"] = createdLabour.CreatedDate;
-              obj["quantity"] = createdLabour.UH__hoursCount__c;
-              obj["totalCost"] = createdLabour.UH__totalCost__c;
-              obj["type"] = createdLabour.UH__Labor__r.UH__Type__c + ' - ' + createdLabour.UH__Labor__r.Name;
-              obj["relatedObjectURL"] = createdLabour.attributes.url;
-
               // send the message back and close the modal
               let data = {
                 isCanceled: false,
                 message: "You successfully added labour.",
-                createdLabour: obj
+                createdLabour: res.records[0]
               };
               this.viewCtrl.dismiss(data);
             });

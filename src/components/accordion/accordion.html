@@ -42,5 +42,10 @@
         <service-place-info [servicePlace]="servicePlace" (onItemClicked)="gotoRecord($event)"></service-place-info>
       </ion-item>
     </ion-list>
+    <ion-list *ngIf="item.elements && item.open && item.name == 'Products in Place'">
+      <ion-item *ngFor="let pip of item.elements" ion-item detail-none class="element-item">
+        <pip-info [pip]="pip" (onItemClicked)="gotoRecord($event)"></pip-info>
+      </ion-item>
+    </ion-list>
   </ion-list-header>
 </ion-list>

@@ -63,13 +63,13 @@ export class WorkorderDetailsPage {
     this.oauth.getOAuthCredentials().then(oauth => {
       let whereCond: string = `WHERE UH__WorkOrder__c = '${this.id}'`;
       this.relDataService.getRelatedWOParts(oauth, whereCond).then(result => {
-        this.relatedData.push({"name": "WO Parts", "elements": result.records, "size": result.records.length}); 
+        this.relatedData.push({name: "WO Parts", elements: result.records, size: result.records.length}); 
       });
       this.relDataService.getRelatedWOExpenses(oauth, whereCond).then(result => {
-        this.relatedData.push({"name": "WO Expenses", "elements": result.records, "size": result.records.length}); 
+        this.relatedData.push({name: "WO Expenses", elements: result.records, size: result.records.length}); 
       });
       this.relDataService.getRelatedWOLabours(oauth, whereCond).then(result => {
-        this.relatedData.push({"name": "WO Labors", "elements": result.records, "size": result.records.length}); 
+        this.relatedData.push({name: "WO Labors", elements: result.records, size: result.records.length}); 
       });
     }); 
   }
@@ -142,8 +142,8 @@ export class WorkorderDetailsPage {
   }
 
   checkInventory() {
-    let expenseModal = this.modalCtrl.create(DeptInventoryComponent);
-    expenseModal.present();
+    let stockModal = this.modalCtrl.create(DeptInventoryComponent);
+    stockModal.present();
   }
 
   addPart() {
@@ -155,7 +155,10 @@ export class WorkorderDetailsPage {
     labourModal.onDidDismiss(data => {
       if(!data.isCanceled) {
         // push newly created labour into its related list
-        let relatedWOLabour = this.relatedData[2];
+        let relatedWOLabour;
+        this.relatedData.forEach(elem => {
+          if (elem.name === "WO Labors") relatedWOLabour = elem; 
+        });
         relatedWOLabour.elements.push(data.createdLabour);
         relatedWOLabour.size += 1;
 
@@ -176,7 +179,10 @@ export class WorkorderDetailsPage {
     expenseModal.onDidDismiss(data => {
       if(!data.isCanceled) {
         // push newly created expense into its related list
-        let relatedWOExpenses = this.relatedData[1];
+        let relatedWOExpenses;
+        this.relatedData.forEach(elem => {
+          if (elem.name === "WO Expenses") relatedWOExpenses = elem; 
+        });
         relatedWOExpenses.elements.push(data.createdExpense);
         relatedWOExpenses.size += 1;
 
