@@ -28,39 +28,6 @@ export class MyApp {
       { icon: 'construct', title: 'Service Places', component: 'ServicePlacesPage' },
       { icon: 'filing', title: 'Stock Inventory', component: 'StockInventoryPage' }
     ];
-
-
-    platform.registerBackButtonAction(() => {
- 
-      let appNav = app.getActiveNavs()[0];
-      let activeView = appNav.getActive();
-
-      if (appNav.canGoBack()) { //Can we go back?
-          appNav.pop();
-          return;
-      }
-
-      if (activeView.name !== "HomePage") {
-        //nav.popToRoot();
-        this.nav.setRoot(HomePage);
-      } else {
-        const alert = this.alertCtrl.create({
-            title: 'App termination',
-            message: 'Do you want to close the app?',
-            buttons: [{
-                text: 'Cancel',
-                role: 'cancel',
-                handler: () => console.log(app.getActiveNavs())
-            },{
-                text: 'Close App',
-                handler: () => this.platform.exitApp()  // Close app
-            }]
-        });
-        alert.present();
-      }
-
-    });
-
   }
 
   initializeApp() {
@@ -69,6 +36,35 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.platform.registerBackButtonAction(() => {
+ 
+        let appNav = this.app.getActiveNavs()[0];
+        let activeView = appNav.getActive();
+  
+        if (appNav.canGoBack()) { //Can we go back?
+            appNav.pop();
+            return;
+        }
+  
+        if (activeView.name !== "HomePage") {
+          //nav.popToRoot();
+          this.nav.setRoot(HomePage);
+        } else {
+          const alert = this.alertCtrl.create({
+            title: 'App termination',
+            message: 'Do you want to close the app?',
+            buttons: [{
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => console.log(this.app.getActiveNavs())
+            },{
+              text: 'Close App',
+              handler: () => this.platform.exitApp()  // Close app
+            }]
+          });
+          alert.present();
+        }
+      });
     });
   }
 
