@@ -140,7 +140,7 @@ export class MapComponent {
           let spLat = el["position"]["latitude"];
           let spLng = el["position"]["longitude"];
 
-          console.table(el);
+          //console.table(el);
 
           // marker - ikonica
           const popupContent = '<div text-center class="popupContent"><strong>'+el["pip"]+'</strong> @ '+el["spName"]+' <br /> Status: <strong>'+el["status"]+'</strong> <br /> <a href="#/workorder-details/'+el["id"]+'">GO</a></div>';
@@ -227,7 +227,7 @@ export class MapComponent {
       ; 
     let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
     let d = R * c; // Distance in km
-    console.log("distance", Number(d).toFixed(2),"km");
+    //console.log("distance", Number(d).toFixed(2),"km");
     return d;
   }
   

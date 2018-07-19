@@ -1,7 +1,7 @@
 <ion-header>
-    <ion-navbar>
+    <ion-navbar color="calm">
       <ion-row text-center>
-          <ion-col col-3 col-lg-3 col-xl-3><button ion-button color="dark" outline (click)="dismiss()">Close</button></ion-col>
+          <ion-col col-3 col-lg-3 col-xl-3><button ion-button color="light" outline (click)="dismiss()">Close</button></ion-col>
           <ion-col col-6 col-lg-6 col-xl-6><ion-title>Edit Workorder</ion-title></ion-col>
           <ion-col col-3 col-lg-3 col-xl-3><button ion-button color="materialGreen" (click)="updateWO(editWO.value)" [disabled]="!editWO.valid">Save</button></ion-col>
       </ion-row>
