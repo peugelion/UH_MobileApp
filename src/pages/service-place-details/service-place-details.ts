@@ -32,7 +32,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   Id: string;
   sp: {};
 
-  //spPromise: Promise<any>;
+  //sp: Promise<any>;
 
   name: string;
   tel: string;
@@ -90,35 +90,46 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
 
   // DETAILS TAB
 
-  loadServicePlace() {
-    return new Promise((resolve, reject) => 
-
-      this.oauth.getOAuthCredentials()
-      .then( oauth => DataService.createInstance(oauth, {useProxy:false}) )
-      .then( service => {
-        let spPromise       = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, '');
-        let cityPromise     = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r');
-        let countryPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r/UH__Country__r');
-        let contactPromise  = this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__Contact__r');
-
-        spPromise.then(r => {
-          //console.log(" spPromise resolve : ", r);
-          this.tel  = r["UH__Phone__c"];
-          this.name = r["Name"];
-          this.addr = r["UH__Address__c"];
-          this.lat  = r["UH__position__Latitude__s"];
-          this.lng  = r["UH__position__Longitude__s"];
-          this.accountId = r["UH__Account__c"];
-          //this.map.initmap();
-          resolve(r);   // !!!
-        });
-        cityPromise.then( r => this.cityName = r["Name"] );
-        countryPromise.then( r => this.countryName = r["Name"] );
-        contactPromise.then( r => this.contact = r, err => this.contact = null )
-        //.catch( r => this.contact = null );
-      })
-
-    );
+  // loadServicePlace() {
+  //   return new Promise((resolve, reject) => {
+  //     this.oauth.getOAuthCredentials().then( oauth => ((oauth.isSF) ? this.loadServicePlace_SF() : this.loadServicePlace_Strapi()) )
+  //   });
+  // }
+  async loadServicePlace() {
+    const oauth = await this.oauth.getOAuthCredentials();
+    //return await (oauth.isSF) ? this.loadServicePlace_SF(oauth) : this.loadServicePlace_Strapi(oauth);
+    ( (oauth.isSF) ? this.fetchData_SF(oauth) : this.fetchData_Strapi(oauth) )
+    .then( sp => {      //console.log("sp main", sp);
+      this.name = sp["Name"];
+      this.tel  = sp["UH__Phone__c"];
+      this.addr = sp["UH__Address__c"];      //console.log("this.addr", this.addr);
+      this.lat  = sp["UH__position__Latitude__s"];
+      this.lng  = sp["UH__position__Longitude__s"];
+      this.accountId = sp["UH__Account__c"];
+    });
+    return this.sp;
+  }
+  
+  async fetchData_SF(oauth) {
+    const service = await DataService.createInstance(oauth, {useProxy:false});
+    //this.sp          = await this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, '');
+    let cityPromise    = await this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r');
+    let countryPromise = await this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r/UH__Country__r');
+    try {
+      this.contact = await this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__Contact__r');      //console.log(this.contact);
+    } catch(e) {
+      this.contact = null
+    }
+    this.cityName     = await cityPromise["Name"];
+    this.countryName  = await countryPromise["Name"];
+    return await service.apexrest("/services/data/v37.0/sobjects/UH__ServicePlace__c/"+this.Id);
+  }
+  async fetchData_Strapi(oauth) {
+    let spPromise = await oauth.strapi.getEntry('serviceplace', this.Id);  //console.log("spPromise", spPromise);
+    this.contact  = await spPromise["UH__Contact__r"];                     //console.log("this.contact strapi", this.contact);
+    this.cityName     = "Belgrade" // TODO //this.cityName     = await cityPromise["Name"];
+    this.countryName  = "Serbia";  // TODO //this.countryName  = await countryPromise["Name"];    
+    return await spPromise;
   }
 
   // RELATED TAB

@@ -26,7 +26,8 @@
       <ion-list id={{sp?.Id}}>
         <ion-item *ngIf="contact != null;else elsetag" id={{contact?.Id}} (click)="goToContact(contact?.Id)">
           <p>Contact</p>
-          <h2><a>{{ contact?.FirstName}}&nbsp;{{ contact?.LastName}}</a></h2>
+          <!-- <h2><a>{{ contact?.FirstName}}&nbsp;{{ contact?.LastName}}</a></h2> -->
+          <h2><a>{{ contact?.Name}}&nbsp;</a></h2>
         </ion-item>
         <ng-template #elsetag>
           <ion-item>
@@ -49,7 +50,7 @@
         </ion-item>
       </ion-list>
       <ion-card>
-        <map [lat]="lat" [lng]="lng" [addr]="addr" [cityName]="cityName" [countryName]="countryName"></map>
+        <map [lat]="lat" [lng]="lng" [addr]="addr" [cityName]="cityName" [countryName]="countryName" [popupHeaderText]="name"></map>
       </ion-card>
     </div>
     <!-- details tab end -->

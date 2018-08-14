@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { RelatedListsDataProvider } from '../../providers/related-lists-data/related-lists-data';
 import { DataService } from 'forcejs';
+import Strapi from 'strapi-sdk-javascript/build/main';
 
 @IonicPage({
   segment: 'contact/:id'
@@ -30,12 +31,17 @@ export class ContactPage {
     this.getRelatedData();
   }
 
-  getContactDetails(contactUrl: string) {
-    this.oauth.getOAuthCredentials()
-      .then(oauth => DataService.createInstance(oauth, {useProxy:false}).apexrest(contactUrl))
-      .then(result => {
-        this.contact = result;
-      });
+  async getContactDetails(contactUrl: string) {
+    const oauth = await this.oauth.getOAuthCredentials();
+    console.log("oauth contact page", oauth);
+    return await (oauth.isSF) ? this.getContactDetails_SF(oauth, contactUrl) : this.getContactDetails_Strapi(oauth, contactUrl);
+  }
+  async getContactDetails_SF(oauth, contactUrl: string) {
+    const service = await DataService.createInstance(oauth, {useProxy:false});
+    this.contact = contactUrl ? await service.apexrest(contactUrl) : await service.apexrest("/services/data/v37.0/sobjects/Contact/"+this.id);
+  }
+  async getContactDetails_Strapi(oauth, contactUrl: string) {
+    this.contact = await oauth.strapi.getEntry('contact', this.id);
   }
 
   getRelatedData() {

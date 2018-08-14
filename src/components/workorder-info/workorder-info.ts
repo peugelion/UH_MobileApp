@@ -16,10 +16,11 @@ export class WorkorderInfoComponent {
 
   itemClicked(event: any, page: string, id: string, url: string): void {
     event.stopPropagation();
+    //console.log(page, id, url)
     if(!this.inAccordion) {
-      this.navCtrl.push(page, {id: id, url: url});
+      this.navCtrl.push(page, {id: id});
     } else {
-      this.onItemClicked.emit({page: page, id: id, url: url});
+      this.onItemClicked.emit({page: page, id: id});
     }
   }
 }

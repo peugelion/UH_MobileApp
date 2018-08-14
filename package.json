@@ -45,6 +45,7 @@
 								"phonegap-plugin-push": "^1.4.5",
 								"rxjs": "5.5.10",
 								"shelljs": "^0.7.0",
+								"strapi-sdk-javascript": "^0.2.1",
 								"sw-toolbox": "3.6.0",
 								"zone.js": "0.8.26"
 				},

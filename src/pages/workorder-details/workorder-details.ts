@@ -5,6 +5,7 @@ import { WorkordersServiceProvider } from '../../providers/workorders-service/wo
 
 import { AddExpenseComponent } from '../../components/add-expense/add-expense';
 import { DeptInventoryComponent } from '../../components/dept-inventory/dept-inventory';
+import { AddPartComponent } from '../../components/add-part/add-part';
 import { AddLaborComponent } from '../../components/add-labor/add-labor';
 import { RejectWorkorderComponent } from '../../components/reject-workorder/reject-workorder';
 import { DataService } from 'forcejs';
@@ -147,7 +148,27 @@ export class WorkorderDetailsPage {
   }
 
   addPart() {
-    console.log("I got inside addPart!");
+    let partModal = this.modalCtrl.create(AddPartComponent, { woId: this.currWO.Id });
+    partModal.onDidDismiss(data => {
+      if(!data.isCanceled) {
+        // push newly created labour into its related list
+        let relatedWOPart;
+        this.relatedData.forEach(elem => {
+          if (elem.name === "WO Parts") relatedWOPart = elem; 
+        });
+        relatedWOPart.elements.push(data.createdPart);
+        relatedWOPart.size += 1;
+
+        // present the message from a addPart modal
+        let toast = this.toastCtrl.create({
+          message: data.message,
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+      }
+    });
+    partModal.present();
   }
 
   addLabour() {

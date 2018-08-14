@@ -2,6 +2,7 @@ import { Component, Input, /*OnInit, SimpleChange,*/ SimpleChanges } from '@angu
 //import { HttpClient } from '@angular/common/http';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { MapServiceProvider } from '../../providers/map-service/map-service';
+import { TechniciansServiceProvider } from '../../providers/technicians-service/technicians-service';
 
 
 /**
@@ -25,20 +26,28 @@ export class MapComponent {
 
   maxDistance: number = 50;   // in km; initial map zoom to show SPs that are max 50km far away
 
-  @Input() lat: string = null;
+  @Input() lat: string = null;            // sp page : lat\lng servicnog mesta ili addr+city+country za pronalazenje lat\lng
   @Input() lng: string = null;
   
   @Input() addr: string = null;
   @Input() cityName: string = null;
   @Input() countryName: string = null;
-  
-  @Input() isHomePage: boolean = false;
 
-  constructor(/*private http:HttpClient,*/ private oauth : OAuthServiceProvider, private mapService: MapServiceProvider,) {}
+  @Input() popupHeaderText: string = null; // sp page : spName, naziv servicnog mesta
+  
+  @Input() isHomePage: boolean = false;    // home page : jedini input za na home strani. Uzima trenutnu lokaciju logovanog tehnicara, njegovo ime za popup i lokacije radnih naloga za dodatne markere
+
+  //mapElId: string = "map_homepage";
+
+  constructor(
+    /*private http:HttpClient,*/
+    private oauth : OAuthServiceProvider,
+    private mapService: MapServiceProvider,
+    private techService: TechniciansServiceProvider) {}
 
   ngOnChanges(changes: SimpleChanges) {
     try {
-        this.initmap();
+      this.initmap();
     } catch(err) {
         console.log(err);
     }
@@ -48,7 +57,21 @@ export class MapComponent {
 
   /* draw map if we hava lat\lng, esle fetch lat\lng from address(+city+country) than drow map */
   initmap() {
-    //console.warn("  lat", this.lat, "lng", this.lng, "addr", this.addr, "city", this.cityName, "country", this.countryName,"map",this.map)
+    console.warn("  lat", this.lat, "lng", this.lng, "addr", this.addr, "city", this.cityName, "country", this.countryName,"map",this.map)
+
+    if (this.isHomePage && !this.popupHeaderText) {
+      this.oauth.getOAuthCredentials()
+      .then(oauth => this.techService.fetchLoggedInTechnican(oauth))
+      .then(tech => {
+        console.warn(tech)
+        this.popupHeaderText = `<b>Your location</b>
+          <br><p>(<a href='/#/tech/${tech.id}'>${tech.name}</a>
+          ${(tech.phone) ? "<br><a href='tel:"+tech.phone+"'>"+tech.phone+"</a>" : ''})</p>`;
+        this.initmap();     // once we got the Techican name and link for popup, we can initiate the map
+      });
+      return;
+    }
+
     if (this.lat) {
       this.drawmap();       // go
       return;
@@ -82,16 +105,11 @@ export class MapComponent {
   }
 
   drawmap() {
-    // if (!document.getElementById('map_sp')) {
-    //   window.setTimeout(
-    //     this.drawmap.bind(this), 0       // retry
-    //   );
-    // }
-
     // init map
-    if (this.map) this.map.remove();                  // fix: tab reload
-    if (!document.getElementById('map_sp')) return;   // fix: tab change, 'map_sp missing' kad prebacis na related tab, pre nego je details zavrsion ucitavanje (crta mapu, a vec na related tabu)
-    this.map = new L.Map('map_sp');    // attach to 'map_sp' element
+    if (this.map) this.map.remove();                             // fix: tab reload\refresh
+    const mapElId = this.isHomePage ? "map_homepage" : "map_sp"; // fix: prelazak sa home na sp details page (link iz recent WO liste) gde su dve mape aktivne u isto vreme (home i sp)
+    if (!document.getElementById(mapElId)) return;               // fix: tab change, 'map_sp missing' kad prebacis na related tab, pre nego je details zavrsion ucitavanje (crta mapu, a vec na related tabu)
+    this.map = new L.Map(mapElId);    // attach to 'map_sp' or 'map_homepage' element
 
     // create the tile layer with correct attribution
     const osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -102,21 +120,29 @@ export class MapComponent {
     this.map.addLayer(osm);
     
     // marker - ikonica
-    const popupContent = '<div class="spPopupContent"><h2>'+name+'</h2> <br />'+this.addr+'</div>';
+    
+    let popupContent = `<div class="popupContent"><h3>${this.popupHeaderText}</h3>
+                        ${(this.addr) ? '<br />'+this.addr : ''}</div>`
     const popup = L.popup()
       .setLatLng([this.lat, this.lng])
       .setContent(popupContent);
     const centerIcon = L.icon({
       // iconUrl: "/resource/1500293185000/uh__jsAndStyles/images/mapPinStar.png",
-      iconUrl: "https://unpkg.com/leaflet@1.3.1/dist/images/marker-icon.png",
+      // iconUrl: "https://unpkg.com/leaflet@1.3.1/dist/images/marker-icon.png",
+      iconUrl: "./assets/imgs/marker-icon.png",
       iconSize: [25,41],
       iconAnchor: [15,35],
       popupAnchor: [0,-18]
     });
 
-    L.marker([this.lat, this.lng], {riseOnHover:true, riseOffset: 30, icon: centerIcon})
-      .addTo(this.map)
-      .bindPopup(popup);
+    // if (this.isHomePage)
+    //   L.marker([this.lat, this.lng], {riseOnHover:true, riseOffset: 30, icon: centerIcon})
+    //     .addTo(this.map);
+    // else {
+      L.marker([this.lat, this.lng], {riseOnHover:true, riseOffset: 30, icon: centerIcon})
+        .addTo(this.map)
+        .bindPopup(popup);
+    //}
     
     /* add service places markers on Home Page */
 
@@ -127,9 +153,10 @@ export class MapComponent {
       .then(filteredWOs => this.fetchSPsGeoPositions(filteredWOs))   /* fetch lat\lng from SP addresses */
       .then(filteredWOsWithGeoLoc => {
         //console.log("     1. filteredWOsWithGeoLoc", filteredWOsWithGeoLoc);
+
         const spIcon = L.icon({
           // iconUrl: "/resource/1500293185000/uh__jsAndStyles/images/mapPinStar.png",
-          iconUrl: "/assets/imgs/map71.png",
+          iconUrl: "./assets/imgs/map71.png",
           iconSize: [25,31],
           iconAnchor: [15,35],
           popupAnchor: [0,-18]
@@ -140,10 +167,8 @@ export class MapComponent {
           let spLat = el["position"]["latitude"];
           let spLng = el["position"]["longitude"];
 
-          console.table(el);
-
           // marker - ikonica
-          const popupContent = '<div text-center class="popupContent"><strong>'+el["pip"]+'</strong> @ '+el["spName"]+' <br /> Status: <strong>'+el["status"]+'</strong> <br /> <a href="#/workorder-details/'+el["id"]+'">GO</a></div>';
+          const popupContent = '<div text-center class="spPopupContent"><strong>'+el["pip"]+'</strong> @ '+el["spName"]+' <br /> Status: <strong>'+el["status"]+'</strong> <br /> <a href="#/workorder-details/'+el["id"]+'">GO</a></div>';
           const popup = L.popup()
             .setLatLng([this.lat, this.lng])
             .setContent(popupContent);

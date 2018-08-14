@@ -1,7 +1,12 @@
 map {
-    #map_sp {
+    //#map_sp {
+    div.map {
         min-height: 240px;
         height: 60vw;
         max-height: 470px;
+    }
+    .popupContent,
+    .spPopupContent {
+        text-align: center
     }
 }

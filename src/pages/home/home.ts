@@ -42,7 +42,10 @@ export class HomePage {
     let selectCond = 'WHERE UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK';
     this.woService.showListWOs(oauth, selectCond)
       .then(results => {
-        this.workOrders = results.records;
+        console.log("showListWOs results", results);
+        console.log(results);
+        //this.workOrders = results["records"];
+        this.workOrders = results;
       });
   }
   

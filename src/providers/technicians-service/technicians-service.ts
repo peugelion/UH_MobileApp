@@ -35,7 +35,25 @@ export class TechniciansServiceProvider {
             ]
         ));
         return [labels, dataArr]
-      });;
+      });
+  }
+
+  //
+
+  // map-homepage; add part
+  fetchLoggedInTechnican(oauthCreds){
+    let service = DataService.createInstance(oauthCreds, {useProxy:false});
+    return service.query(`SELECT id, name, UH__User__r.Phone
+      FROM UH__Technician__c
+      WHERE UH__User__r.Id = '`+oauthCreds['userId']+`'`)
+    .then(r => {
+      let tmp = r["records"][0];
+      return {
+        id : tmp.Id,
+        name : tmp.Name,
+        phone : tmp.UH__User__r ? tmp.UH__User__r.Phone : null
+      }
+    });
   }
 
 }

@@ -13,7 +13,8 @@ import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-serv
 export class WorkordersPage {
 
   listLabel: string;
-  workorders: Array<{Id: string, Name: string, UH__Status__c: string, UH__ServicePlace__r: object, UH__productInPlace__r: object, UH__Description__c:string, UH__Deadline__c: string}>;
+  //workorders: Array<{Id: string, Name: string, UH__Status__c: string, UH__ServicePlace__r: object, UH__productInPlace__r: object, UH__Description__c:string, UH__Deadline__c: string}>;
+  workorders: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private oauth: OAuthServiceProvider, private woService: WorkordersServiceProvider, private loadingCtrl: LoadingController) {
   }
@@ -55,7 +56,8 @@ export class WorkordersPage {
         loading.present();
         this.woService.showListWOs(oauth, selectCond)
           .then(results => {
-            this.workorders = results.records;
+            //this.workorders = results["records"];
+            this.workorders = results;
             this.listLabel = listName;
             loading.dismiss();
           });

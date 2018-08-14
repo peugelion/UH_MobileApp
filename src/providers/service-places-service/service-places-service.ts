@@ -14,14 +14,9 @@ export class ServicePlacesServiceProvider {
 
   constructor(private http:HttpClient) {}
 
-  loadServicePlaces(oauthCreds, all) {
-    let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query(
-      `SELECT Id, Name, UH__Phone__c, UH__Address__c, UH__City__r.Name
-      FROM UH__ServicePlace__c`
-      + (all ? `` : ` WHERE LastViewedDate = LAST_YEAR OR LastViewedDate = THIS_YEAR`)
-    )
-    .then(r => r.records.map(entry => (
+  loadServicePlaces(oauth, all) {
+    return ( (oauth.isSF) ? this.fetchData_SF(oauth, all) : this.fetchData_Strapi(oauth, all) )
+    .then(r => r.map(entry => (
       {
         Id:       entry["Id"],      // wo id (go button on popup)
         name:     entry["Name"],  // wo name,
@@ -30,12 +25,32 @@ export class ServicePlacesServiceProvider {
       }
     )))
   }
- 
+
+  async fetchData_SF(oauth, all) {
+    let service = DataService.createInstance(oauth, {useProxy:false});
+    let data = await service.query(
+      `SELECT Id, Name, UH__Phone__c, UH__Address__c, UH__City__r.Name
+      FROM UH__ServicePlace__c`
+      + (all ? `` : ` WHERE LastViewedDate = LAST_YEAR OR LastViewedDate = THIS_YEAR`)
+    );
+    return await data["records"];
+  }
+
+  async fetchData_Strapi(oauth, all) {
+    let twoWeksAgoDate = new Date(new Date().setDate(new Date().getDate() - 174) ).toISOString();  //console.log(twoWeksAgoDate);
+    let params = all ? {} : {_UH__startTime__c_gt: twoWeksAgoDate}
+    let spPromise = await oauth.strapi.getEntries('serviceplace', params);
+    console.log("spPromise", spPromise); 
+    // this.contact  = await spPromise["UH__Contact__r"];                     //console.log("this.contact strapi", this.contact);
+    // this.cityName     = "Belgrade" // TODO //this.cityName     = await cityPromise["Name"];
+    // this.countryName  = "Serbia";  // TODO //this.countryName  = await countryPromise["Name"];    
+    return await spPromise;
+  } 
 
   // RELATED TAB
 
-  getRelatedWOs(oauthCreds, Id) {
-    let service = DataService.createInstance(oauthCreds, {useProxy:false});
+  getRelatedWOs(oauth, Id) {
+    let service = DataService.createInstance(oauth, {useProxy:false});
     return service.query(
       `SELECT Id, Name, uh__status__c, uh__productInPlace__r.Name, uh__description__c, format(UH__Deadline__c)
         FROM UH__WorkOrder__c 
@@ -61,8 +76,8 @@ export class ServicePlacesServiceProvider {
     });
   }
 
-  getRelatedPiPs(oauthCreds, spId) {
-    let service = DataService.createInstance(oauthCreds, {useProxy:false});
+  getRelatedPiPs(oauth, spId) {
+    let service = DataService.createInstance(oauth, {useProxy:false});
     return service.query(
       `SELECT Id, Name, UH__Contact__r.Name, UH__Product__r.ProductCode, UH__installedDate__c
       FROM UH__ProductInPlace__c

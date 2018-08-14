@@ -1,12 +1,13 @@
 <ion-card>
-  <ion-grid (click)="itemClicked($event, 'WorkorderDetailsPage', workorder.Id, workorder.attributes.url)">
+  <ion-grid (click)="itemClicked($event, 'WorkorderDetailsPage', workorder.Id, workorder?.attributes?.url)">
     <ion-row>
       <ion-col col-12><h1>{{workorder.Name}}</h1></ion-col>
     </ion-row>
     <ion-row class="ellipsis">
-      <ion-col col-5 col-lg-3 col-xl-3><div>Product in Place:</div></ion-col>
+      <ion-col col-5 col-lg-3 col-xl-3><div>Product in Place: </div></ion-col>
       <ion-col col-7 col-lg-9 col-xl-9>
-        <div><a (click)="itemClicked($event, 'ProductInPlacePage', workorder.UH__productInPlace__c, workorder.UH__productInPlace__r?.attributes.url)">
+        <!-- <div><a (click)="itemClicked($event, 'ProductInPlacePage', workorder.UH__productInPlace__r.Id, workorder.UH__productInPlace__r?.attributes.url)"> -->
+        <div><a (click)="itemClicked($event, 'ProductInPlacePage', workorder.UH__productInPlace__r.Id)">
             {{workorder.UH__productInPlace__r?.Name}}</a>
         </div>
       </ion-col>
@@ -14,7 +15,8 @@
     <ion-row class="ellipsis">
       <ion-col col-5 col-lg-3 col-xl-3><div>Service Place:</div></ion-col>
       <ion-col col-7 col-lg-9 col-xl-9>
-        <div><a (click)="itemClicked($event, 'ServicePlaceDetailsPage', workorder.UH__ServicePlace__c, workorder.UH__ServicePlace__r?.attributes.url)">
+        <!-- <div><a (click)="itemClicked($event, 'ServicePlaceDetailsPage', workorder.UH__ServicePlace__r.Id, workorder.UH__ServicePlace__r?.attributes.url)"> -->
+        <div><a (click)="itemClicked($event, 'ServicePlaceDetailsPage', workorder.UH__ServicePlace__r.Id)">
             {{workorder.UH__ServicePlace__r?.Name}}<br/>{{workorder.UH__ServicePlace__r?.UH__Address__c}}</a>
         </div>
       </ion-col>
@@ -22,7 +24,8 @@
     <ion-row class="ellipsis">
       <ion-col col-5 col-lg-3 col-xl-3><div>Contact:</div></ion-col>
       <ion-col col-7 col-lg-9 col-xl-9>
-        <div><a (click)="itemClicked($event, 'ContactPage', workorder.UH__Contact__c, workorder.UH__Contact__r?.attributes.url)">
+        <!-- <div><a (click)="itemClicked($event, 'ContactPage', workorder.UH__Contact__c, workorder.UH__Contact__r?.attributes.url)"> -->
+        <div><a (click)="itemClicked($event, 'ContactPage', workorder.UH__Contact__r?.Id, workorder.UH__Contact__r?.attributes?.url)">
             {{workorder.UH__Contact__r?.Name}}</a>
         </div>
       </ion-col>

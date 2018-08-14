@@ -8,6 +8,7 @@ import { WorkorderFormComponent } from './workorder-form/workorder-form';
 import { AddLaborComponent } from './add-labor/add-labor';
 import { RejectWorkorderComponent } from './reject-workorder/reject-workorder';
 import { EditWorkorderComponent } from './edit-workorder/edit-workorder';
+import { AddPartComponent } from './add-part/add-part';
 
 @NgModule({
 	declarations: [
@@ -18,13 +19,15 @@ import { EditWorkorderComponent } from './edit-workorder/edit-workorder';
     WorkorderFormComponent,
     AddLaborComponent,
     RejectWorkorderComponent,
-    EditWorkorderComponent
+    EditWorkorderComponent,
+    AddPartComponent
 	],
 	entryComponents: [
     AddExpenseComponent,
     DeptInventoryComponent,
     WorkorderFormComponent,
     AddLaborComponent,
+    AddPartComponent,
     RejectWorkorderComponent,
     EditWorkorderComponent
   ],
@@ -37,7 +40,8 @@ import { EditWorkorderComponent } from './edit-workorder/edit-workorder';
     WorkorderFormComponent,
     AddLaborComponent,
     RejectWorkorderComponent,
-    EditWorkorderComponent
+    EditWorkorderComponent,
+    AddPartComponent
 	]
 })
 export class ComponentsModule {}

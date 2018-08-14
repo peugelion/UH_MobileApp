@@ -21,7 +21,7 @@ export class MapServiceProvider {
       FROM uh__workOrder__c
       WHERE uh__status__c = 'Accept' AND UH__Technician__r.UH__User__r.Id = '`+oauth['userId']+`'`)
     .then(r => {
-      //console.log("loadWOsSPs 1. query:", r);
+      console.log("loadWOsSPs 1. query:", r);
       let tmp = {};
       /* filter out duplicate service places
          https://stackoverflow.com/questions/18773778/create-array-of-unique-objects-by-property */
