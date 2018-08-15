@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { DataService } from 'forcejs';
+import { HttpClient } from '@angular/common/http';
+import Strapi from 'strapi-sdk-javascript/build/main';
 
 @IonicPage()
 @Component({
@@ -13,7 +15,7 @@ export class ProductInPlacePage {
   private pipRecord: any;
   relatedData: Array<any> = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private oauth : OAuthServiceProvider, public http: HttpClient) {
     let pipId = this.navParams.data['id'];
     this.getPiPDetails(pipId);
   }
@@ -24,27 +26,24 @@ export class ProductInPlacePage {
     this.relatedData[i].open = !this.relatedData[i].open;
   }
 
-  getPiPDetails(pipId: string): void {
-    let isStrapi = window["isStrapi"];
-    if (!isStrapi) {
-      this.oauth.getOAuthCredentials()
-        .then(oauth => DataService.createInstance(oauth, {useProxy:false}).apexrest(`/services/apexrest/UH/productInPlace/${pipId}`))
-        .then(result => {
-          console.log(result);
-          this.pipRecord = result.pipRecord;
-          this.relatedData.push({"name": "Cases", "elements": result.cases, "size": result.cases.length});
-          this.relatedData.push({"name": "Workorders", "elements": result.workorders, "size": result.workorders.length});
-        });
+  async getPiPDetails(pipId: string) {
+    let oauth = await this.oauth.getOAuthCredentials();
+    if (oauth.isSF) {
+        let res = await DataService.createInstance(oauth, {useProxy:false}).apexrest(`/services/apexrest/UH/productInPlace/${pipId}`);
+        this.pipRecord = res.pipRecord;  //          console.log("pip rest result", result);
+        this.relatedData.push({"name": "Cases", "elements": res.cases, "size": res.cases.length});
+        this.relatedData.push({"name": "Workorders", "elements": res.workorders, "size": res.workorders.length});
     } else {
-      // let url = `http://127.0.0.1:1337/graphql?query={
-      //   productinplaces(
-      //       where: { ${selectCond} }
-      //     ) { _id Name UH__Description__c UH__Deadline__c UH__Status__c UH__Contact__r{ _id Name } UH__productInPlace__r { _id Name } }
-      //   }`//.replace(/\s/g, ' ');
-      //   this.http.get(url).subscribe(
-      //     data => resolve( this.strapiRespParsing(data["data"]["workorders"]) ), // TODO parse dates to local format, ex. new Date('2013-08-10T12:10:15.474Z').toLocaleDateString()+" "+new Date('2013-08-10T12:10:15.474Z').toLocaleTimeString()
-      //     err => console.error(err)
-      //   )
+      let url = oauth.instanceURL+`/graphql?query={
+        productinplace(id:"${pipId}"){
+          _id Name UH__Contact__r{Id Name} UH__Product__r{Id Name} UH__Quantity__c
+          workorders {Id Name UH__Deadline__c UH__Description__c UH__productInPlace__r{Id Name} UH__ServicePlace__r{Id Name}}
+          UH__ServicePlace__r{Id Name} UH__Status__c UH__code__c UH__installedDate__c UH__purchaseDate__c
+        }}`//.replace(/\s/g, ' ');
+      let res = await this.http.get(url).toPromise(); // TODO parse dates to local format, ex. new Date('2013-08-10T12:10:15.474Z').toLocaleDateString()+" "+new Date('2013-08-10T12:10:15.474Z').toLocaleTimeString()
+      this.pipRecord = res["data"]["productinplace"];  //      console.log("this.pipRecord", this.pipRecord);
+      //this.relatedData.push({"name": "Cases", "elements": this.pipRecord["cases"], "size": this.pipRecord["cases"].length});
+      this.relatedData.push({"name": "Workorders", "elements": this.pipRecord["workorders"], "size": this.pipRecord["workorders"].length}); // TODO related tab - cases
     }
   }
 }

@@ -39,6 +39,7 @@
 								"cordova-plugin-ionic-webview": "^1.2.0",
 								"cordova-plugin-splashscreen": "^5.0.2",
 								"cordova-plugin-whitelist": "^1.3.3",
+								"cordova-sqlite-storage": "^2.4.0",
 								"forcejs": "^2.2.1",
 								"ionic-angular": "3.9.2",
 								"ionicons": "3.0.0",
@@ -63,7 +64,8 @@
 												"com.salesforce": {},
 												"cordova-plugin-geolocation": {
 																"GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
-												}
+												},
+												"cordova-sqlite-storage": {}
 								},
 								"platforms": [
 												"android"

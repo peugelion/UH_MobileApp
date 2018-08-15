@@ -3,6 +3,8 @@ import { OAuth } from 'forcejs';
 //import Strapi from 'strapi-sdk-javascript';
 import Strapi from 'strapi-sdk-javascript/build/main';
 import { HttpClient } from '@angular/common/http';
+import { Storage } from '@ionic/storage';
+
 
 /*
   Generated class for the OAuthServiceProvider provider.
@@ -13,57 +15,49 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class OAuthServiceProvider {
   oAuthCreds : any;
-  strapiUrl : string = 'http://localhost:1337';
+  strapiUrl : string = 'http://localhost:1337'; //TODO
 
-  constructor(public http: HttpClient) {
-    //console.log('Hello OAuthServiceProvider Provider');
-  }
+  constructor(public http: HttpClient, private storage: Storage) {}
 
-  getOAuthCredentials() : any {
-    return new Promise((resolve, reject) => {
-      // if already authenticated just resolve the promise
-      if(this.oAuthCreds) {
-        resolve(this.oAuthCreds);
+  async getOAuthCredentials() {
+    // if already authenticated just resolve the promise
+    if (this.oAuthCreds)
+      return this.oAuthCreds;
+    else {
+      // authenticate and resolve the promise
+
+      //let isSF = confirm("press OK for SF or Cancel for local authethication ?")
+      //window.localStorage.setItem('isSF', JSON.stringify(isSF));
+      
+      this.storage.set('isStrapi', JSON.parse(localStorage.getItem('isStrapi')) );
+
+      //let isStrapi = JSON.parse(localStorage.getItem('isStrapi'));
+      let isStrapi = await this.storage.get('isStrapi');  //      await console.log('isStrapi', isStrapi);
+      window["isStrapi"] = await isStrapi;
+
+      if (!isStrapi) {
+      /* SF */
+        let oauth = OAuth.createInstance();
+        this.oAuthCreds = await oauth.login();
+        this.oAuthCreds["isSF"] = true;
+        //oauth["isSF"] = true  //        await console.log(this.oAuthCreds);
       }
       else {
-        // authenticate and resolve the promise
-
-        //let isSF = confirm("press OK for SF or Cancel for local authethication ?")
-        //window.localStorage.setItem('isSF', JSON.stringify(isSF));
-
-        let isStrapi = JSON.parse(localStorage.getItem('isStrapi'));
-        window["isStrapi"] = isStrapi;
-
-        if (!isStrapi) {
-        /* SF */
-          let oauth = OAuth.createInstance();
-          oauth.login()
-            .then(oauthResult => {
-              //console.log("oauthResult inside OAuthServiceProvider = ", oauthResult);
-              this.oAuthCreds = oauthResult;
-              this.oAuthCreds["isSF"] = true;
-              //oauth["isSF"] = true
-              console.log(this.oAuthCreds);
-              resolve(this.oAuthCreds);
-            });
-
-        } else {
-        /* strapi */        
-          // this.strapiAuth().subscribe(
-          //   data => {
-          //     data["userId"] = data["user"]["_id"]; // da bude kao na SF
-          //     data["isSF"] = false;                 // !
-          //     console.log("oauthResult inside OAuthServiceProvider", data);
-          //     this.oAuthCreds = data;
-          //     resolve(this.oAuthCreds);
-          //   },
-          //   err => console.error(err)
-          // )
-          
-          this.strapiAuth().then( r => resolve(this.oAuthCreds) )
-        }
+      /* strapi */
+        // this.strapiAuth().subscribe(
+        //   data => {
+        //     data["userId"] = data["user"]["_id"]; // da bude kao na SF
+        //     data["isSF"] = false;                 // !
+        //     console.log("oauthResult inside OAuthServiceProvider", data);
+        //     this.oAuthCreds = data;
+        //     resolve(this.oAuthCreds);
+        //   },
+        //   err => console.error(err)
+        // )
+        this.oAuthCreds = await this.strapiAuth();
       }
-    })
+      return await this.oAuthCreds;
+    }
   }
 
   // strapiAuth() {
@@ -80,9 +74,9 @@ export class OAuthServiceProvider {
 
   async strapiAuth() {
     //const strapi = new Strapi('http://localhost:1337');
-    const strapi = new Strapi(this.strapiUrl);
+    const strapi = new Strapi(this.strapiUrl);    //await console.log("strapi - strapiAuth 0 ", await strapi);
     const user = await strapi.login('millllan@gmail.com', 'Sdexter3');
-    this.oAuthCreds = await user;
+    this.oAuthCreds = await user;    //await console.log("this.oAuthCreds - strapiAuth 0 ", await this.oAuthCreds);
     this.oAuthCreds["isSF"] = false;
     this.oAuthCreds["userId"] = await user["user"]["_id"]; // muljanje da se poklapa sa SF
     this.oAuthCreds["strapi"] = await strapi;
@@ -90,9 +84,8 @@ export class OAuthServiceProvider {
     this.oAuthCreds["strapi"]["instanceURL"] = this.strapiUrl;
 
     this.oAuthCreds.parseResponse           = this.parseStrapiResponse; //
-    this.oAuthCreds["strapi"].parseResponse = this.parseStrapiResponse; //
-    //console.log("this.oAuthCreds", this.oAuthCreds);
-    return await strapi; 
+    this.oAuthCreds["strapi"].parseResponse = this.parseStrapiResponse; //    await console.log("this.oAuthCreds - strapiAuth", this.oAuthCreds);
+    return await this.oAuthCreds; 
   }
 
   /* strapi helper */

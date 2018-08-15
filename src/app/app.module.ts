@@ -22,6 +22,8 @@ import { ComponentsModule } from '../components/components.module';
 import { MapServiceProvider } from '../providers/map-service/map-service';
 import { AccordionComponentModule } from '../components/accordion-component.module';
 import { RelatedListsDataProvider } from '../providers/related-lists-data/related-lists-data';
+import { IonicStorageModule } from '@ionic/storage';
+
 
 @NgModule({
   declarations: [
@@ -38,7 +40,8 @@ import { RelatedListsDataProvider } from '../providers/related-lists-data/relate
     ReactiveFormsModule,
     ComponentsModule,
     ProductInPlacePageModule,
-    AccordionComponentModule
+    AccordionComponentModule,
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

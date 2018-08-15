@@ -30,32 +30,21 @@ export class HomePage {
     public actionSheetCtrl: ActionSheetController,
     public platform: Platform) {}
 
-  initPage(){
-    this.oauth.getOAuthCredentials().
-      then((oauth) => {
-        //this.deptStock.getWarehouseAndStock();
-        this.showListWOs(oauth);
-      });
+  async initPage(){
+    this.oauthCreds = await this.oauth.getOAuthCredentials();
+    //this.deptStock.getWarehouseAndStock();
+    await this.showListWOs();
   }
 
-  showListWOs(oauth) {
+  async showListWOs() {
     let selectCond = 'WHERE UH__startTime__c = LAST_WEEK OR UH__startTime__c = THIS_WEEK';
-    this.woService.showListWOs(oauth, selectCond)
-      .then(results => {
-        console.log("showListWOs results", results);
-        console.log(results);
-        //this.workOrders = results["records"];
-        this.workOrders = results;
-      });
+    this.workOrders = await this.woService.showListWOs(this.oauthCreds, selectCond);
   }
   
   // https://blog.ionicframework.com/pull-to-refresh-directive/
-  doRefresh(refresher) {
-    this.oauth.getOAuthCredentials().
-      then(oauth => {
-        this.showListWOs(oauth);
-        refresher.complete();
-      });
+  async doRefresh(refresher) {
+      await this.showListWOs();
+      await refresher.complete();
   }
   
 

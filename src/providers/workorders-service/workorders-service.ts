@@ -16,7 +16,7 @@ export class WorkordersServiceProvider {
 
   showListWOs(oauth, selectCond) {
     return new Promise((resolve, reject) => {
-      if (oauth["isSF"]) {
+      if (oauth.isSF) {
         let service = DataService.createInstance(oauth, {useProxy:false});
         service.query(`SELECT id, name, uh__status__c, uh__servicePlace__r.Id, uh__servicePlace__r.Name, uh__servicePlace__r.UH__Address__c,
             uh__Contact__c, uh__Contact__r.Id, uh__Contact__r.Name, uh__productInPlace__r.Id, uh__productInPlace__r.Name, uh__description__c, format(UH__Deadline__c)
@@ -43,7 +43,7 @@ export class WorkordersServiceProvider {
       let url = oauth.instanceURL+`/graphql?query={
         workorders(
           where: { ${selectCond} }
-        ) { _id Name UH__Description__c UH__Deadline__c UH__Status__c UH__ServicePlace__r{ _id, Name, UH__Address__c } UH__Contact__r{ _id Name } UH__productInPlace__r { _id Name } }
+        ) { _id Name UH__Description__c UH__Deadline__c UH__Status__c UH__ServicePlace__r{ _id, Name, UH__Address__c } UH__Contact__r{ Id Name } UH__productInPlace__r { _id Name } }
       }`//.replace(/\s/g, ' ');
       this.http.get(url).subscribe(
         //data => resolve(data["data"]["workorders"]),  // TODO parse dates to local format, ex. new Date('2013-08-10T12:10:15.474Z').toLocaleDateString()+" "+new Date('2013-08-10T12:10:15.474Z').toLocaleTimeString()
