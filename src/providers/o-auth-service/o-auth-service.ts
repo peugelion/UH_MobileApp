@@ -62,12 +62,10 @@ export class OAuthServiceProvider {
 
   // strapiAuth() {
   //   let url = `http://localhost:1337/auth/local`;
-  //   return this.http.post(url, 
-  //   {
+  //   return this.http.post(url, {
   //     identifier: 'millllan@gmail.com',
   //     password: 'Sdexter3'
-  //   }, 
-  //   {
+  //   }, {
   //     headers: { 'Content-Type': 'application/json' }
   //   })
   // }
@@ -75,7 +73,7 @@ export class OAuthServiceProvider {
   async strapiAuth() {
     //const strapi = new Strapi('http://localhost:1337');
     const strapi = new Strapi(this.strapiUrl);    //await console.log("strapi - strapiAuth 0 ", await strapi);
-    const user = await strapi.login('millllan@gmail.com', 'Sdexter3');
+    const user = await strapi.login('mpetrovic@europos.co.rs', 'Sdexter3');
     this.oAuthCreds = await user;    //await console.log("this.oAuthCreds - strapiAuth 0 ", await this.oAuthCreds);
     this.oAuthCreds["isSF"] = false;
     this.oAuthCreds["userId"] = await user["user"]["_id"]; // muljanje da se poklapa sa SF

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { DataService } from 'forcejs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class RelatedListsDataProvider {
 
-  constructor() {}
+  constructor(public http: HttpClient) {}
 
   getRelatedCases(oauthCreds, selectCond) {
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
@@ -18,25 +19,58 @@ export class RelatedListsDataProvider {
                           FROM UH__workOrder__c ${selectCond}`);
   }
 
-  getRelatedWOParts(oauthCreds, selectCond) {
-    let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query(`SELECT ID, Name, UH__WorkOrder__c, UH__Part__c, UH__Part__r.Name, UH__Part__r.UH__Type__c, UH__Quantity__c, format(UH__Cost__c),
+  async getRelatedWOParts(oauthCreds, woId) {
+    if (!oauthCreds.isSF)
+      return this.getRelatedWOParts_strapi(oauthCreds, woId);
+    let service = await DataService.createInstance(oauthCreds, {useProxy:false});
+    let r = await service.query(`SELECT ID, Name, UH__WorkOrder__c, UH__Part__c, UH__Part__r.Name, UH__Part__r.UH__Type__c, UH__Quantity__c, format(UH__Cost__c),
                                  format(UH__TotalCost__c), format(CreatedDate) 
-                          FROM UH__WO_Part__c ${selectCond}`);
+                          FROM UH__WO_Part__c WHERE UH__WorkOrder__c = '${woId}'`);
+    return r["records"];
+  }
+  async getRelatedWOParts_strapi(oauthCreds, woId) {
+    let url = oauthCreds.instanceURL+`/graphql?query={
+      woparts(where:{UH__workOrder__r:"${woId}"}){_id Name UH__Part__r{Name, UH__Type__c} UH__Quantity__c UH__Cost__c}
+    }`//.replace(/\s/g, ' ');
+    let r = await this.http.get(url).toPromise(); // TODO parse dates to local format, ex. new Date('2013-08-10T12:10:15.474Z').toLocaleDateString()+" "+new Date('2013-08-10T12:10:15.474Z').toLocaleTimeString()
+    console.log("r parts strapi", r);
+    return r["data"]["woparts"];
   }
 
-  getRelatedWOExpenses(oauthCreds, selectCond) {
-    let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query(`SELECT ID, Name, UH__WorkOrder__c, UH__Quantity__c, format(UH__Cost__c), format(UH__TotalCost__c), UH__ExpenseType__c,
+  async getRelatedWOExpenses(oauthCreds, woId) {
+    if (!oauthCreds.isSF)
+      return this.getRelatedWOExpenses_strapi(oauthCreds, woId);
+    let service = await DataService.createInstance(oauthCreds, {useProxy:false});
+    let r = await service.query(`SELECT ID, Name, UH__WorkOrder__c, UH__Quantity__c, format(UH__Cost__c), format(UH__TotalCost__c), UH__ExpenseType__c,
                                  format(CreatedDate) 
-                          FROM UH__WO_Expense__c ${selectCond}`);
+                          FROM UH__WO_Expense__c WHERE UH__WorkOrder__c = '${woId}'`);
+    return r["records"];
+  }
+  async getRelatedWOExpenses_strapi(oauthCreds, woId) {
+    let url = oauthCreds.instanceURL+`/graphql?query={
+      woexpenses(where:{UH__workOrder__r:"${woId}"}){_id Name UH__WorkOrder__r{Id Name} UH__Quantity__c UH__Cost__c UH__totalCost__c UH__expenseType__c}
+    }`//.replace(/\s/g, ' ');
+    let r = await this.http.get(url).toPromise(); // TODO parse dates to local format, ex. new Date('2013-08-10T12:10:15.474Z').toLocaleDateString()+" "+new Date('2013-08-10T12:10:15.474Z').toLocaleTimeString()
+    console.log("r expenses strapi", r);
+    return r["data"]["woexpenses"];
   }
 
-  getRelatedWOLabours(oauthCreds, selectCond) {
-    let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query(`SELECT ID, Name, UH__WorkOrder__c, UH__Labor__c, UH__Labor__r.Name, UH__Labor__r.UH__Type__c, format(UH__Cost__c),
+  async getRelatedWOLabours(oauthCreds, woId) {
+    if (!oauthCreds.isSF)
+      return this.getRelatedWOLabours_strapi(oauthCreds, woId);
+    let service = await DataService.createInstance(oauthCreds, {useProxy:false});
+    let r = await service.query(`SELECT ID, Name, UH__WorkOrder__c, UH__Labor__c, UH__Labor__r.Name, UH__Labor__r.UH__Type__c, format(UH__Cost__c),
                                  format(UH__TotalCost__c), UH__hoursCount__c, format(CreatedDate) 
-                          FROM UH__WO_Labor__c ${selectCond}`);
+                          FROM UH__WO_Labor__c WHERE UH__WorkOrder__c = '${woId}'`);
+    return r["records"];
+  }
+  async getRelatedWOLabours_strapi(oauthCreds, woId) {
+    let url = oauthCreds.instanceURL+`/graphql?query={
+      wolabors(where:{UH__workOrder__r:"${woId}"}){_id Name UH__workOrder__r{Id Name} UH__Labor__r{Name UH__Type__c} UH__Cost__c}
+    }`//.replace(/\s/g, ' ');
+    let r = await this.http.get(url).toPromise(); // TODO parse dates to local format, ex. new Date('2013-08-10T12:10:15.474Z').toLocaleDateString()+" "+new Date('2013-08-10T12:10:15.474Z').toLocaleTimeString()
+    console.log("r wolabors strapi", r);
+    return r["data"]["wolabors"];
   }
 
   getRelatedContacts(oauthCreds, selectCond) {

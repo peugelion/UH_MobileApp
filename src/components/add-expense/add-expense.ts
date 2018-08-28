@@ -44,6 +44,8 @@ export class AddExpenseComponent {
     // save the expense
     this.oauth.getOAuthCredentials()
       .then(oauth => {
+        if (!oauth.isSF)
+          return this.saveExpense_strapi(formData);
         let service = DataService.createInstance(oauth, {useProxy:false});
         let sObject = {
           UH__WorkOrder__c: this.woId,
@@ -74,5 +76,29 @@ export class AddExpenseComponent {
             console.log(error);
           });
       });
+  }
+  async saveExpense_strapi(formData: any) {
+    let oauth = await this.oauth.getOAuthCredentials();
+    let sObject = {
+      UH__WorkOrder__r: this.woId,
+      UH__expenseType__c: formData.type,
+      UH__Cost__c: parseFloat(formData.cost),
+      UH__Quantity__c: formData.qty
+    };
+    console.log("sObject", sObject);
+
+    let createEntry = await oauth.strapi.createEntry('woexpense', sObject);
+    console.log("createEntry", createEntry);
+    let getEntry = await oauth.strapi.getEntry('woexpense', createEntry.id);
+    console.log("getEntry ... ", getEntry);
+    
+    let data = {
+      isCanceled: false,
+      message: "You successfully added expense.",
+      createdExpense: getEntry
+    };
+    this.viewCtrl.dismiss(data);
+
+    return getEntry;
   }
 }

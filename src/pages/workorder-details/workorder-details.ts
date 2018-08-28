@@ -47,32 +47,28 @@ export class WorkorderDetailsPage {
     this.getRelatedData();
   }
 
-  getWODetails(woID) {
-    this.oauth.getOAuthCredentials()
-      .then(oauth => {
-        this.woService.getWODetails(oauth, woID)
-          .then(result => {
-            this.currWO = result.currWO;
-            this.currentWOStatus = result.currWO.UH__Status__c;
-            this.statusClassMap = result.statusesMap;
-            this.statusClassMap.Arrived = result.statusesMap["Arrived on place"];
-          });
-      });
+  async getWODetails(woID) {
+    let oauth = await this.oauth.getOAuthCredentials();
+    let result = await this.woService.getWODetails(oauth, woID);
+    console.log("getWODetails service result", result);
+    this.currWO = result.currWO;
+    this.currentWOStatus = result.currWO.UH__Status__c;
+    this.statusClassMap = result.statusesMap;
+    this.statusClassMap.Arrived = result.statusesMap["Arrived on place"];
   }
 
-  getRelatedData() {
-    this.oauth.getOAuthCredentials().then(oauth => {
-      let whereCond: string = `WHERE UH__WorkOrder__c = '${this.id}'`;
-      this.relDataService.getRelatedWOParts(oauth, whereCond).then(result => {
-        this.relatedData.push({name: "WO Parts", elements: result.records, size: result.records.length}); 
-      });
-      this.relDataService.getRelatedWOExpenses(oauth, whereCond).then(result => {
-        this.relatedData.push({name: "WO Expenses", elements: result.records, size: result.records.length}); 
-      });
-      this.relDataService.getRelatedWOLabours(oauth, whereCond).then(result => {
-        this.relatedData.push({name: "WO Labors", elements: result.records, size: result.records.length}); 
-      });
-    }); 
+  async getRelatedData() {
+    let oauth = await this.oauth.getOAuthCredentials();
+    //let whereCond: string = `WHERE UH__WorkOrder__c = '${this.id}'`;
+    let result1 = await this.relDataService.getRelatedWOParts(oauth, this.id);
+      console.log("parts", result1);
+      this.relatedData.push({name: "WO Parts", elements: result1, size: result1.length});
+    let result2 = await this.relDataService.getRelatedWOExpenses(oauth, this.id);
+      console.log("exp", result2);
+      this.relatedData.push({name: "WO Expenses", elements: result2, size: result2.length});
+    let result3 = await this.relDataService.getRelatedWOLabours(oauth, this.id);
+      console.log("labour", result3);
+      this.relatedData.push({name: "WO Labors", elements: result3, size: result3.length});
   }
 
   toggleSection(i) {

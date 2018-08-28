@@ -23,17 +23,13 @@ export class WorkordersPage {
     this.showListWOs('Recently assigned WOs');
   }
 
-  loadWOs() {
-    this.oauth.getOAuthCredentials().
-      then(oauth => {
-        this.woService.loadWOs(oauth)
-          .then(results => {
-            this.workorders = results.records;
-          });
-      });
-  }
+  // async loadWOs() {
+  //   let oauth = await this.oauth.getOAuthCredentials();
+  //   this.workorders = this.woService.loadWOs(oauth);
+  //   this.workorders = this.workorders.records;
+  // }
 
-  showListWOs(listName: string) : void {
+  async showListWOs(listName: string) {
     let selectCond: string = '';
     switch(listName) {
       case 'Recently assigned WOs': 
@@ -47,20 +43,16 @@ export class WorkordersPage {
         break;
       default: selectCond = "WHERE UH__Status__c <> 'Reject'";
     }
-    this.oauth.getOAuthCredentials().
-      then(oauth => {
-        let loading = this.loadingCtrl.create({
-          spinner: 'bubbles',
-          content: 'Loading, please wait...'
-        });
-        loading.present();
-        this.woService.showListWOs(oauth, selectCond)
-          .then(results => {
-            //this.workorders = results["records"];
-            this.workorders = results;
-            this.listLabel = listName;
-            loading.dismiss();
-          });
-      });
+    let oauth = await this.oauth.getOAuthCredentials();
+    let loading = this.loadingCtrl.create({
+      spinner: 'bubbles',
+      content: 'Loading, please wait...'
+    });
+    loading.present();
+    console.log("selectCond", selectCond);
+    this.workorders = await this.woService.showListWOs(oauth, selectCond);
+    console.log("showListWOs results", this.workorders);
+    this.listLabel = listName;
+    loading.dismiss();
   }
 }
