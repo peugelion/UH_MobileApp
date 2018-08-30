@@ -93,7 +93,9 @@ export class OAuthServiceProvider {
    * TODO: parse dates to local format, ex. new Date('2013-08-10T12:10:15.474Z').toLocaleDateString()+" "+new Date('2013-08-10T12:10:15.474Z').toLocaleTimeString()
    */
   parseStrapiResponse(object) {
-    var str = JSON.stringify(object).replace(/"_id":/g, '"Id":'); // to metch SF responses
+    var str = JSON.stringify(object)
+      .replace(/"_id":/g, '"Id":') // to metch SF responses
+      .replace(/Arrived_on_place/g, 'Arrived on place'); // to metch SF responses
     return JSON.parse(str); // TODO: parse dates to local format
   }
 

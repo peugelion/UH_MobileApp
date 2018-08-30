@@ -33,9 +33,11 @@ export class WorkordersServiceProvider {
       workorders(
         where: { ${selectCond} }
       ) { _id Id Name UH__Description__c UH__Deadline__c UH__Status__c UH__ServicePlace__r{ _id, Name, UH__Address__c } UH__Contact__r{ Id Name } UH__productInPlace__r { _id Name } }
-    }`//.replace(/\s/g, ' ');
+    }`//.replace(/\s+/g,' ').replace(/\{\s/g,'{').replace(/\(\s/g,'(').replace(/\:\s/g,':').trim();
     let r = await this.http.get(url).toPromise(); // TODO parse dates to local format, ex. new Date('2013-08-10T12:10:15.474Z').toLocaleDateString()+" "+new Date('2013-08-10T12:10:15.474Z').toLocaleTimeString()
-    return r["data"]["workorders"];
+    //return r["data"]["workorders"];
+    let tmp = JSON.stringify(r["data"]["workorders"]).replace(/Arrived_on_place/g, 'Arrived on place'); // to metch SF responses
+    return JSON.parse(tmp);
   }
 
   async getWODetails(oauth, woID) {
@@ -71,7 +73,7 @@ export class WorkordersServiceProvider {
     return service.request(reqObject);
   }
   async changeWOStatus_strapi(oauth, woID, status) {
-    let reqObject = await oauth.strapi.updateEntry('workorder', woID, {
+    await oauth.strapi.updateEntry('workorder', woID, {
       id: woID,
       UH__Status__c: status
     });

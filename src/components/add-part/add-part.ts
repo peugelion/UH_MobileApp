@@ -151,7 +151,7 @@ export class AddPartComponent {
           UH__workOrder__c: this.woId,
           UH__Part__c: formData.part,
           UH__Cost__c: formData.cost,
-          UH__quantity__c: formData.quantity,
+          UH__Quantity__c: formData.quantity,
           UH__Department__c: formData.department,
         };
         service.create('UH__WO_Part__c', sObject)

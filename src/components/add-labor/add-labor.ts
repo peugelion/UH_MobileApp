@@ -3,6 +3,7 @@ import { ViewController, NavParams } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 import { DataService } from 'forcejs';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'add-labor',
@@ -17,7 +18,8 @@ export class AddLaborComponent {
     public viewCtrl: ViewController,
     private formBuilder: FormBuilder,
     private oauth : OAuthServiceProvider,
-    public params: NavParams
+    public params: NavParams,
+    public http: HttpClient
   ) {
     this.woId = this.params.get('woId');
 
@@ -30,15 +32,20 @@ export class AddLaborComponent {
     this.getLabours();
   }
 
-  getLabours() {
-    this.oauth.getOAuthCredentials()
-      .then(oauth => {
-        let service = DataService.createInstance(oauth, {useProxy:false});
-        service.query(`SELECT Id, Name FROM Product2 WHERE RecordTypeId = '01215000000sJoqAAE'`)
-         .then(result => {
-            this.labours = result.records;
-         });
-      });
+  async getLabours() {
+    let oauth = await this.oauth.getOAuthCredentials();    console.log("getLabours USO");
+    if (!oauth.isSF)
+      return this.getLabours_strapi(oauth);
+    let service = await DataService.createInstance(oauth, {useProxy:false});
+    let result = await service.query(`SELECT Id, Name FROM Product2 WHERE RecordTypeId = '01215000000sJoqAAE'`);   console.log("sf labours", result["records"]);
+    this.labours = result["records"];
+  }
+  async getLabours_strapi(oauth) {    console.log("getLabours_strapi USO");
+    let url = oauth.instanceURL+`/graphql?query={
+      products(where:{RecordTypeId:"Labor"}){_id Id Name}
+    }`;
+    let r = await this.http.get(url).toPromise();      console.log("r products RecordTypeId Labor", r["data"]["products"]);
+    this.labours = r["data"]["products"];       // TODO parse dates
   }
 
   dismiss() {
@@ -53,6 +60,8 @@ export class AddLaborComponent {
     // save the labour
     this.oauth.getOAuthCredentials()
       .then(oauth => {
+        if (!oauth.isSF)
+          return this.saveLabour_strapi(oauth, formData);
         let service = DataService.createInstance(oauth, {useProxy:false});
         let sObject = {
           UH__workOrder__c: this.woId,
@@ -84,4 +93,29 @@ export class AddLaborComponent {
           });
       });
   }
+  async saveLabour_strapi(oauth, formData: any) {
+    console.log("formdata labor strapi", formData);
+    let sObject = {
+      UH__workOrder__r: this.woId,
+      UH__Labor__r: formData.labour,
+      UH__Cost__c: parseFloat(formData.cost),
+      UH__hoursCount__c: formData.hours
+    };
+    console.log("sObject labor", sObject);
+
+    let createEntry = await oauth.strapi.createEntry('wolabor', sObject);
+    console.log("createEntry", createEntry);
+    let getEntry = await oauth.strapi.getEntry('wolabor', createEntry.id);
+    console.log("getEntry ... ", getEntry);
+    
+    let data = {
+      isCanceled: false,
+      message: "You successfully added labour.",
+      createdLabour: getEntry
+    };
+    this.viewCtrl.dismiss(data);
+
+    return getEntry;
+  }
+
 }

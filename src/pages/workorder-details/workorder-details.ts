@@ -60,15 +60,19 @@ export class WorkorderDetailsPage {
   async getRelatedData() {
     let oauth = await this.oauth.getOAuthCredentials();
     //let whereCond: string = `WHERE UH__WorkOrder__c = '${this.id}'`;
-    let result1 = await this.relDataService.getRelatedWOParts(oauth, this.id);
-      console.log("parts", result1);
-      this.relatedData.push({name: "WO Parts", elements: result1, size: result1.length});
-    let result2 = await this.relDataService.getRelatedWOExpenses(oauth, this.id);
-      console.log("exp", result2);
-      this.relatedData.push({name: "WO Expenses", elements: result2, size: result2.length});
-    let result3 = await this.relDataService.getRelatedWOLabours(oauth, this.id);
-      console.log("labour", result3);
-      this.relatedData.push({name: "WO Labors", elements: result3, size: result3.length});
+    this.relDataService.getRelatedWOParts(oauth, this.id).then(result => {
+      console.log("parts", result);
+      this.relatedData.push({name: "WO Parts", elements: result, size: result.length});
+    });
+    this.relDataService.getRelatedWOExpenses(oauth, this.id).then(result => {
+      console.log("exp", result);
+      this.relatedData.push({name: "WO Expenses", elements: result, size: result.length});
+    });
+    this.relDataService.getRelatedWOLabours(oauth, this.id).then(result => {
+      console.log("labour", result);
+      this.relatedData.push({name: "WO Labors", elements: result, size: result.length});
+    });
+    console.log("get this.relatedData", this.relatedData);
   }
 
   toggleSection(i) {
@@ -83,17 +87,13 @@ export class WorkorderDetailsPage {
     this.navCtrl.push(page, {"id": recordId, "url": url});
   }
 
-  changeWOStatus(status: string) {
-    this.oauth.getOAuthCredentials()
-      .then(oauth => {
-        this.woService.changeWOStatus(oauth, this.currWO.Id, status)
-          .then(result => {
-            this.currWO = result.currWO;
-            this.currentWOStatus = status;
-            this.statusClassMap = result.statusesMap;
-            this.statusClassMap.Arrived = result.statusesMap["Arrived on place"];
-          });
-      });
+  async changeWOStatus(status: string) {
+    let oauth = await this.oauth.getOAuthCredentials();
+    let result = await this.woService.changeWOStatus(oauth, this.currWO.Id, status);
+    this.currWO = result.currWO;
+    this.currentWOStatus = status;
+    this.statusClassMap = result.statusesMap;
+    this.statusClassMap.Arrived = result.statusesMap["Arrived on place"];
   }
 
   executeAction(action) {
@@ -173,7 +173,9 @@ export class WorkorderDetailsPage {
       if(!data.isCanceled) {
         // push newly created labour into its related list
         let relatedWOLabour;
+        console.log("wo details: addLabour: this.relatedData", this.relatedData);
         this.relatedData.forEach(elem => {
+          console.log("wo details: addLabour: elem", elem)
           if (elem.name === "WO Labors") relatedWOLabour = elem; 
         });
         relatedWOLabour.elements.push(data.createdLabour);

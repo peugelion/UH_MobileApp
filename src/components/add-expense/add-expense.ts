@@ -48,7 +48,7 @@ export class AddExpenseComponent {
           return this.saveExpense_strapi(formData);
         let service = DataService.createInstance(oauth, {useProxy:false});
         let sObject = {
-          UH__WorkOrder__c: this.woId,
+          UH__workOrder__c: this.woId,
           UH__expenseType__c: formData.type,
           UH__Cost__c: formData.cost,
           UH__Quantity__c: formData.qty
@@ -80,7 +80,7 @@ export class AddExpenseComponent {
   async saveExpense_strapi(formData: any) {
     let oauth = await this.oauth.getOAuthCredentials();
     let sObject = {
-      UH__WorkOrder__r: this.woId,
+      UH__workOrder__r: this.woId,
       UH__expenseType__c: formData.type,
       UH__Cost__c: parseFloat(formData.cost),
       UH__Quantity__c: formData.qty
