@@ -27,13 +27,8 @@ export class OAuthServiceProvider {
       return this.oAuthCreds;
     else {
       // authenticate and resolve the promise
-      //window.localStorage.setItem('isSF', JSON.stringify(isSF));      
       this.storage.set('isStrapi', JSON.parse(localStorage.getItem('isStrapi')) );
-
-      //let isStrapi = JSON.parse(localStorage.getItem('isStrapi'));
       let isStrapi = await this.storage.get('isStrapi');  //      await console.log('isStrapi', isStrapi);
-      window["isStrapi"] = await isStrapi;
-
       this.oAuthCreds = (!isStrapi) ? this.Auth() /* SF */ : this.Auth_strapi();
       return this.oAuthCreds;
     }

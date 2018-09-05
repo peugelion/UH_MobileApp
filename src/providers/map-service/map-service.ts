@@ -15,37 +15,50 @@ export class MapServiceProvider {
     //console.log('Hello MapServiceProvider Provider');
   }
 
-  loadWOsWithUniqueSPs(oauth){
-    let service = DataService.createInstance(oauth, {useProxy:false});
-    return service.query(`SELECT id, name, UH__Status__c, UH__productInPlace__r.Name, uh__servicePlace__r.Id, uh__servicePlace__r.Name, uh__servicePlace__r.UH__Address__c, uh__servicePlace__r.UH__position__c, uh__servicePlace__r.UH__City__r.Name, uh__servicePlace__r.UH__City__r.UH__Country__r.Name
-      FROM uh__workOrder__c
-      WHERE uh__status__c = 'Accept' AND UH__Technician__r.UH__User__r.Id = '`+oauth['userId']+`'`)
-    .then(r => {
-      console.log("loadWOsSPs 1. query:", r);
-      let tmp = {};
-      /* filter out duplicate service places
-         https://stackoverflow.com/questions/18773778/create-array-of-unique-objects-by-property */
-      return r["records"].filter(function(entry) {
-        if (tmp[entry.UH__ServicePlace__r.Id]) {
-          return false;
-        }
-        tmp[entry.UH__ServicePlace__r.Id] = true;
-        return true;
-      });
-    })
-    .then(filteredWOs => filteredWOs.map(entry => (
+  async loadWOsWithUniqueSPs(oauth){
+    let WOs = [];
+    console.log("   loadWOsWithUniqueSPs USO");
+    if (oauth.isSF) {
+      let service = await DataService.createInstance(oauth, {useProxy:false});
+      let r = await service.query(`SELECT id, name, UH__Status__c, UH__productInPlace__r.Name, uh__servicePlace__r.Id, uh__servicePlace__r.Name, uh__servicePlace__r.UH__Address__c, uh__servicePlace__r.UH__position__c, uh__servicePlace__r.UH__City__r.Name, uh__servicePlace__r.UH__City__r.UH__Country__r.Name
+        FROM uh__workOrder__c
+        WHERE uh__status__c = 'Accept' AND UH__Technician__r.UH__User__r.Id = '`+oauth['userId']+`'`);
+      WOs = r["records"];
+      console.log("loadWOsSPs 1. SF query:", WOs);
+    } else {
+      let url = oauth.instanceURL+`/graphql?query={
+        workorders(
+          where:{UH__Status__c:"Accept",}
+        ) {_id,Id,Name,UH__Status__c,UH__productInPlace__r{_id,Name},UH__ServicePlace__r{Id,Name,UH__Address__c,UH__position__c},UH__Technician__r{_id,Name,UH__User__r{_id,Name}}}
+      }`.replace(/\s+/g,'').trim();
+      let r = await this.http.get(url).toPromise();
+      WOs = r["data"]["workorders"];
+    }
+
+    /* filter out duplicate service places
+        https://stackoverflow.com/questions/18773778/create-array-of-unique-objects-by-property */
+    let tmp = {};
+    let filteredWOs = WOs.filter(function(entry) {
+      if (tmp[entry.UH__ServicePlace__r.Id]) {
+        return false;
+      }
+      tmp[entry.UH__ServicePlace__r.Id] = true;
+      return true;
+    });
+
+    return filteredWOs.map(entry => (
       {
         id:       entry["Id"],      // wo id (go button on popup)
         woName:   entry["Name"],  // wo name,
         status:   entry["UH__Status__c"],
         pip:      ( entry["UH__productInPlace__r"] ) ? entry["UH__productInPlace__r"]["Name"] : null,
         spName: entry.UH__ServicePlace__r.Name,
-        position: entry.UH__ServicePlace__r.UH__position__c,
+        position: ( entry["UH__ServicePlace__r"]["UH__position__c"] ) ? entry.UH__ServicePlace__r.UH__position__c : null,
         addr:     entry.UH__ServicePlace__r.UH__Address__c,
-        city:     entry.UH__ServicePlace__r.UH__City__r.Name,
-        country:  entry.UH__ServicePlace__r.UH__City__r.UH__Country__r.Name
+        city:     ( entry["UH__ServicePlace__r"]["UH__City__r"] ) ? entry.UH__ServicePlace__r.UH__City__r.Name : null,
+        country:  ( entry["UH__ServicePlace__r"]["UH__City__r"] ) ? entry.UH__ServicePlace__r.UH__City__r.UH__Country__r.Name : null
       }
-    )))
+    ))
   }
 
   //

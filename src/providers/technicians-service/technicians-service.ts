@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { DataService } from 'forcejs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class TechniciansServiceProvider {
 
-  constructor() {}
+  constructor(public http: HttpClient) {}
 
   // technicans-page
   loadTechnicians(oauthCreds){
@@ -41,19 +42,33 @@ export class TechniciansServiceProvider {
   //
 
   // map-homepage; add part
-  fetchLoggedInTechnican(oauthCreds){
-    let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query(`SELECT id, name, UH__User__r.Phone
+  async fetchLoggedInTechnican(oauthCreds){
+    if (!oauthCreds.isSF)
+      return this.fetchLoggedInTechnican_strapi(oauthCreds);
+    let service = await DataService.createInstance(oauthCreds, {useProxy:false});
+    let r = await service.query(`SELECT id, name, UH__User__r.Phone
       FROM UH__Technician__c
-      WHERE UH__User__r.Id = '`+oauthCreds['userId']+`'`)
-    .then(r => {
-      let tmp = r["records"][0];
-      return {
-        id : tmp.Id,
-        name : tmp.Name,
-        phone : tmp.UH__User__r ? tmp.UH__User__r.Phone : null
-      }
-    });
+      WHERE UH__User__r.Id = '`+oauthCreds['userId']+`'`);
+    r = r["records"][0];
+    return {
+        id : r.Id,
+        name : r.Name,
+        phone : r.UH__User__r ? r.UH__User__r.Phone : null
+    }
+  }
+  async fetchLoggedInTechnican_strapi(oauthCreds){
+    let url = oauthCreds.instanceURL+`/graphql?query={
+      technicians(
+        where:{UH__User__r:"${oauthCreds['userId']}"}
+      ){ _id, Name, UH__User__r{ Phone } }
+    }`.replace(/\s+/g,'').trim();
+    let r = await this.http.get(url).toPromise();
+    r = r["data"]["technicians"][0];
+    return {
+        id : r["_id"],
+        name : r["Name"],
+        phone : r["UH__User__r"] ? r["UH__User__r"]["Phone"] : null
+    }
   }
 
 }

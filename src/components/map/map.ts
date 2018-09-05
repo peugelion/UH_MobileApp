@@ -23,6 +23,7 @@ export class MapComponent {
   map;
 
   getLatLongForAddressCounter: number = 0;
+  marksInMapBoundsArr: Array<any> = [];
 
   maxDistance: number = 50;   // in km; initial map zoom to show SPs that are max 50km far away
 
@@ -47,7 +48,7 @@ export class MapComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     try {
-      this.initmap();
+      this.initMap();
     } catch(err) {
         console.log(err);
     }
@@ -55,56 +56,15 @@ export class MapComponent {
 
   // BEGIN map
 
-  /* draw map if we hava lat\lng, esle fetch lat\lng from address(+city+country) than drow map */
-  initmap() {
-    console.warn("  lat", this.lat, "lng", this.lng, "addr", this.addr, "city", this.cityName, "country", this.countryName,"map",this.map)
-
-    if (this.isHomePage && !this.popupHeaderText) {
-      this.oauth.getOAuthCredentials()
-      .then(oauth => this.techService.fetchLoggedInTechnican(oauth))
-      .then(tech => {
-        console.warn(tech)
-        this.popupHeaderText = `<b>Your location</b>
-          <br><p>(<a href='/#/tech/${tech.id}'>${tech.name}</a>
-          ${(tech.phone) ? "<br><a href='tel:"+tech.phone+"'>"+tech.phone+"</a>" : ''})</p>`;
-        this.initmap();     // once we got the Techican name and link for popup, we can initiate the map
-      });
+  /* check if we hava lat\lng, if not, fetch lat\lng from address(+city+country) first, than init map */
+  /* 1. home page: fetch current technicion lat\lng */
+  /* 2. service place page: fetch lat\lng from sp address */
+  async initMap() {
+    //console.warn("  lat", this.lat, "lng", this.lng, "addr", this.addr, "city", this.cityName, "country", this.countryName,"map",this.map)
+    await this.getLatLng();
+    if (!this.lat)
       return;
-    }
 
-    if (this.lat) {
-      this.drawmap();       // go
-      return;
-    }
-
-    /* 1. home page: fetch current technicion lat\lng */
-
-    if (this.isHomePage) {
-      if (navigator.geolocation)
-        navigator.geolocation.getCurrentPosition(position => {
-          this.lat = position.coords.latitude.toString();  //technician Lat
-          this.lng = position.coords.longitude.toString(); //technician Lng
-          this.drawmap();       // go
-        })
-      else
-        alert('Geolocation is not supported.');
-      return;
-    }
-
-    /* 2. serice place page: fetch lat\lng from address */
-
-    if (this.addr) {
-      // if no lat\lng is set : fetch it from address,
-      this.getLatLongPromise(this.addr, this.cityName, this.countryName)
-      .then(pos => {             //console.warn(" getLatLong resolve : ", r);        
-        this.lat = pos["latitude"];
-        this.lng = pos["longitude"];
-        this.drawmap();       // go
-      }, err => console.error( 'getLatLongPromise: onRejected function called: ', err ));
-    }
-  }
-
-  drawmap() {
     // init map
     if (this.map) this.map.remove();                             // fix: tab reload\refresh
     const mapElId = this.isHomePage ? "map_homepage" : "map_sp"; // fix: prelazak sa home na sp details page (link iz recent WO liste) gde su dve mape aktivne u isto vreme (home i sp)
@@ -120,9 +80,9 @@ export class MapComponent {
     this.map.addLayer(osm);
     
     // marker - ikonica
-    
-    let popupContent = `<div class="popupContent"><h3>${this.popupHeaderText}</h3>
-                        ${(this.addr) ? '<br />'+this.addr : ''}</div>`
+    let popupContent = await this.getPopupText();
+    // let popupContent = `<div class="popupContent"><h3>${this.popupHeaderText}</h3>
+    //                     ${(this.addr) ? '<br />'+this.addr : ''}</div>`
     const popup = L.popup()
       .setLatLng([this.lat, this.lng])
       .setContent(popupContent);
@@ -135,102 +95,135 @@ export class MapComponent {
       popupAnchor: [0,-18]
     });
 
-    // if (this.isHomePage)
-    //   L.marker([this.lat, this.lng], {riseOnHover:true, riseOffset: 30, icon: centerIcon})
-    //     .addTo(this.map);
-    // else {
-      L.marker([this.lat, this.lng], {riseOnHover:true, riseOffset: 30, icon: centerIcon})
-        .addTo(this.map)
-        .bindPopup(popup);
-    //}
+    L.marker([this.lat, this.lng], {riseOnHover:true, riseOffset: 30, icon: centerIcon})
+      .addTo(this.map)
+      .bindPopup(popup);
     
-    /* add service places markers on Home Page */
-
-    if (this.isHomePage) {
-      //console.log("  isHomePage ...");
-      this.oauth.getOAuthCredentials()
-      .then(oauth => this.mapService.loadWOsWithUniqueSPs(oauth))
-      .then(filteredWOs => this.fetchSPsGeoPositions(filteredWOs))   /* fetch lat\lng from SP addresses */
-      .then(filteredWOsWithGeoLoc => {
-        //console.log("     1. filteredWOsWithGeoLoc", filteredWOsWithGeoLoc);
-
-        const spIcon = L.icon({
-          // iconUrl: "/resource/1500293185000/uh__jsAndStyles/images/mapPinStar.png",
-          iconUrl: "./assets/imgs/map71.png",
-          iconSize: [25,31],
-          iconAnchor: [15,35],
-          popupAnchor: [0,-18]
-        });
-
-        let marksInMapBoundsArr = [];
-        filteredWOsWithGeoLoc.forEach(el => {
-          let spLat = el["position"]["latitude"];
-          let spLng = el["position"]["longitude"];
-
-          // marker - ikonica
-          const popupContent = '<div text-center class="spPopupContent"><strong>'+el["pip"]+'</strong> @ '+el["spName"]+' <br /> Status: <strong>'+el["status"]+'</strong> <br /> <a href="#/workorder-details/'+el["id"]+'">GO</a></div>';
-          const popup = L.popup()
-            .setLatLng([this.lat, this.lng])
-            .setContent(popupContent);
-
-          let latlng = L.latLng([spLat, spLng])
-          L.marker(latlng, {riseOnHover:true, riseOffset: 30, icon: spIcon})
-            .addTo(this.map)                                         /* add ALL SP markers to map */
-            .bindPopup(popup);
-
-          // add all locations to map, but zoomout to just those that are closeby ... max 50km
-          if (this.distanceUnder50km(spLat, spLng))
-            marksInMapBoundsArr.push(latlng);                         /* add only nearby SPs to map bounds */
-        });
-        marksInMapBoundsArr.push(L.latLng([this.lat, this.lng]));     /* add current technican to map bounds */
-
-        let bounds = L.latLngBounds(marksInMapBoundsArr);
-        this.map.fitBounds(bounds);                                   /* set map bounds, to zoom to nearby SPs with workorders */
-      })
-    }
+    //
+    
+    if (this.isHomePage)
+      this.addSpMarkersOnHomepage();
   }
-  // END map
 
+  // Homepage only
 
-  // BEGIN map helpers
+  async addSpMarkersOnHomepage() {
+    /* add service places markers on Home Page */
+    console.log("  drawmap_addSpMarkersOnHomepage (isHomePage) USO ...");
+    let oauth = await this.oauth.getOAuthCredentials();
+    let filteredWOs = await this.mapService.loadWOsWithUniqueSPs(oauth);
+    console.log("filteredWOs", filteredWOs);
 
-  /* SP locations */
-  fetchSPsGeoPositions(filteredWOs) {
-    //console.log("loadWOsSPs 2. filteredWOs:",filteredWOs);
-    let tmp = [];
+    const spIcon = L.icon({
+      // iconUrl: "/resource/1500293185000/uh__jsAndStyles/images/mapPinStar.png",
+      iconUrl: "./assets/imgs/map71.png",
+      iconSize: [25,31],
+      iconAnchor: [15,35],
+      popupAnchor: [0,-18]
+    });
+    
+    /* fetch lat\lng from SP addresses */
     filteredWOs.forEach(el => {
-      let pos = el["position"];
-      if (pos)
-        tmp.push(el)  //
-      else {
-        let addr = el["address"];
+      let pos = el["position"];      //console.log("pos",pos);
+      if (pos && pos.lenght) {
+        console.log("fetach and add (no need to fetch position froma address)", el["position"]);
+        this.addSpMarkerToMap(el, spIcon);   // go
+      }
+      if (!pos || !pos.length) {
+        //let addr = el["address"];
+        let addr = el["addr"];
         let city = el["city"];
         let country = el["country"];
-
-        this.getLatLongPromise(addr, city, country).
-        then(pos => {
+        this.getLatLongFromAddr(addr, city, country).then(pos => {
           el["position"] = pos;
-          tmp.push(el); //
-        }, err => console.error( 'getLatLongPromise: onRejected function called: ', err ));
+          console.log("fetach and add", el["position"]);
+          this.addSpMarkerToMap(el, spIcon);   // go
+        })
       }
-    });   //console.log("tmp", tmp)
-    return tmp;
+    });
+
+    this.marksInMapBoundsArr.push(L.latLng([this.lat, this.lng]));     /* add current technican to map bounds */
+  }
+  
+  addSpMarkerToMap(el, spIcon) {
+    //console.log(" dodaj marker USO", el);
+    let spLat = el["position"]["latitude"];
+    let spLng = el["position"]["longitude"];
+
+    // marker - ikonica
+    const popupContent = '<div text-center class="spPopupContent"><strong>'+el["pip"]+'</strong> @ '+el["spName"]+' <br /> Status: <strong>'+el["status"]+'</strong> <br /> <a href="#/workorder-details/'+el["id"]+'">GO</a></div>';
+    const popup = L.popup()
+      .setLatLng([this.lat, this.lng])
+      .setContent(popupContent);
+
+    let latlng = L.latLng([spLat, spLng])
+    L.marker(latlng, {riseOnHover:true, riseOffset: 30, icon: spIcon})
+      .addTo(this.map)                                         /* add ALL SP markers to map */
+      .bindPopup(popup);
+
+    // add all locations to map, but zoomout to just those that are closeby ... max 50km
+    if (this.distanceUnder50km(spLat, spLng))
+      this.marksInMapBoundsArr.push(latlng);                         /* add only nearby SPs to map bounds */
+    console.log("samo 'in bounds' markeri", this.marksInMapBoundsArr.length, this.marksInMapBoundsArr);
+    this.map.fitBounds(L.latLngBounds(this.marksInMapBoundsArr));    /* set map bounds, to zoom to nearby SPs with workorders */
+  }
+  // END map
+  
+
+  // BEGIN map helpers (homepage)
+
+  // on SP page this is input parameter, on Home its generated here
+  
+  async getPopupText() {
+    if (this.isHomePage) {
+      let oauth = await this.oauth.getOAuthCredentials();
+      let tech = await this.techService.fetchLoggedInTechnican(oauth);        console.warn("tech",tech);
+      this.popupHeaderText = `<b>Your location</b>
+        <br><p>(<a href='/#/tech/${tech.id}'>${tech.name}</a>
+        ${(tech.phone) ? "<br><a href='tel:"+tech.phone+"'>"+tech.phone+"</a>" : ''})</p>`;
+    }
+    let popupContent = `<div class="popupContent"><h3>${this.popupHeaderText}</h3>
+    ${(this.addr) ? '<br />'+this.addr : ''}</div>`
   }
 
-  getLatLongPromise(addr, city, country){
-    return new Promise((resolve, reject) => {
-      if (!addr || !city || !country) {
-        return //console.warn("getLatLongPromise ... nema adresu ?");
-      }
-      if (city)
-        addr += ", " +city+ ", " +country;
-      this.getLatLongForAddressCounter = 0;
-      this.mapService.getLatLongFromAddr(addr).subscribe(
-        data => resolve( this.mapService.getLatLongRenderGeocode(data, this.getLatLongForAddressCounter) ),    // go!
-        err => console.error(err),
-        //() => console.log('getLatLongPromise done')
-      );
-    });
+  async getLatLng() {
+    if (this.isHomePage) {
+      if (navigator.geolocation)        
+        return new Promise(function (resolve, reject) {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        }).then(position => {
+          this.lat = position["coords"].latitude.toString();  //technician Lat
+          this.lng = position["coords"].longitude.toString(); //technician Lng
+        })
+      else
+        alert('Geolocation is not supported.');
+      return;
+    }
+  
+    /* 2. service place page: fetch lat\lng from address */
+    if (this.addr) {
+      // if no lat\lng is set : fetch it from address,
+      let pos = await this.getLatLongFromAddr(this.addr, this.cityName, this.countryName)
+      //console.warn(" getLatLong resolve : ", r);
+      this.lat = pos["latitude"];
+      this.lng = pos["longitude"];
+    }
+    return;
+  }
+
+  // BEGIN map helpers (general)
+
+  async getLatLongFromAddr(addr, city, country){
+    //console.log("   getLatLongFromAddr USO", addr);
+    //if (!addr || !city || !country) {   // TODO city\country suppor in strapi
+    if (!addr) {
+      return //console.warn("getLatLongFromAddr ... nema adresu ?");
+    }
+    if (city)
+      addr += ", " +city+ ", " +country;
+    this.getLatLongForAddressCounter = 0;   //console.log("addr", addr);
+    let data = await this.mapService.getLatLongFromAddr(addr).toPromise();
+    return await this.mapService.getLatLongRenderGeocode(data, this.getLatLongForAddressCounter);
   }
   
   // distance in km
