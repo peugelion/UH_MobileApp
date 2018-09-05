@@ -4,6 +4,7 @@ import { OAuth } from 'forcejs';
 import Strapi from 'strapi-sdk-javascript/build/main';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
+import * as Constants from '../../providers/constants/constants';
 
 
 /*
@@ -15,7 +16,8 @@ import { Storage } from '@ionic/storage';
 @Injectable()
 export class OAuthServiceProvider {
   oAuthCreds : any;
-  strapiUrl : string = 'http://localhost:1337'; //TODO
+  oAuthCredsPromise : Promise<any>;
+  strapiUrl : string = Constants.STRAPI_ENDPOINT;   // 'http://localhost:1337';
 
   constructor(public http: HttpClient, private storage: Storage) {}
 
@@ -25,42 +27,32 @@ export class OAuthServiceProvider {
       return this.oAuthCreds;
     else {
       // authenticate and resolve the promise
-
-      //let isSF = confirm("press OK for SF or Cancel for local authethication ?")
-      //window.localStorage.setItem('isSF', JSON.stringify(isSF));
-      
+      //window.localStorage.setItem('isSF', JSON.stringify(isSF));      
       this.storage.set('isStrapi', JSON.parse(localStorage.getItem('isStrapi')) );
 
       //let isStrapi = JSON.parse(localStorage.getItem('isStrapi'));
       let isStrapi = await this.storage.get('isStrapi');  //      await console.log('isStrapi', isStrapi);
       window["isStrapi"] = await isStrapi;
 
-      if (!isStrapi) {
-      /* SF */
-        let oauth = OAuth.createInstance();
-        this.oAuthCreds = await oauth.login();
-        this.oAuthCreds["isSF"] = true;
-        //oauth["isSF"] = true  //        await console.log(this.oAuthCreds);
-      }
-      else {
-      /* strapi */
-        // this.strapiAuth().subscribe(
-        //   data => {
-        //     data["userId"] = data["user"]["_id"]; // da bude kao na SF
-        //     data["isSF"] = false;                 // !
-        //     console.log("oauthResult inside OAuthServiceProvider", data);
-        //     this.oAuthCreds = data;
-        //     resolve(this.oAuthCreds);
-        //   },
-        //   err => console.error(err)
-        // )
-        this.oAuthCreds = await this.strapiAuth();
-      }
-      return await this.oAuthCreds;
+      this.oAuthCreds = (!isStrapi) ? this.Auth() /* SF */ : this.Auth_strapi();
+      return this.oAuthCreds;
     }
   }
 
-  // strapiAuth() {
+  /* SF auth */
+  async Auth() {
+    let oauth = OAuth.createInstance();
+    if (!this.oAuthCredsPromise) {  // fix - sammo jedan SF popup window
+      this.oAuthCredsPromise = oauth.login();
+    }
+    this.oAuthCreds = await this.oAuthCredsPromise;
+    this.oAuthCreds["isSF"] = true;
+    //oauth["isSF"] = true  //        await console.log(this.oAuthCreds);
+    return this.oAuthCreds;
+  }
+
+  
+  // Auth_strapi() {
   //   let url = `http://localhost:1337/auth/local`;
   //   return this.http.post(url, {
   //     identifier: 'millllan@gmail.com',
@@ -70,19 +62,19 @@ export class OAuthServiceProvider {
   //   })
   // }
 
-  async strapiAuth() {
+  async Auth_strapi() {
     //const strapi = new Strapi('http://localhost:1337');
-    const strapi = new Strapi(this.strapiUrl);    //await console.log("strapi - strapiAuth 0 ", await strapi);
+    const strapi = new Strapi(Constants.STRAPI_ENDPOINT);    //await console.log("strapi - Auth_strapi 0 ", await strapi);
     const user = await strapi.login('mpetrovic@europos.co.rs', 'Sdexter3');
-    this.oAuthCreds = await user;    //await console.log("this.oAuthCreds - strapiAuth 0 ", await this.oAuthCreds);
+    this.oAuthCreds = user;    //await console.log("this.oAuthCreds - Auth_strapi 0 ", await this.oAuthCreds);
     this.oAuthCreds["isSF"] = false;
-    this.oAuthCreds["userId"] = await user["user"]["_id"]; // muljanje da se poklapa sa SF
-    this.oAuthCreds["strapi"] = await strapi;
-    this.oAuthCreds["instanceURL"]           = this.strapiUrl; // kao SF
-    this.oAuthCreds["strapi"]["instanceURL"] = this.strapiUrl;
+    this.oAuthCreds["userId"] = user["user"]["_id"]; // muljanje da se poklapa sa SF
+    this.oAuthCreds["strapi"] = strapi;
+    this.oAuthCreds["instanceURL"]           = Constants.STRAPI_ENDPOINT; // kao SF
+    this.oAuthCreds["strapi"]["instanceURL"] = Constants.STRAPI_ENDPOINT;
 
     this.oAuthCreds.parseResponse           = this.parseStrapiResponse; //
-    this.oAuthCreds["strapi"].parseResponse = this.parseStrapiResponse; //    await console.log("this.oAuthCreds - strapiAuth", this.oAuthCreds);
+    this.oAuthCreds["strapi"].parseResponse = this.parseStrapiResponse; //    await console.log("this.oAuthCreds - Auth_strapi", this.oAuthCreds);
     return await this.oAuthCreds; 
   }
 

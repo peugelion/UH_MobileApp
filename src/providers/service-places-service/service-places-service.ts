@@ -37,7 +37,7 @@ export class ServicePlacesServiceProvider {
   }
 
   async fetchData_Strapi(oauth, all) {
-    let twoWeksAgoDate = new Date(new Date().setDate(new Date().getDate() - 174) ).toISOString();  //console.log(twoWeksAgoDate);
+    let twoWeksAgoDate = new Date(new Date().setDate(new Date().getDate() - 14) ).toISOString();  //console.log(twoWeksAgoDate);
     let params = all ? {} : {_UH__startTime__c_gt: twoWeksAgoDate}
     let spPromise = await oauth.strapi.getEntries('serviceplace', params);
     console.log("spPromise", spPromise); 

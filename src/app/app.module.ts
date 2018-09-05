@@ -1,5 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, NgModule, LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common'; // jezik
+//import locale from '@angular/common/locales/en-US-POSIX';      // jezik za datume/currency
+import locale from '@angular/common/locales/sr-Cyrl';      // jezik za datume/currency
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -24,11 +27,15 @@ import { AccordionComponentModule } from '../components/accordion-component.modu
 import { RelatedListsDataProvider } from '../providers/related-lists-data/related-lists-data';
 import { IonicStorageModule } from '@ionic/storage';
 
+import { PipesModule } from '../pipes/pipes.module';
+
+
+registerLocaleData(locale);
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +48,9 @@ import { IonicStorageModule } from '@ionic/storage';
     ComponentsModule,
     ProductInPlacePageModule,
     AccordionComponentModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+
+    PipesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -49,6 +58,7 @@ import { IonicStorageModule } from '@ionic/storage';
     HomePage
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: "en-US" }, //replace "en-US" with your locale
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
@@ -58,7 +68,7 @@ import { IonicStorageModule } from '@ionic/storage';
     WorkordersServiceProvider,
     ServicePlacesServiceProvider,
     MapServiceProvider,
-    RelatedListsDataProvider,
+    RelatedListsDataProvider
   ]
 })
 export class AppModule {}

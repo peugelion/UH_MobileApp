@@ -11,7 +11,7 @@
 								"ionic:build": "ionic-app-scripts build",
 								"ionic:serve": "ionic-app-scripts serve",
 								"test": "echo \"Error: no test specified\" && exit 1",
-								"start" : "ionic serve"
+								"start": "ionic serve"
 				},
 				"author": "Jovica Jovanovic",
 				"license": "Apache-2.0",

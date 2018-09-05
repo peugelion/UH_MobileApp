@@ -23,9 +23,9 @@ export class RelatedListsDataProvider {
     if (!oauthCreds.isSF)
       return this.getRelatedWOParts_strapi(oauthCreds, woId);
     let service = await DataService.createInstance(oauthCreds, {useProxy:false});
-    let r = await service.query(`SELECT ID, Name, UH__workOrder__r, UH__Part__c, UH__Part__r.Name, UH__Part__r.UH__Type__c, UH__Quantity__c, format(UH__Cost__c),
+    let r = await service.query(`SELECT ID, Name, UH__WorkOrder__c, UH__Part__c, UH__Part__r.Name, UH__Part__r.UH__Type__c, UH__Quantity__c, format(UH__Cost__c),
                                         format(UH__TotalCost__c), format(CreatedDate) 
-                                 FROM UH__WO_Part__c WHERE UH__workOrder__r = '${woId}'`);
+                                 FROM UH__WO_Part__c WHERE UH__WorkOrder__c = '${woId}'`);
     return r["records"];
   }
   async getRelatedWOParts_strapi(oauthCreds, woId) {
@@ -45,7 +45,7 @@ export class RelatedListsDataProvider {
     let service = await DataService.createInstance(oauthCreds, {useProxy:false});
     let r = await service.query(`SELECT ID, Name, UH__WorkOrder__c, UH__Quantity__c, format(UH__Cost__c), format(UH__TotalCost__c), UH__ExpenseType__c,
                                         format(CreatedDate) 
-                                 FROM UH__WO_Expense__c WHERE UH__workOrder__r = '${woId}'`);
+                                 FROM UH__WO_Expense__c WHERE UH__WorkOrder__c = '${woId}'`);
     return r["records"];
   }
   async getRelatedWOExpenses_strapi(oauthCreds, woId) {

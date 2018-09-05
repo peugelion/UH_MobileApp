@@ -124,11 +124,11 @@
         </ion-item>
         <ion-item>
           <h3>Created Date</h3>
-          <p>{{currWO?.CreatedDate}}</p>
+          <p>{{currWO?.CreatedDate | dateTimeFormatPipe }}</p>
         </ion-item>        
         <ion-item>
           <h3>Start time</h3>
-          <p>{{currWO?.UH__startTime__c}}</p>
+          <p>{{currWO?.UH__startTime__c | dateTimeFormatPipe }}</p>
         </ion-item>
         <ion-item>
           <h3>Additional comments</h3>
@@ -136,7 +136,7 @@
         </ion-item>
         <ion-item>
           <h3>Deadline</h3>
-          <p>{{currWO?.UH__Deadline__c}}</p>
+          <p>{{currWO?.UH__Deadline__c | dateTimeFormatPipe }}</p>
         </ion-item>
         <ion-item>
           <h3>Closed on</h3>
@@ -144,7 +144,7 @@
         </ion-item>
         <ion-item>
           <h3>Cancellation date</h3>
-          <p>{{currWO?.UH__dateCancelled__c}}</p>
+          <p>{{currWO?.UH__dateCancelled__c | dateTimeFormatPipe }}</p>
         </ion-item>
         <ion-item>
           <h3>Cancelled By</h3>

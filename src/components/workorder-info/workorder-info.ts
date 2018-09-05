@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NavController, NavParams} from 'ionic-angular';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @Component({
   selector: 'workorder-info',

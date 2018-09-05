@@ -10,30 +10,36 @@ import { ContactInfoComponent } from './contact-info/contact-info';
 import { ServicePlaceInfoComponent } from './service-place-info/service-place-info';
 import { PipInfoComponent } from './pip-info/pip-info';
 
+import { PipesModule } from '../pipes/pipes.module';
+
 @NgModule({
 	declarations: [
-    AccordionComponent,
-    CaseInfoComponent,
-    WorkorderInfoComponent,
-    WorkorderPartInfoComponent,
-    WorkorderExpenseInfoComponent,
-    WorkorderLabourInfoComponent,
-    ContactInfoComponent,
-    ServicePlaceInfoComponent,
-    PipInfoComponent
+        AccordionComponent,
+        CaseInfoComponent,
+        WorkorderInfoComponent,
+        WorkorderPartInfoComponent,
+        WorkorderExpenseInfoComponent,
+        WorkorderLabourInfoComponent,
+        ContactInfoComponent,
+        ServicePlaceInfoComponent,
+        PipInfoComponent
 	],
 	entryComponents: [],
-	imports: [IonicPageModule],
+	imports: [
+        IonicPageModule,
+        
+        PipesModule
+    ],
 	exports: [
-    AccordionComponent,
-    CaseInfoComponent,
-    WorkorderInfoComponent,
-    WorkorderPartInfoComponent,
-    WorkorderExpenseInfoComponent,
-    WorkorderLabourInfoComponent,
-    ContactInfoComponent,
-    ServicePlaceInfoComponent,
-    PipInfoComponent
+        AccordionComponent,
+        CaseInfoComponent,
+        WorkorderInfoComponent,
+        WorkorderPartInfoComponent,
+        WorkorderExpenseInfoComponent,
+        WorkorderLabourInfoComponent,
+        ContactInfoComponent,
+        ServicePlaceInfoComponent,
+        PipInfoComponent
 	]
 })
 export class AccordionComponentModule {}

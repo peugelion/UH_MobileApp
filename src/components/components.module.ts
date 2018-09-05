@@ -10,6 +10,8 @@ import { RejectWorkorderComponent } from './reject-workorder/reject-workorder';
 import { EditWorkorderComponent } from './edit-workorder/edit-workorder';
 import { AddPartComponent } from './add-part/add-part';
 
+//import { PipesModule } from '../pipes/pipes.module';
+
 @NgModule({
 	declarations: [
 		AddExpenseComponent,
@@ -20,7 +22,7 @@ import { AddPartComponent } from './add-part/add-part';
     AddLaborComponent,
     RejectWorkorderComponent,
     EditWorkorderComponent,
-    AddPartComponent
+    AddPartComponent,
 	],
 	entryComponents: [
     AddExpenseComponent,
@@ -31,7 +33,10 @@ import { AddPartComponent } from './add-part/add-part';
     RejectWorkorderComponent,
     EditWorkorderComponent
   ],
-	imports: [IonicPageModule],
+	imports: [
+    IonicPageModule,
+    //PipesModule
+  ],
 	exports: [
 		AddExpenseComponent,
 		DeptInventoryComponent,
