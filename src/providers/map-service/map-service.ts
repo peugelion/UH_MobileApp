@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DataService } from 'forcejs';
+import { TechniciansServiceProvider } from '../../providers/technicians-service/technicians-service';
 
 /*
   Generated class for the MapServiceProvider provider.
@@ -11,7 +12,7 @@ import { DataService } from 'forcejs';
 @Injectable()
 export class MapServiceProvider {
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, private techService: TechniciansServiceProvider) {
     //console.log('Hello MapServiceProvider Provider');
   }
 
@@ -26,9 +27,10 @@ export class MapServiceProvider {
       WOs = r["records"];
       console.log("loadWOsSPs 1. SF query:", WOs);
     } else {
+      //let tech = await this.techService.fetchLoggedInTechnican(oauth);       //TODO find a way to fetch in one api call
       let url = oauth.instanceURL+`/graphql?query={
         workorders(
-          where:{UH__Status__c:"Accept",}
+          where:{UH__Status__c:"Accept",UH__Technician__r:"`+oauth.tech.id+`"}
         ) {_id,Id,Name,UH__Status__c,UH__productInPlace__r{_id,Name},UH__ServicePlace__r{Id,Name,UH__Address__c,UH__position__c},UH__Technician__r{_id,Name,UH__User__r{_id,Name}}}
       }`.replace(/\s+/g,'').trim();
       let r = await this.http.get(url).toPromise();
@@ -53,6 +55,7 @@ export class MapServiceProvider {
         status:   entry["UH__Status__c"],
         pip:      ( entry["UH__productInPlace__r"] ) ? entry["UH__productInPlace__r"]["Name"] : null,
         spName: entry.UH__ServicePlace__r.Name,
+        // position: ( entry["UH__ServicePlace__r"]["UH__position__c"] ) ? entry.UH__ServicePlace__r.UH__position__c : null,
         position: ( entry["UH__ServicePlace__r"]["UH__position__c"] ) ? entry.UH__ServicePlace__r.UH__position__c : null,
         addr:     entry.UH__ServicePlace__r.UH__Address__c,
         city:     ( entry["UH__ServicePlace__r"]["UH__City__r"] ) ? entry.UH__ServicePlace__r.UH__City__r.Name : null,

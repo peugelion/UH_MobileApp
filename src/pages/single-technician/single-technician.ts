@@ -53,38 +53,44 @@ export class SingleTechnicianPage {
   }
 
   // https://blog.ionicframework.com/pull-to-refresh-directive/
-  doRefresh(refresher) {
-    ((this.toptabs == "details") ? this.loadTechnician() : this.loadRelated())
-      .then(r => refresher.complete());
+  async doRefresh(refresher) {
+    (this.toptabs == "details") ? await this.loadTechnician() : await this.loadRelated();
+    refresher.complete();
   }
 
-  loadTechnician() {
-    return new Promise((resolve, reject) => {
-      this.oauth.getOAuthCredentials()
-      .then( oauth => DataService.createInstance(oauth, {useProxy:false}) )
-      .then( service => {
-        let techPromise    = this.soService.getSobject(service, 'UH__Technician__c', this.Id, '');
-        let defDeptPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__defaultDepartment__r');
-        let userPromise    = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__User__r');
+  async loadTechnician() {
+    let oauth = await this.oauth.getOAuthCredentials();
+    if (!oauth.isSF)
+      return this.loadTechnician_strapi(oauth);
+    let service = await DataService.createInstance(oauth, {useProxy:false});
 
-        Promise.all([techPromise, userPromise])
-        .then(arrayOfResults => {                          //console.log('arrayOfResults', arrayOfResults);
-          this.technician = arrayOfResults[0];             //console.log("this.technician", this.technician);
-          this.user = arrayOfResults[1];                   console.log("this.user", this.user);
-          resolve(techPromise); // !!!
-        })
-        .catch(error => console.log("arrayOfResults promisee err", error));
+    let techPromise    = this.soService.getSobject(service, 'UH__Technician__c', this.Id, '');
+    let defDeptPromise = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__defaultDepartment__r');
+    let userPromise    = this.soService.getSobject(service, 'UH__Technician__c', this.Id, 'UH__User__r');
+    Promise.all([techPromise, userPromise])
+    .then(arrayOfResults => {                          //console.log('arrayOfResults', arrayOfResults);
+      this.technician = arrayOfResults[0];             //console.log("this.technician", this.technician);
+      this.user = arrayOfResults[1];                   console.log("this.user", this.user);
+      //resolve(techPromise); // !!!
+    })
+    .catch(error => console.log("arrayOfResults promisee err", error));
 
-        //
+    /* technician->default department->department veza */
+    defDeptPromise
+      .then(r => r['UH__Department__c'], err => this.department = null)
+      //.catch(error => this.department = null)             //console.log("defDeptPromise", error);
+      .then(departmentId => this.soService.getSobject(service, 'UH__Department__c', departmentId, ''))
+      //.then(r => resolve(this.department = r));
+      .then(r => this.department = r);
+    return;
+  }
 
-        /* technician->default department->department veza */
-        defDeptPromise
-        .then(r => r['UH__Department__c'], err => this.department = null)
-        //.catch(error => this.department = null)             //console.log("defDeptPromise", error);
-        .then(departmentId => this.soService.getSobject(service, 'UH__Department__c', departmentId, ''))
-        .then(r => resolve(this.department = r));
-      });
-    });
+  async loadTechnician_strapi(oauth) {
+    this.technician = await oauth.strapi.getEntry('technician', this.Id);
+    console.log("technician : ", this.technician);
+    this.user = this.technician["UH__User__r"];
+    //todo department ?
+    return;
   }
 
   loadDepartmentDetails(id, department) {

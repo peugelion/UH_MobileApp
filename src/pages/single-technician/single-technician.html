@@ -39,7 +39,8 @@
           <ion-list id={{technician?.Id}}>
               <ion-item>
                 <p>User</p>
-                <h2>{{ user?.FirstName }} {{ user?.LastName }}&nbsp;</h2>
+                <!-- <h2>{{ user?.FirstName }} {{ user?.LastName }}&nbsp;</h2> -->
+                <h2>{{ user?.Name }}&nbsp;</h2>
               </ion-item>
               <ion-item>
                 <p>Phone</p>
@@ -50,7 +51,7 @@
               </ion-item>
               <ion-item>
                 <p>Email</p>
-                <h2 *ngIf="user?.Email != null; else elsetag" ><a href="mailto:{{ user.Email }}">{{ user.Email }}</a>&nbsp;</h2>
+                <h2 *ngIf="(user?.Email || user?.email) != null; else elsetag" ><a href="mailto:{{ user.Email }}">{{ user.Email || user.email }}</a>&nbsp;</h2>
               </ion-item>
               <ion-item *ngIf="department != null" (click)="loadDepartmentDetails(department?.Id, department)">
                 <p>Department</p>
@@ -59,7 +60,7 @@
               <ion-item>
                 <!-- <ion-label>Username: {{ technician?.UH__username__c }}</ion-label> -->
                 <p>Username</p>
-                <h2>{{ technician?.UH__username__c }}&nbsp;</h2>
+                <h2>{{ technician?.UH__username__c || user?.username }}&nbsp;</h2>
               </ion-item>
           </ion-list>
 

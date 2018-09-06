@@ -8,12 +8,21 @@ export class TechniciansServiceProvider {
   constructor(public http: HttpClient) {}
 
   // technicans-page
-  loadTechnicians(oauthCreds){
+  async loadTechnicians(oauthCreds){
+    if (!oauthCreds.isSF)
+      return this.loadTechnicians_strapi(oauthCreds);
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query(`SELECT Id, Name FROM UH__Technician__c WHERE UH__Active__c=true`)  
-      .then(result => {
-        return result.records;
-      });
+    let result = await service.query(`SELECT Id, Name FROM UH__Technician__c WHERE UH__Active__c=true`);
+    return result.records;
+  }
+  async loadTechnicians_strapi(oauthCreds){
+    let url = oauthCreds.instanceURL+`/graphql?query={
+      technicians(
+        where:{UH__Active__c:"true"}
+      ){_id, Name}
+    }`.replace(/\s+/g,'').trim();
+    let r = await this.http.get(url).toPromise();
+    return r["data"]["technicians"];
   }
 
   // technican-details page: related tab

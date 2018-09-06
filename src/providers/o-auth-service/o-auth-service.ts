@@ -5,6 +5,7 @@ import Strapi from 'strapi-sdk-javascript/build/main';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import * as Constants from '../../providers/constants/constants';
+import { TechniciansServiceProvider } from '../../providers/technicians-service/technicians-service'; // samo za strapi (uhvati i tehnicara)
 
 
 /*
@@ -19,7 +20,10 @@ export class OAuthServiceProvider {
   oAuthCredsPromise : Promise<any>;
   strapiUrl : string = Constants.STRAPI_ENDPOINT;   // 'http://localhost:1337';
 
-  constructor(public http: HttpClient, private storage: Storage) {}
+  constructor(
+    public http: HttpClient,
+    private storage: Storage,
+    private techService: TechniciansServiceProvider) {}
 
   async getOAuthCredentials() {
     // if already authenticated just resolve the promise
@@ -60,7 +64,7 @@ export class OAuthServiceProvider {
   async Auth_strapi() {
     //const strapi = new Strapi('http://localhost:1337');
     const strapi = new Strapi(Constants.STRAPI_ENDPOINT);    //await console.log("strapi - Auth_strapi 0 ", await strapi);
-    const user = await strapi.login('mpetrovic@europos.co.rs', 'Sdexter3');
+    const user = await strapi.login('pera', 'Sdexter3'); // console.log("Auth_strapi user", user);
     this.oAuthCreds = user;    //await console.log("this.oAuthCreds - Auth_strapi 0 ", await this.oAuthCreds);
     this.oAuthCreds["isSF"] = false;
     this.oAuthCreds["userId"] = user["user"]["_id"]; // muljanje da se poklapa sa SF
@@ -70,6 +74,7 @@ export class OAuthServiceProvider {
 
     this.oAuthCreds.parseResponse           = this.parseStrapiResponse; //
     this.oAuthCreds["strapi"].parseResponse = this.parseStrapiResponse; //    await console.log("this.oAuthCreds - Auth_strapi", this.oAuthCreds);
+    this.techService.fetchLoggedInTechnican(this.oAuthCreds).then(tech => this.oAuthCreds["tech"] = tech); // jbg fix za loadWOsWithUniqueSPs u map-service.ts
     return await this.oAuthCreds; 
   }
 

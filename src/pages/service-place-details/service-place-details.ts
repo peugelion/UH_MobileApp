@@ -146,12 +146,13 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   //   );
   // }
 
-  getRelatedData() {
-    this.oauth.getOAuthCredentials().then(oauth => {
-      let whereCond: string = `WHERE UH__ServicePlace__c = '${this.Id}'`;
-      this.relDataService.getRelatedWOs(oauth, whereCond).then(result => { this.relatedData.push({"name": "Workorders", "elements": result.records, "size": result.records.length}); });
-      this.relDataService.getRelatedPIPs(oauth, whereCond).then(result => { this.relatedData.push({"name": "Products in Place", "elements": result.records, "size": result.records.length}); });
-    }); 
+  async getRelatedData() {
+    let oauth = await this.oauth.getOAuthCredentials();
+    //let whereCond: string = `WHERE UH__ServicePlace__c = '${this.Id}'`;
+    let relatedWOs = await this.relDataService.getRelatedWOs(oauth, this.Id);  console.log("relatedWOs", relatedWOs);
+    this.relatedData.push({"name": "Workorders", "elements": relatedWOs, "size": relatedWOs.length});
+    let relatedPIPs = await this.relDataService.getRelatedPIPs(oauth, this.Id);
+    this.relatedData.push({"name": "Products in Place", "elements": relatedPIPs, "size": relatedPIPs.length});
   }
 
   // FOOTER ACTIONS
