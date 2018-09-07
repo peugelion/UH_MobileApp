@@ -44,12 +44,11 @@ export class ContactPage {
     this.contact = await oauth.strapi.getEntry('contact', this.id);
   }
 
-  getRelatedData() {
-    this.oauth.getOAuthCredentials().then(oauth => {
-      let whereCond: string = `WHERE ContactId = '${this.id}'`;
-      this.relDataService.getRelatedCases(oauth, whereCond).then(result => { this.relatedData.push({"name": "Cases", "elements": result.records, "size": result.records.length}); });
-      whereCond =  `WHERE UH__Contact__c = '${this.id}'`;
-      this.relDataService.getRelatedWOs(oauth, whereCond).then(result => { this.relatedData.push({"name": "Workorders", "elements": result.records, "size": result.records.length}); });
-    }); 
+  async getRelatedData() {
+    let oauth = await this.oauth.getOAuthCredentials();
+    let whereCond: string = `WHERE ContactId = '${this.id}'`;
+    this.relDataService.getRelatedCases(oauth, this.id).then(result => { this.relatedData.push({"name": "Cases", "elements": result.records, "size": result.records.length}); });
+    whereCond =  `WHERE UH__Contact__c = '${this.id}'`;
+    this.relDataService.getRelatedWOs(oauth, whereCond).then(result => { this.relatedData.push({"name": "Workorders", "elements": result.records, "size": result.records.length}); });
   }
 }

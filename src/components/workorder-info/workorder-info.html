@@ -1,5 +1,5 @@
 <ion-card>
-  <ion-grid (click)="itemClicked($event, 'WorkorderDetailsPage', workorder.Id, workorder?.attributes?.url)">
+  <ion-grid (click)="itemClicked($event, 'WorkorderDetailsPage', workorder.Id || workorder._id, workorder?.attributes?.url)">
     <ion-row>
       <ion-col col-12><h1>{{workorder.Name}}</h1></ion-col>
     </ion-row>

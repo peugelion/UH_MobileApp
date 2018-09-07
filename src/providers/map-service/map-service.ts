@@ -28,6 +28,8 @@ export class MapServiceProvider {
       console.log("loadWOsSPs 1. SF query:", WOs);
     } else {
       //let tech = await this.techService.fetchLoggedInTechnican(oauth);       //TODO find a way to fetch in one api call
+      if (!oauth["tech"])
+        return
       let url = oauth.instanceURL+`/graphql?query={
         workorders(
           where:{UH__Status__c:"Accept",UH__Technician__r:"`+oauth.tech.id+`"}

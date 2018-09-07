@@ -7,25 +7,34 @@ export class RelatedListsDataProvider {
 
   constructor(public http: HttpClient) {}
 
-  getRelatedCases(oauthCreds, selectCond) {
+  async getRelatedCases(oauthCreds, selectCond) {
+    if (!oauthCreds.isSF)
+      return this.getRelatedCases_strapi(oauthCreds, selectCond);
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
-    return service.query(`SELECT ID, CaseNumber, Subject, Priority, format(CreatedDate) FROM Case ${selectCond}`);
+    let results = await service.query(`SELECT ID, CaseNumber, Subject, Priority, format(CreatedDate) FROM Case ${selectCond}`);
+    return results["records"];
+  }
+  async getRelatedCases_strapi(oauthCreds, selectCond) {
+    console.log("no cases yet", selectCond); //TODO cases
   }
 
-  async getRelatedWOs(oauthCreds, Id) {
+  async getRelatedWOs(oauthCreds, selectCond) {
     if (!oauthCreds.isSF)
-      return this.getRelatedWOs_strapi(oauthCreds, Id);
+      return this.getRelatedWOs_strapi(oauthCreds, selectCond);
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
     let results = await service.query(`SELECT id, name, uh__status__c, uh__servicePlace__c, uh__servicePlace__r.Name, uh__servicePlace__r.UH__Address__c,
                                  uh__Contact__c, uh__Contact__r.Name, uh__productInPlace__c, uh__productInPlace__r.Name, uh__description__c, format(UH__Deadline__c)
-                          FROM UH__workOrder__c WHERE UH__ServicePlace__c = '${Id}'`);
+                          FROM UH__workOrder__c ${selectCond}`);
     return results["records"];
   }
-  async getRelatedWOs_strapi(oauthCreds, Id) {
+  async getRelatedWOs_strapi(oauthCreds, selectCond) {
+    selectCond = selectCond.replace(/\'+/g,`"`).replace(`WHERE `, `where: {`).replace(`__c = `, `__r : `);      
+      //.replace(`WHERE UH__Contact__c = `,`where:{UH__Contact__r:`)
+      //.replace(`WHERE UH__ServicePlace__c = `, `where:{UH__ServicePlace__r:`)
     let url = oauthCreds.instanceURL+`/graphql?query={
-      workorders(where:{UH__ServicePlace__r:"${Id}"}){
+      workorders(${selectCond}}){
         _id, Name, UH__Status__c, UH__ServicePlace__r{Name, UH__Address__c}, UH__Contact__r{_id, Name}, UH__productInPlace__r{_id, Name}, UH__Description__c, UH__Deadline__c}
-    }`//.replace(/\s+/g,'').trim();
+    }`.replace(/\s+/g,'').trim();
     let results = await this.http.get(url).toPromise();
     return results["data"]["workorders"];
   }
@@ -43,7 +52,7 @@ export class RelatedListsDataProvider {
     let url = oauthCreds.instanceURL+`/graphql?query={
       woparts(where:{UH__workOrder__r:"${woId}"}){_id, Name, createdAt, UH__Part__r{Name, UH__Type__c}, UH__Quantity__c, UH__Cost__c, UH__totalCost__c}
     }`//.replace(/\s+/g,'').trim();
-    let r = await this.http.get(url).toPromise();     // console.log("r parts strapi", r);  
+    let r = await this.http.get(url).toPromise();
     //return r["data"]["woparts"];
     let tmp = JSON.stringify(r["data"]["woparts"]).replace(/Spare_part/g, 'Spare part'); // to metch SF responses
     return JSON.parse(tmp);
@@ -62,7 +71,7 @@ export class RelatedListsDataProvider {
     let url = oauthCreds.instanceURL+`/graphql?query={
       woexpenses(where:{UH__workOrder__r:"${woId}"}){_id, Name, createdAt, UH__workOrder__r{Id, Name}, UH__Cost__c, UH__Quantity__c, UH__totalCost__c, UH__expenseType__c}
     }`.replace(/\s+/g,'').trim();
-    let r = await this.http.get(url).toPromise();    // console.log("r expenses strapi", r);
+    let r = await this.http.get(url).toPromise();
     return r["data"]["woexpenses"];
   }
 
@@ -75,11 +84,11 @@ export class RelatedListsDataProvider {
                                  FROM UH__WO_Labor__c WHERE UH__WorkOrder__c = '${woId}'`);
     return r["records"];
   }
-  async getRelatedWOLabours_strapi(oauthCreds, woId) {  //console.log(" lab Strapi USO")
+  async getRelatedWOLabours_strapi(oauthCreds, woId) {
     let url = oauthCreds.instanceURL+`/graphql?query={
       wolabors(where:{UH__workOrder__r:"${woId}"}){_id, Name, createdAt, UH__workOrder__r{Id, Name}, UH__Labor__r{Name, UH__Type__c}, UH__Cost__c, UH__hoursCount__c, UH__totalCost__c}
     }`//.replace(/\s+/g,'').trim();
-    let r = await this.http.get(url).toPromise();      //console.log("r wolabors strapi", r);
+    let r = await this.http.get(url).toPromise();
     return r["data"]["wolabors"];
   }
 

@@ -98,7 +98,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   async loadServicePlace() {
     const oauth = await this.oauth.getOAuthCredentials();
     //return await (oauth.isSF) ? this.loadServicePlace_SF(oauth) : this.loadServicePlace_Strapi(oauth);
-    ( (oauth.isSF) ? this.fetchData_SF(oauth) : this.fetchData_Strapi(oauth) )
+    ( (oauth.isSF) ? this.fetchData(oauth) : this.fetchData_Strapi(oauth) )
     .then( sp => {      //console.log("sp main", sp);
       this.name = sp["Name"];
       this.tel  = sp["UH__Phone__c"];
@@ -110,7 +110,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     return this.sp;
   }
   
-  async fetchData_SF(oauth) {
+  async fetchData(oauth) {
     const service = await DataService.createInstance(oauth, {useProxy:false});
     //this.sp          = await this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, '');
     let cityPromise    = await this.soService.getSobject(service, 'UH__ServicePlace__c', this.Id, 'UH__City__r');
@@ -148,8 +148,8 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
 
   async getRelatedData() {
     let oauth = await this.oauth.getOAuthCredentials();
-    //let whereCond: string = `WHERE UH__ServicePlace__c = '${this.Id}'`;
-    let relatedWOs = await this.relDataService.getRelatedWOs(oauth, this.Id);  console.log("relatedWOs", relatedWOs);
+    let whereCond: string = `WHERE UH__ServicePlace__c = '${this.Id}'`;
+    let relatedWOs = await this.relDataService.getRelatedWOs(oauth, whereCond);  console.log("relatedWOs", relatedWOs);
     this.relatedData.push({"name": "Workorders", "elements": relatedWOs, "size": relatedWOs.length});
     let relatedPIPs = await this.relDataService.getRelatedPIPs(oauth, this.Id);
     this.relatedData.push({"name": "Products in Place", "elements": relatedPIPs, "size": relatedPIPs.length});

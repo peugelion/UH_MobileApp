@@ -60,6 +60,7 @@ export class WorkorderDetailsPage {
   async getRelatedData() {
     let oauth = await this.oauth.getOAuthCredentials();
     //let whereCond: string = `WHERE UH__WorkOrder__c = '${this.id}'`;
+    console.log("wo details getRelatedData this.id", this.id);
     this.relDataService.getRelatedWOParts(oauth, this.id).then(result => {
       console.log("parts", result);
       this.relatedData.push({name: "WO Parts", elements: result, size: result.length});

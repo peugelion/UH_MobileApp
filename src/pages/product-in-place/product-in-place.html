@@ -63,19 +63,19 @@
         </ion-item>
         <ion-item>
           <h3>Purchase Date</h3>
-          <p>{{pipRecord?.UH__purchaseDate__c}}</p>
+          <p>{{pipRecord?.UH__purchaseDate__c | dateTimeFormatPipe }}</p>
         </ion-item>
         <ion-item>
           <h3>Shipped Date</h3>
-          <p>{{pipRecord?.UH__shippedDate__c}}</p>
+          <p>{{pipRecord?.UH__shippedDate__c | dateTimeFormatPipe }}</p>
         </ion-item>
         <ion-item>
-          <h3>Shipped Date</h3>
-          <p>{{pipRecord?.UH__installedDate__c}}</p>
+          <h3>Installed Date</h3>
+          <p>{{pipRecord?.UH__installedDate__c | dateTimeFormatPipe }}</p>
         </ion-item>
         <ion-item>
           <h3>Usage end date</h3>
-          <p>{{pipRecord?.UH__endDate__c}}</p>
+          <p>{{pipRecord?.UH__endDate__c | dateTimeFormatPipe }}</p>
         </ion-item>
         <ion-item>
           <h3>Quantity</h3>

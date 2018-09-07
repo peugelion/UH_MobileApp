@@ -56,19 +56,16 @@ export class EditWorkorderComponent {
   async updateWO_strapi(formData: any, oauth) {
     formData.Id = this.workorder.Id;
     oauth.strapi.updateEntry("workorder", formData.Id, formData)
-    .then(response => {
-      console.log("wo edit response", response);
-      this.workorder = response;
-      
-      // send the message back and close the modal
-      let data = {
-        isCanceled: false,
-        message: "You successfully updated workorder."
-      };
-      this.viewCtrl.dismiss(data);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+      .then(response => {
+        this.workorder = response;        console.log("wo edit response", response);
+        // send the message back and close the modal
+        let data = {
+          isCanceled: false,
+          message: "You successfully updated workorder."
+        };
+        this.viewCtrl.dismiss(data);
+        //this.navCtrl.push('WorkorderDetailsPage', {id: data.woId});
+      })
+      .catch(error => console.log(error));
   }
 }
