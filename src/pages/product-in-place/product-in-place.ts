@@ -34,7 +34,9 @@ export class ProductInPlacePage {
     if (!oauth.isSF)
       this.getPiPDetails_strapi(pipId, oauth);
     let result = await DataService.createInstance(oauth, {useProxy:false}).apexrest(`/services/apexrest/UH/productInPlace/${pipId}`);
-    this.pipRecord = result.pipRecord;            console.log("pip rest result", result);
+    this.pipRecord = result.pipRecord;
+    console.log("pip rest result", result);
+    console.log("result['workorders;]", result["workorders"]);
     this.relatedData.push({"name": "Cases", "elements": result.cases, "size": result.cases.length});
     this.relatedData.push({"name": "Workorders", "elements": result.workorders, "size": result.workorders.length});
   }
@@ -46,12 +48,14 @@ export class ProductInPlacePage {
         UH__purchaseDate__c, UH__shippedDate__c, UH__installedDate__c, UH__endDate__c,
         UH__Contact__r{Id,Name}, UH__Product__r{Id,Name}, UH__ServicePlace__r{Id,Name},
         workorders{
-          Id, Name, UH__Deadline__c, UH__Description__c, UH__ServicePlace__r{Id,Name}, UH__Status__c
+          Id, Name, UH__Deadline__c, UH__Description__c, UH__ServicePlace__r{Id,Name}, UH__Status__c, UH__Contact__r{Name}
         }
       }}`.replace(/\s+/g,'').trim();
-    let res = await this.http.get(url).toPromise(); // TODO parse dates to local format, ex. new Date('2013-08-10T12:10:15.474Z').toLocaleDateString()+" "+new Date('2013-08-10T12:10:15.474Z').toLocaleTimeString()
-    this.pipRecord = res["data"]["productinplace"];  //      console.log("this.pipRecord", this.pipRecord);
-    //this.relatedData.push({"name": "Cases", "elements": this.pipRecord["cases"], "size": this.pipRecord["cases"].length});
+    let res = await this.http.get(url).toPromise();
+    this.pipRecord = res["data"]["productinplace"];
+    console.log("this.pipRecord", this.pipRecord);
+    console.log("this.pipRecord['workorders;]", this.pipRecord["workorders"]);
+    //this.relatedData.push({"name": "Cases", "elements": this.pipRecord["cases"], "size": this.pipRecord["cases"].length});  //TODO
     this.relatedData.push({"name": "Workorders", "elements": this.pipRecord["workorders"], "size": this.pipRecord["workorders"].length}); // TODO related tab - cases
   }
 }
