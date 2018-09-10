@@ -33,31 +33,47 @@ export class RejectWorkorderComponent {
     this.viewCtrl.dismiss(data);
   }
 
-  rejectWO(formData: any): void {
+  async rejectWO(formData: any) {
     // reject WO
-    this.oauth.getOAuthCredentials()
-      .then(oauth => {
-        let service = DataService.createInstance(oauth, {useProxy:false});
-        let sObject = {
-          Id: this.woId,
-          UH__cancelledBy__c: oauth.userId,
-          UH__Status__c: 'Reject',
-          UH__dateCancelled__c: Date.now(),
-          UH__Comments__c: formData.reason
+    let oauth = await this.oauth.getOAuthCredentials();
+    if (!oauth.isSF)
+      return await this.rejectWO_strapi(formData, oauth);
+    let service = DataService.createInstance(oauth, {useProxy:false});
+    let sObject = {
+      Id: this.woId,
+      UH__cancelledBy__c: oauth.userId,
+      UH__Status__c: 'Reject',
+      UH__dateCancelled__c: Date.now(),
+      UH__Comments__c: formData.reason
+    };
+    service.update('UH__WorkOrder__c', sObject)
+      .then(response => {
+        // send the message back and close the modal
+        let data = {
+          isCanceled: false,
+          message: "You successfully rejected workorder."
         };
-        service.update('UH__WorkOrder__c', sObject)
-          .then(response => {
-            // send the message back and close the modal
-            let data = {
-              isCanceled: false,
-              message: "You successfully rejected workorder."
-            };
-            this.viewCtrl.dismiss(data);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      });
+        this.viewCtrl.dismiss(data);
+      })
+      .catch(error => console.log(error));
+  }
+
+  async rejectWO_strapi(formData: any, oauth) {
+    console.log("formdata labor strapi", formData, oauth.userId);
+    let sObject = {
+      cancelledBy: oauth.userId,
+      UH__Status__c: 'Reject',
+      dateCancelled: Date.now(),
+      Comments: formData.reason
+    };
+    console.log("sObject rejectWO", sObject);
+    let updateEntry = await oauth.strapi.updateEntry('workorder', this.woId, sObject);
+    // send the message back and close the modal
+    let data = {
+      isCanceled: false,
+      message: "You successfully rejected workorder."
+    };
+    this.viewCtrl.dismiss(data);
   }
 
 }

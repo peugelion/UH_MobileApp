@@ -21,39 +21,37 @@ export class ContactsPage {
     private oauth: OAuthServiceProvider,
     private loadingCtrl: LoadingController) {}
 
-  showListContacts(listName: string) : void {
-    let selectCond: string = '';
+  async showListContacts(listName: string) {
+    let oauth = await this.oauth.getOAuthCredentials();
+    let selectCond;
     switch(listName) {
       case 'All Contacts without email':
-        selectCond = "WHERE Email = '' OR Email = NULL"; 
+        selectCond = (oauth.isSF) ? "WHERE Email = '' OR Email = NULL" : {Email_ne:null}; 
         break;
       case 'Recently Viewed':
-        selectCond = "WHERE LastViewedDate >= LAST_WEEK AND LastViewedDate <= THIS_WEEK"; 
+        selectCond = (oauth.isSF) ? "WHERE LastViewedDate >= LAST_WEEK AND LastViewedDate <= THIS_WEEK": {}; // TODO localstorage recent views
         break;
       case 'New Last Week':
-        selectCond = "WHERE CreatedDate = LAST_WEEK"; 
+        let weekAgoDate = new Date(new Date().setDate(new Date().getDate() - 7) ).toISOString();
+        let twoWeksAgoDate = new Date(new Date().setDate(new Date().getDate() - 14) ).toISOString();
+        selectCond = (oauth.isSF) ? "WHERE CreatedDate = LAST_WEEK" : {createdAt_gte: weekAgoDate, createdAt_lt: twoWeksAgoDate}; 
         break;
       case 'New This Week':
-        selectCond = "WHERE CreatedDate = THIS_WEEK"; 
+        selectCond = (oauth.isSF) ? "WHERE CreatedDate = THIS_WEEK" : {createdAt_gte: new Date(new Date().setDate(new Date().getDate() - 7) ).toISOString()}; 
         break;
       default: break;
     }
-    this.oauth.getOAuthCredentials().
-      then(oauth => {
-        let loading = this.loadingCtrl.create({
-          spinner: 'bubbles',
-          content: 'Loading, please wait...'
-        });
-        loading.present();
-        let service = DataService.createInstance(oauth, {useProxy:false});
-        service.query(`SELECT Id, Name, Title, Phone, MobilePhone, Email, AccountId, Account.Name
-                       FROM Contact ${selectCond}`)
-        .then(result => {
-            this.contacts = result.records;
-            this.listLabel = listName;
-            loading.dismiss();
-          });
-      });
+    if (oauth.isSF) {
+      let service = DataService.createInstance(oauth, {useProxy:false});
+      let result = await service.query(`SELECT Id, Name, Title, Phone, MobilePhone, Email, AccountId, Account.Name
+                        FROM Contact ${selectCond}`);
+      this.contacts = result.records;
+    } else {
+        let weksAgoDate = new Date(new Date().setDate(new Date().getDate() - 7) ).toISOString();
+      //let params = all ? {} : {_UH__startTime__c_gt: twoWeksAgoDate}
+      this.contacts = await oauth.strapi.getEntries('contact', selectCond);   console.log("selectCond", selectCond)
+    }
+    this.listLabel = listName;
   }
 
   gotoRecord(event: any, page: string, id: string, url: string): void {
@@ -61,8 +59,14 @@ export class ContactsPage {
     this.navCtrl.push(page, {"id": id, "url": url});
   }
 
-  ionViewDidLoad() {
-    this.showListContacts('Recently Viewed');
+  async ionViewDidLoad() {
+    let loading = this.loadingCtrl.create({
+      spinner: 'bubbles',
+      content: 'Loading, please wait...'
+    });
+    loading.present();
+    await this.showListContacts('Recently Viewed');
+    loading.dismiss();
   }
 
 }

@@ -25,7 +25,7 @@
       <ion-col col-5 col-lg-3 col-xl-3><div>Contact:</div></ion-col>
       <ion-col col-7 col-lg-9 col-xl-9>
         <!-- <div><a (click)="itemClicked($event, 'ContactPage', workorder.UH__Contact__c, workorder.UH__Contact__r?.attributes.url)"> -->
-        <div><a (click)="itemClicked($event, 'ContactPage', workorder.UH__Contact__r?.Id, workorder.UH__Contact__r?.attributes?.url)">
+        <div><a (click)="itemClicked($event, 'ContactPage', workorder.UH__Contact__r?.Id || workorder.UH__Contact__r?._id, workorder.UH__Contact__r?.attributes?.url)">
             {{workorder.UH__Contact__r?.Name}}</a>
         </div>
       </ion-col>

@@ -74,7 +74,8 @@ export class OAuthServiceProvider {
 
     this.oAuthCreds.parseResponse           = this.parseStrapiResponse; //
     this.oAuthCreds["strapi"].parseResponse = this.parseStrapiResponse; //    await console.log("this.oAuthCreds - Auth_strapi", this.oAuthCreds);
-    this.techService.fetchLoggedInTechnican(this.oAuthCreds).then(tech => this.oAuthCreds["tech"] = tech); // jbg fix za loadWOsWithUniqueSPs u map-service.ts
+    //this.techService.fetchLoggedInTechnican(this.oAuthCreds).then(tech => this.oAuthCreds["tech"] = tech); // jbg fix za loadWOsWithUniqueSPs u map-service.ts (tech async)
+    this.oAuthCreds["tech"] = await this.techService.fetchLoggedInTechnican(this.oAuthCreds);
     return await this.oAuthCreds; 
   }
 

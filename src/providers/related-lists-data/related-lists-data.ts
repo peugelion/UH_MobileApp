@@ -7,7 +7,7 @@ export class RelatedListsDataProvider {
 
   constructor(public http: HttpClient) {}
 
-  async getRelatedCases(oauthCreds, selectCond) {
+  async getRelatedCases(oauthCreds, selectCond) {   console.log("selectCond cases", selectCond);
     if (!oauthCreds.isSF)
       return this.getRelatedCases_strapi(oauthCreds, selectCond);
     let service = DataService.createInstance(oauthCreds, {useProxy:false});
@@ -16,6 +16,7 @@ export class RelatedListsDataProvider {
   }
   async getRelatedCases_strapi(oauthCreds, selectCond) {
     console.log("no cases yet", selectCond); //TODO cases
+    return [];
   }
 
   async getRelatedWOs(oauthCreds, selectCond) {

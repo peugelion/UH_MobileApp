@@ -33,22 +33,18 @@ export class ContactPage {
 
   async getContactDetails(contactUrl: string) {
     const oauth = await this.oauth.getOAuthCredentials();
-    console.log("oauth contact page", oauth);
-    return await (oauth.isSF) ? this.getContactDetails_SF(oauth, contactUrl) : this.getContactDetails_Strapi(oauth, contactUrl);
-  }
-  async getContactDetails_SF(oauth, contactUrl: string) {
-    const service = await DataService.createInstance(oauth, {useProxy:false});
-    this.contact = contactUrl ? await service.apexrest(contactUrl) : await service.apexrest("/services/data/v37.0/sobjects/Contact/"+this.id);
-  }
-  async getContactDetails_Strapi(oauth, contactUrl: string) {
+    if (oauth.isSF) {
+      const service = DataService.createInstance(oauth, {useProxy:false});
+      this.contact = contactUrl ? await service.apexrest(contactUrl) : await service.apexrest("/services/data/v37.0/sobjects/Contact/"+this.id);
+    } else
     this.contact = await oauth.strapi.getEntry('contact', this.id);
   }
 
   async getRelatedData() {
     let oauth = await this.oauth.getOAuthCredentials();
     let whereCond: string = `WHERE ContactId = '${this.id}'`;
-    this.relDataService.getRelatedCases(oauth, this.id).then(result => { this.relatedData.push({"name": "Cases", "elements": result.records, "size": result.records.length}); });
+    //this.relDataService.getRelatedCases(oauth, this.id).then(result => { this.relatedData.push({"name": "Cases", "elements": result, "size": result.length}); });
     whereCond =  `WHERE UH__Contact__c = '${this.id}'`;
-    this.relDataService.getRelatedWOs(oauth, whereCond).then(result => { this.relatedData.push({"name": "Workorders", "elements": result.records, "size": result.records.length}); });
+    this.relDataService.getRelatedWOs(oauth, whereCond).then(result => { this.relatedData.push({"name": "Workorders", "elements": result, "size": result.length}); });
   }
 }

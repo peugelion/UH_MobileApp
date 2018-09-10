@@ -3,7 +3,8 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Contact - {{contact?.Salutation}} {{contact?.FirstName}} {{contact?.LastName}}</ion-title>
+    <!-- <ion-title>Contact - {{contact?.Salutation}} {{contact?.FirstName}} {{contact?.LastName}}</ion-title> -->
+    <ion-title>Contact - {{contact?.Salutation}} {{contact?.Name}}</ion-title>
   </ion-navbar>
 
   <ion-segment [(ngModel)]="tab">

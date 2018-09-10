@@ -30,7 +30,7 @@ export class AccountsPage {
     private oauth: OAuthServiceProvider,
     private loadingCtrl: LoadingController) {}
 
-    showListAccounts(listName: string) : void {
+    async showListAccounts(listName: string) {
       let selectCond: string = '';
       switch(listName) {
         case 'Recently Viewed':
@@ -44,22 +44,18 @@ export class AccountsPage {
           break;
         default: break;
       }
-      this.oauth.getOAuthCredentials().
-        then(oauth => {
-          let loading = this.loadingCtrl.create({
-            spinner: 'bubbles',
-            content: 'Loading, please wait...'
+      let oauth = await this.oauth.getOAuthCredentials();
+      if (oauth.isSF) {
+        let service = DataService.createInstance(oauth, {useProxy:false});
+        service.query(`SELECT Id, Name, Type, Phone, Fax, Website, UH__NumberofLocations__c, UH__preferredTech__c, UH__preferredTech__r.Name
+                        FROM Account ${selectCond}`)
+        .then(result => {
+            this.accounts = result.records;
+            this.listLabel = listName;
           });
-          loading.present();
-          let service = DataService.createInstance(oauth, {useProxy:false});
-          service.query(`SELECT Id, Name, Type, Phone, Fax, Website, UH__NumberofLocations__c, UH__preferredTech__c, UH__preferredTech__r.Name
-                         FROM Account ${selectCond}`)
-          .then(result => {
-              this.accounts = result.records;
-              this.listLabel = listName;
-              loading.dismiss();
-            });
-        });
+      } else {
+        console.log("TODO accounts");
+      }
     }
   
     gotoRecord(event: any, page: string, id: string, url: string): void {
@@ -67,7 +63,13 @@ export class AccountsPage {
       this.navCtrl.push(page, {"id": id, "url": url});
     }
   
-    ionViewDidLoad() {
-      this.showListAccounts('Recently Viewed');
+    async ionViewDidLoad() {
+      let loading = this.loadingCtrl.create({
+        spinner: 'bubbles',
+        content: 'Loading, please wait...'
+      });
+      loading.present();
+      await this.showListAccounts('Recently Viewed');
+      loading.dismiss();
     }
 }

@@ -88,7 +88,7 @@
         <ion-item>
           <h3>Contact</h3>
           <p>
-            <a (click)="gotoRecord('ContactPage', currWO?.UH__Contact__c, currWO?.UH__Contact__r?.attributes?.url)">
+            <a (click)="gotoRecord('ContactPage', currWO?.UH__Contact__r?.Id || currWO?.UH__Contact__r?._id, currWO?.UH__Contact__r?.attributes?.url)">
               {{currWO?.UH__Contact__r?.Name}}
             </a>
           </p>
@@ -96,7 +96,7 @@
         <ion-item>
           <h3>Service place</h3>
           <p>
-            <a (click)="gotoRecord('ServicePlaceDetailsPage', currWO?.UH__ServicePlace__c, currWO?.UH__ServicePlace__r.attributes.url)">
+            <a (click)="gotoRecord('ServicePlaceDetailsPage', currWO?.UH__ServicePlace__r?.Id, currWO?.UH__ServicePlace__r.attributes?.url)">
               {{currWO?.UH__ServicePlace__r?.Name}}
             </a>
           </p>
@@ -104,7 +104,7 @@
         <ion-item>
           <h3>Product in place</h3>
           <p>
-            <a (click)="gotoRecord('ProductInPlacePage', currWO?.UH__productInPlace__c, currWO?.UH__productInPlace__r.attributes.url)">
+            <a (click)="gotoRecord('ProductInPlacePage', currWO?.UH__productInPlace__r?.Id, currWO?.UH__productInPlace__r.attributes?.url)">
               {{currWO?.UH__productInPlace__r?.Name}}
             </a>
           </p>

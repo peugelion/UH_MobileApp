@@ -43,7 +43,7 @@ export class AddLaborComponent {
   async getLabours_strapi(oauth) {    console.log("getLabours_strapi USO");
     let url = oauth.instanceURL+`/graphql?query={
       products(where:{RecordTypeId:"Labor"}){_id Id Name}
-    }`;
+    }`.replace(/\s+/g,'').trim();
     let r = await this.http.get(url).toPromise();      console.log("r products RecordTypeId Labor", r["data"]["products"]);
     this.labours = r["data"]["products"];       // TODO parse dates
   }
@@ -93,8 +93,7 @@ export class AddLaborComponent {
           });
       });
   }
-  async saveLabour_strapi(oauth, formData: any) {
-    console.log("formdata labor strapi", formData);
+  async saveLabour_strapi(oauth, formData: any) {    console.log("formdata labor strapi", formData);
     let sObject = {
       UH__workOrder__r: this.woId,
       UH__Labor__r: formData.labour,
@@ -103,19 +102,17 @@ export class AddLaborComponent {
     };
     console.log("sObject labor", sObject);
 
-    let createEntry = await oauth.strapi.createEntry('wolabor', sObject);
-    console.log("createEntry", createEntry);
-    let getEntry = await oauth.strapi.getEntry('wolabor', createEntry.id);
-    console.log("getEntry ... ", getEntry);
+    let createEntry = await oauth.strapi.createEntry('wolabor', sObject);    console.log("createEntry", createEntry);
+    //let getEntry = await oauth.strapi.getEntry('wolabor', createEntry.id);    console.log("getEntry ... ", getEntry);
     
     let data = {
       isCanceled: false,
       message: "You successfully added labour.",
-      createdLabour: getEntry
+      createdLabour: createEntry
     };
     this.viewCtrl.dismiss(data);
 
-    return getEntry;
+    return createEntry;
   }
 
 }

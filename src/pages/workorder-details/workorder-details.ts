@@ -61,16 +61,13 @@ export class WorkorderDetailsPage {
     let oauth = await this.oauth.getOAuthCredentials();
     //let whereCond: string = `WHERE UH__WorkOrder__c = '${this.id}'`;
     console.log("wo details getRelatedData this.id", this.id);
-    this.relDataService.getRelatedWOParts(oauth, this.id).then(result => {
-      console.log("parts", result);
+    this.relDataService.getRelatedWOParts(oauth, this.id).then(result => {        console.log("parts", result);
       this.relatedData.push({name: "WO Parts", elements: result, size: result.length});
     });
-    this.relDataService.getRelatedWOExpenses(oauth, this.id).then(result => {
-      console.log("exp", result);
+    this.relDataService.getRelatedWOExpenses(oauth, this.id).then(result => {     console.log("exp", result);
       this.relatedData.push({name: "WO Expenses", elements: result, size: result.length});
     });
-    this.relDataService.getRelatedWOLabours(oauth, this.id).then(result => {
-      console.log("labour", result);
+    this.relDataService.getRelatedWOLabours(oauth, this.id).then(result => {      console.log("labour", result);
       this.relatedData.push({name: "WO Labors", elements: result, size: result.length});
     });
     console.log("get this.relatedData", this.relatedData);

@@ -19,14 +19,14 @@ export class WorkordersServiceProvider {
   async showListWOs_strapi(oauth, selectCond) {
     if (selectCond.includes("LAST_WEEK")) {
       let twoWeksAgo = new Date(new Date().setDate(new Date().getDate() - 14) ).toISOString();  //console.log(twoWeksAgoDate);
-      selectCond = `UH__Status__c_ne: "Rejected", UH__startTime__c_gte: "${twoWeksAgo}"`;
+      selectCond = `UH__Status__c_ne: "Reject", UH__startTime__c_gte: "${twoWeksAgo}"`;
     } else if (selectCond.includes("TODAY")) {
       let todayDate = new Date(new Date().setUTCHours(0,0,0,0)).toISOString();  //console.log(today);
-      selectCond = `UH__Status__c_ne: "Rejected", UH__startTime__c_gte: "${todayDate}"`;
+      selectCond = `UH__Status__c_ne: "Reject", UH__startTime__c_gte: "${todayDate}"`;
     } else if (selectCond.includes("Open"))
       selectCond = `UH__Status__c: "Open"`;
     else
-      selectCond = `UH__Status__c_ne: "Rejected"`;
+      selectCond = `UH__Status__c_ne: "Reject"`;
 
     //let url = `http://localhost:1337/workorder?_sort=Description:asc&_limit=3`;
     let url = oauth.instanceURL+`/graphql?query={
