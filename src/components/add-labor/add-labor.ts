@@ -42,7 +42,7 @@ export class AddLaborComponent {
   }
   async getLabours_strapi(oauth) {    console.log("getLabours_strapi USO");
     let url = oauth.instanceURL+`/graphql?query={
-      products(where:{RecordTypeId:"Labor"}){_id Id Name}
+      products(where:{RecordTypeId:"Labor"}){_id, Id, Name}
     }`.replace(/\s+/g,'').trim();
     let r = await this.http.get(url).toPromise();      console.log("r products RecordTypeId Labor", r["data"]["products"]);
     this.labours = r["data"]["products"];       // TODO parse dates

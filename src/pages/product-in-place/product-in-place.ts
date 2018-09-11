@@ -42,15 +42,16 @@ export class ProductInPlacePage {
   }
 
   async getPiPDetails_strapi(pipId: string, oauth) {
+    // this.pipRecord = await oauth.strapi.getEntry('productinplace', pipId);
     let url = oauth.instanceURL+`/graphql?query={
       productinplace(id:"${pipId}"){
-        _id, Name, UH__description__c, UH__Quantity__c, UH__Status__c, UH__code__c, UH__serial__c,
-        UH__purchaseDate__c, UH__shippedDate__c, UH__installedDate__c, UH__endDate__c,
+        _id, Name, UH__description__c, UH__Quantity__c, UH__Status__c, UH__code__c, UH__serial__c, UH__purchaseDate__c, UH__shippedDate__c, UH__installedDate__c, UH__endDate__c,
         UH__Contact__r{Id,Name}, UH__Product__r{Id,Name}, UH__ServicePlace__r{Id,Name},
         workorders{
           Id, Name, UH__Deadline__c, UH__Description__c, UH__ServicePlace__r{Id,Name}, UH__Status__c, UH__Contact__r{Name}
         }
       }}`.replace(/\s+/g,'').trim();
+      
     let res = await this.http.get(url).toPromise();
     this.pipRecord = res["data"]["productinplace"];
     console.log("this.pipRecord", this.pipRecord);
