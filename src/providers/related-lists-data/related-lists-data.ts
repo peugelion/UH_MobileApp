@@ -34,7 +34,7 @@ export class RelatedListsDataProvider {
       //.replace(`WHERE UH__ServicePlace__c = `, `where:{UH__ServicePlace__r:`)
     let url = oauthCreds.instanceURL+`/graphql?query={
       workorders(${selectCond}}){
-        _id, Name, UH__Status__c, UH__ServicePlace__r{Name, UH__Address__c}, UH__Contact__r{_id, Name}, UH__productInPlace__r{_id, Name}, UH__Description__c, UH__Deadline__c}
+        Id, Name, UH__Status__c, UH__ServicePlace__r{Name, UH__Address__c}, UH__Contact__r{Id, Name}, UH__productInPlace__r{Id, Name}, UH__Description__c, UH__Deadline__c}
     }`.replace(/\s+/g,'').trim();
     let results = await this.http.get(url).toPromise();
     return results["data"]["workorders"];
@@ -50,13 +50,13 @@ export class RelatedListsDataProvider {
     return r["records"];
   }
   async getRelatedWOParts_strapi(oauthCreds, woId) {
-    let url = oauthCreds.instanceURL+`/graphql?query={
-      woparts(where:{UH__workOrder__r:"${woId}"}){_id, Name, createdAt, UH__Part__r{Name, UH__Type__c}, UH__Quantity__c, UH__Cost__c, UH__totalCost__c}
-    }`//.replace(/\s+/g,'').trim();
-    let r = await this.http.get(url).toPromise();
-    //return r["data"]["woparts"];
-    let tmp = JSON.stringify(r["data"]["woparts"]).replace(/Spare_part/g, 'Spare part'); // to metch SF responses
-    return JSON.parse(tmp);
+    // let url = oauthCreds.instanceURL+`/graphql?query={
+    //   woparts(where:{UH__workOrder__r:"${woId}"}){Id, Name, createdAt, UH__Part__r{Name, UH__Type__c}, UH__Quantity__c, UH__Cost__c, UH__totalCost__c}
+    // }`.replace(/\s+/g,'').trim();
+    // let r = await this.http.get(url).toPromise();
+    // let tmp = JSON.stringify(r["data"]["woparts"]).replace(/Spare_part/g, 'Spare part'); // to metch SF responses
+    // return JSON.parse(tmp);
+    return await oauthCreds.strapi.getEntries('wopart', {UH__workOrder__r: woId});
   }
 
   async getRelatedWOExpenses(oauthCreds, woId) {
@@ -69,11 +69,12 @@ export class RelatedListsDataProvider {
     return r["records"];
   }
   async getRelatedWOExpenses_strapi(oauthCreds, woId) {
-    let url = oauthCreds.instanceURL+`/graphql?query={
-      woexpenses(where:{UH__workOrder__r:"${woId}"}){_id, Name, createdAt, UH__workOrder__r{Id, Name}, UH__Cost__c, UH__Quantity__c, UH__totalCost__c, UH__expenseType__c}
-    }`.replace(/\s+/g,'').trim();
-    let r = await this.http.get(url).toPromise();
-    return r["data"]["woexpenses"];
+    // let url = oauthCreds.instanceURL+`/graphql?query={
+    //   woexpenses(where:{UH__workOrder__r:"${woId}"}){Id, Name, createdAt, UH__workOrder__r{Id, Name}, UH__Cost__c, UH__Quantity__c, UH__totalCost__c, UH__expenseType__c}
+    // }`.replace(/\s+/g,'').trim();
+    // let r = await this.http.get(url).toPromise();
+    // return r["data"]["woexpenses"];
+    return await oauthCreds.strapi.getEntries('woexpense', {UH__workOrder__r: woId});
   }
 
   async getRelatedWOLabours(oauthCreds, woId) {
@@ -86,11 +87,12 @@ export class RelatedListsDataProvider {
     return r["records"];
   }
   async getRelatedWOLabours_strapi(oauthCreds, woId) {
-    let url = oauthCreds.instanceURL+`/graphql?query={
-      wolabors(where:{UH__workOrder__r:"${woId}"}){_id, Name, createdAt, UH__workOrder__r{Id, Name}, UH__Labor__r{Name, UH__Type__c}, UH__Cost__c, UH__hoursCount__c, UH__totalCost__c}
-    }`//.replace(/\s+/g,'').trim();
-    let r = await this.http.get(url).toPromise();
-    return r["data"]["wolabors"];
+    // let url = oauthCreds.instanceURL+`/graphql?query={
+    //   wolabors(where:{UH__workOrder__r:"${woId}"}){Id, Name, createdAt, UH__workOrder__r{Id, Name}, UH__Labor__r{Name, UH__Type__c}, UH__Cost__c, UH__hoursCount__c, UH__totalCost__c}
+    // }`.replace(/\s+/g,'').trim();
+    // let r = await this.http.get(url).toPromise();
+    // return r["data"]["wolabors"];
+    return await oauthCreds.strapi.getEntries('wolabor', {UH__workOrder__r: woId});
   }
 
   getRelatedContacts(oauthCreds, selectCond) {
@@ -116,7 +118,7 @@ export class RelatedListsDataProvider {
   async getRelatedPIPs_strapi(oauthCreds, Id) {
     let url = oauthCreds.instanceURL+`/graphql?query={
       productinplaces(where:{UH__ServicePlace__r:"${Id}"}){
-        _id, Name, UH__Contact__r{_id, Name}, UH__Product__r{_id, ProductCode}, UH__installedDate__c}
+        Id, Name, UH__Contact__r{Id, Name}, UH__Product__r{Id, ProductCode}, UH__installedDate__c}
     }`//.replace(/\s+/g,'').trim();
     let results = await this.http.get(url).toPromise();
     return results["data"]["productinplaces"];

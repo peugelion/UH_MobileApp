@@ -24,7 +24,7 @@
   <div [ngSwitch]="toptabs">
     <div *ngSwitchCase="'details'">
       <ion-list id={{sp?.Id}}>
-        <ion-item *ngIf="contact != null;else elsetag" id={{contact?.Id}} (click)="goToContact(contact?.Id)">
+        <ion-item *ngIf="contact != null;else elsetag" id={{contact?.Id}} (click)="gotoRecord('ContactPage', contact?.Id)">
           <p>Contact</p>
           <!-- <h2><a>{{ contact?.FirstName}}&nbsp;{{ contact?.LastName}}</a></h2> -->
           <h2><a>{{ contact?.Name}}&nbsp;</a></h2>

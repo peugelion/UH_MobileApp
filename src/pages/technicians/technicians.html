@@ -18,7 +18,7 @@
       <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <button ion-item *ngFor="let item of items" id={{item.Id}} (click)="gotoSingleTechnician(item.Id || item._id)">
+    <button ion-item *ngFor="let item of items" id={{item.Id}} (click)="gotoSingleTechnician(item.Id)">
       <!-- <ion-img width="32" height="32" src="{{ technician.MediumPhotoUrl }}"></ion-img> {{ technician.Name }} -->
       <ion-icon item-left color='primary' name="build"></ion-icon> {{ item.Name }}
     </button>

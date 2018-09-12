@@ -88,7 +88,7 @@
         <ion-item>
           <h3>Contact</h3>
           <p>
-            <a (click)="gotoRecord('ContactPage', currWO?.UH__Contact__r?.Id || currWO?.UH__Contact__r?._id, currWO?.UH__Contact__r?.attributes?.url)">
+            <a (click)="gotoRecord('ContactPage', currWO?.UH__Contact__r?.Id, currWO?.UH__Contact__r?.attributes?.url)">
               {{currWO?.UH__Contact__r?.Name}}
             </a>
           </p>

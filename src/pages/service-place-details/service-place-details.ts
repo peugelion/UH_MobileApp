@@ -126,7 +126,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   }
   async fetchData_Strapi(oauth) {
     let spPromise = await oauth.strapi.getEntry('serviceplace', this.Id);  //console.log("spPromise", spPromise);
-    this.contact  = await spPromise["UH__Contact__r"];                     //console.log("this.contact strapi", this.contact);
+    this.contact  = await spPromise["UH__Contact__r"];                     console.log("this.contact strapi", this.contact);
     this.cityName     = "Belgrade" // TODO //this.cityName     = await cityPromise["Name"];
     this.countryName  = "Serbia";  // TODO //this.countryName  = await countryPromise["Name"];    
     return await spPromise;
@@ -153,6 +153,10 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     this.relatedData.push({"name": "Workorders", "elements": relatedWOs, "size": relatedWOs.length});
     let relatedPIPs = await this.relDataService.getRelatedPIPs(oauth, this.Id);
     this.relatedData.push({"name": "Products in Place", "elements": relatedPIPs, "size": relatedPIPs.length});
+  }
+
+  gotoRecord(page, recordId) {
+    this.navCtrl.push(page, {"id": recordId});
   }
 
   // FOOTER ACTIONS
