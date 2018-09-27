@@ -19,7 +19,7 @@ export class TechniciansServiceProvider {
     let url = oauthCreds.instanceURL+`/graphql?query={
       technicians(
         where:{UH__Active__c:"true"}
-      ){_id, Name}
+      ){Id, Name}
     }`.replace(/\s+/g,'').trim();
     let r = await this.http.get(url).toPromise();
     return r["data"]["technicians"];
@@ -69,12 +69,12 @@ export class TechniciansServiceProvider {
     let url = oauthCreds.instanceURL+`/graphql?query={
       technicians(
         where:{UH__User__r:"${oauthCreds['userId']}"}
-      ){ _id, Name, UH__User__r{ Phone } }
+      ){ Id, Name, UH__User__r{ Phone } }
     }`.replace(/\s+/g,'').trim();
     let r = await this.http.get(url).toPromise();
     r = r["data"]["technicians"][0];
     return {
-        id : r["_id"],
+        id : r["Id"],
         name : r["Name"],
         phone : r["UH__User__r"] ? r["UH__User__r"]["Phone"] : null
     }

@@ -29,10 +29,11 @@ export class WorkordersServiceProvider {
       selectCond = `UH__Status__c_ne: "Reject"`;
 
     //let url = `http://localhost:1337/workorder?_sort=Description:asc&_limit=3`;
+    //    ) { _id, Id, Name, UH__Description__c, UH__Deadline__c, UH__Status__c, UH__ServicePlace__r{_id, Name, UH__Address__c}, UH__Contact__r{Id, Name}, UH__productInPlace__r{_id, Name} }
     let url = oauth.instanceURL+`/graphql?query={
       workorders(
         where: { ${selectCond} }
-      ) { _id, Id, Name, UH__Description__c, UH__Deadline__c, UH__Status__c, UH__ServicePlace__r{_id, Name, UH__Address__c}, UH__Contact__r{Id, Name}, UH__productInPlace__r{_id, Name} }
+      ) { Id, Name, UH__Description__c, UH__Deadline__c, UH__Status__c, UH__ServicePlace__r{Id, Name, UH__Address__c}, UH__Contact__r{Id, Name}, UH__productInPlace__r{Id, Name} }
     }`.replace(/\s+/g,'').trim()//.replace(/\s+/g,' ').replace(/\{\s/g,'{').replace(/\(\s/g,'(').replace(/\:\s/g,':').trim();
     let r = await this.http.get(url).toPromise(); // TODO parse dates to local format, ex. new Date('2013-08-10T12:10:15.474Z').toLocaleDateString()+" "+new Date('2013-08-10T12:10:15.474Z').toLocaleTimeString()
     //return r["data"]["workorders"];
