@@ -1,7 +1,7 @@
 
 //export const STRAPI_ENDPOINT = 'http://localhost:1337';
 //export const STRAPI_ENDPOINT = window.location.protocol + '//' + window.location.hostname;
-export const STRAPI_ENDPOINT = (window.location.hostname == "localhost") ? 'http://localhost:1337' : window.location.href.match(/^.*\//)[0]
+export const STRAPI_ENDPOINT = (window.location.hostname == "localhost") ? 'http://localhost:1337' : window.location.origin; // public url works on port 80
 export const DATE_TIME_FMT= `short`;
 export const DATE_FMT= `date`;
 // export class Constants {
