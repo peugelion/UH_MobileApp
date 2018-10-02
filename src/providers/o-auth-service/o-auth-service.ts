@@ -64,6 +64,7 @@ export class OAuthServiceProvider {
   async Auth_strapi() {
     //const strapi = new Strapi('http://localhost:1337');
     const strapi = new Strapi(Constants.STRAPI_ENDPOINT);    //await console.log("strapi - Auth_strapi 0 ", await strapi);
+    console.log("Constants.STRAPI_ENDPOINT", Constants.STRAPI_ENDPOINT);
     const user = await strapi.login('pera', 'Sdexter3'); // console.log("Auth_strapi user", user);
     this.oAuthCreds = user;    //await console.log("this.oAuthCreds - Auth_strapi 0 ", await this.oAuthCreds);
     this.oAuthCreds["isSF"] = false;
