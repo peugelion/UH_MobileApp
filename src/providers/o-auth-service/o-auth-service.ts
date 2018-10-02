@@ -31,15 +31,15 @@ export class OAuthServiceProvider {
       return this.oAuthCreds;
     else {
       // authenticate and resolve the promise
-      this.storage.set('isStrapi', JSON.parse(localStorage.getItem('isStrapi')) );
-      let isStrapi = await this.storage.get('isStrapi');        await console.log('isStrapi ??? ', isStrapi);
-      this.oAuthCreds = (!isStrapi) ? this.Auth() /* SF */ : this.Auth_strapi();
+      this.storage.set('isSF', JSON.parse(localStorage.getItem('isSF')) );
+      let isSF = await this.storage.get('isSF');        await console.log('isSF ??? ', isSF);
+      this.oAuthCreds = isSF ? this.Auth_sf() /* SF */ : this.Auth_strapi();
       return this.oAuthCreds;
     }
   }
 
   /* SF auth */
-  async Auth() {
+  async Auth_sf() {
     let oauth = OAuth.createInstance();
     if (!this.oAuthCredsPromise) {  // fix - sammo jedan SF popup window
       this.oAuthCredsPromise = oauth.login();
