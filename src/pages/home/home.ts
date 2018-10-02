@@ -120,15 +120,15 @@ export class HomePage {
     });
      
     //button click event to show the promt
-             
     window.addEventListener('appinstalled', (event) => {
-     alert('installed');
+      console.log('pwa app already installed');
     });
-     
-     
     if (window.matchMedia('(display-mode: standalone)').matches) {
-      alert('display-mode is standalone');
+      console.log('display-mode is standalone - pwa app launched from the home screen ANDROID');
     }
+    // if (window.navigator.standalone === true) {
+    //   console.log('display-mode is standalone - pwa app launched from the home screen SAFARI');
+    // }
   }
  
   add_to_home(e){

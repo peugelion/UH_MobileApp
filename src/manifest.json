@@ -1,5 +1,5 @@
 {
-  "name": "UH field service app (Ionic WPA)",
+  "name": "UH field service app (Ionic PWA)",
   "short_name": "UH field service",
   "start_url": "index.html",
   "display": "standalone",
@@ -9,5 +9,8 @@
     "type": "image/png"
   }],
   "background_color": "#4e8ef7",
-  "theme_color": "#4e8ef7"
+  "background_color": "#DC6A01",
+  
+  "theme_color": "#4e8ef7",
+  "theme_color": "#f4f4f4"
 }
