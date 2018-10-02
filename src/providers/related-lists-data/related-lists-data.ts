@@ -28,16 +28,17 @@ export class RelatedListsDataProvider {
                           FROM UH__workOrder__c ${selectCond}`);
     return results["records"];
   }
-  async getRelatedWOs_strapi(oauthCreds, selectCond) {
-    selectCond = selectCond.replace(/\'+/g,`"`).replace(`WHERE `, `where: {`).replace(`__c = `, `__r : `);      
-      //.replace(`WHERE UH__Contact__c = `,`where:{UH__Contact__r:`)
-      //.replace(`WHERE UH__ServicePlace__c = `, `where:{UH__ServicePlace__r:`)
-    let url = oauthCreds.instanceURL+`/graphql?query={
-      workorders(${selectCond}}){
-        Id, Name, UH__Status__c, UH__ServicePlace__r{Name, UH__Address__c}, UH__Contact__r{Id, Name}, UH__productInPlace__r{Id, Name}, UH__Description__c, UH__Deadline__c}
-    }`.replace(/\s+/g,'').trim();
-    let results = await this.http.get(url).toPromise();
-    return results["data"]["workorders"];
+  async getRelatedWOs_strapi(oauthCreds, selectCond) {    //console.log("getRelatedWOs_strapi USO");
+    selectCond = selectCond.replace(/\'+/g,`"`).replace(`WHERE `, `where: {`).replace(`__c = `, `__r : `);    //console.log("getRelatedWOs_strapi selectCond", selectCond);    
+    //   //.replace(`WHERE UH__Contact__c = `,`where:{UH__Contact__r:`)
+    //   //.replace(`WHERE UH__ServicePlace__c = `, `where:{UH__ServicePlace__r:`)
+    // let url = oauthCreds.instanceURL+`/graphql?query={
+    //   workorders(${selectCond}}){
+    //     Id, Name, UH__Status__c, UH__ServicePlace__r{Name, UH__Address__c}, UH__Contact__r{Id, Name}, UH__productInPlace__r{Id, Name}, UH__Description__c, UH__Deadline__c}
+    // }`.replace(/\s+/g,'').trim();    console.log("getRelatedWOs_strapi url", url);    
+    // let results = await this.http.get(url).toPromise();    // console.log("getRelatedWOs_strapi results", results);
+    // return results["data"]["workorders"];
+    return await oauthCreds.strapi.getEntries('workorder', selectCond);
   }
 
   async getRelatedWOParts(oauthCreds, woId) {
@@ -107,7 +108,7 @@ export class RelatedListsDataProvider {
                           FROM UH__ServicePlace__c ${selectCond}`);
   }
 
-  async getRelatedPIPs(oauthCreds, Id) {
+  async getRelatedPIPs(oauthCreds, Id) {    //console.log("getRelatedPIPs USO");
     if (!oauthCreds.isSF)
       return this.getRelatedPIPs_strapi(oauthCreds, Id);
     let service = DataService.createInstance(oauthCreds, {useProxy:false});        
@@ -115,13 +116,14 @@ export class RelatedListsDataProvider {
                           FROM UH__ProductInPlace__c WHERE UH__ServicePlace__c = '${Id}'`);
     return results["records"];
   }
-  async getRelatedPIPs_strapi(oauthCreds, Id) {
-    let url = oauthCreds.instanceURL+`/graphql?query={
-      productinplaces(where:{UH__ServicePlace__r:"${Id}"}){
-        Id, Name, UH__Contact__r{Id, Name}, UH__Product__r{Id, ProductCode}, UH__installedDate__c}
-    }`//.replace(/\s+/g,'').trim();
-    let results = await this.http.get(url).toPromise();
-    return results["data"]["productinplaces"];
+  async getRelatedPIPs_strapi(oauthCreds, Id) {    //console.log("getRelatedPIPs_strapi USO");
+    // let url = oauthCreds.instanceURL+`/graphql?query={
+    //   productinplaces(where:{UH__ServicePlace__r:"${Id}"}){
+    //     Id, Name, UH__Contact__r{Id, Name}, UH__Product__r{Id, ProductCode}, UH__installedDate__c}
+    // }`//.replace(/\s+/g,'').trim();
+    // let results = await this.http.get(url).toPromise();
+    // return results["data"]["productinplaces"];
+    return await oauthCreds.strapi.getEntries('productinplace', Id);
   }
 
   getNotesAttachments(oauthCreds, selectCond) {

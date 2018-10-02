@@ -21,7 +21,7 @@ export class ServicePlacesServiceProvider {
         Id:       entry["Id"],      // wo id (go button on popup)
         name:     entry["Name"],  // wo name,
         phone:    entry["UH__Phone__c"],
-        address:  (entry.UH__City__r) ? entry.UH__Address__c+ ", " +entry.UH__City__r.Name : entry.UH__Address__c,
+        address:  (!entry.UH__City__r) ? entry.UH__Address__c : entry.UH__Address__c+ ", " +(entry.UH__City__r.Name || entry.UH__City__r.name),
       }
     )))
   }
@@ -39,67 +39,69 @@ export class ServicePlacesServiceProvider {
   async fetchData_Strapi(oauth, all) {
     let twoWeksAgoDate = new Date(new Date().setDate(new Date().getDate() - 14) ).toISOString();  //console.log(twoWeksAgoDate);
     let params = all ? {} : {_UH__startTime__c_gt: twoWeksAgoDate}
-    let spPromise = await oauth.strapi.getEntries('serviceplace', params);
-    console.log("spPromise", spPromise); 
-    // this.contact  = await spPromise["UH__Contact__r"];                     //console.log("this.contact strapi", this.contact);
-    // this.cityName     = "Belgrade" // TODO //this.cityName     = await cityPromise["Name"];
-    // this.countryName  = "Serbia";  // TODO //this.countryName  = await countryPromise["Name"];    
-    return await spPromise;
+    return await oauth.strapi.getEntries('serviceplace', params);
   } 
 
   // RELATED TAB
 
-  getRelatedWOs(oauth, Id) {
-    let service = DataService.createInstance(oauth, {useProxy:false});
-    return service.query(
-      `SELECT Id, Name, uh__status__c, uh__productInPlace__r.Name, uh__description__c, format(UH__Deadline__c)
-        FROM UH__WorkOrder__c 
-        WHERE UH__ServicePlace__c = '${Id}'`
-    )
-    .then(r => {
-      let labels = [
-          ['Work Orders', 'WorkorderDetailsPage'],
-          ["Product in Place", "Contact", "Description", "Estimated completion date", "Status"]
-      ];
-      let dataArr = r.records.map(item => (
-        [
-          item["Id"],
-          item["Name"],
-          item["UH__productInPlace__r"] ? item["UH__productInPlace__r"]["Name"] : null,
-          item["UH__Contact__r"] ? item["UH__Contact__r"]["Name"] : null,
-          item["UH__Description__c"],
-          item["UH__Deadline__c"],
-          item["UH__Status__c"]
-        ]
-      ));
-      return [labels, dataArr]
-    });
-  }
+  // async getRelatedWOs(oauth, Id) {
+  //   let res = [];
+  //   if (oauth.isSF) {
+  //     let service = await DataService.createInstance(oauth, {useProxy:false});
+  //     let r = await service.query(
+  //       `SELECT Id, Name, uh__status__c, uh__productInPlace__r.Name, uh__description__c, format(UH__Deadline__c)
+  //         FROM UH__WorkOrder__c 
+  //         WHERE UH__ServicePlace__c = '${Id}'`
+  //     )
+  //     res = r["records"];
+  //   } else {
+  //     let r = await oauth.strapi.getEntry('serviceplace', Id);
+  //     res = r["data"];
+  //   }
 
-  getRelatedPiPs(oauth, spId) {
-    let service = DataService.createInstance(oauth, {useProxy:false});
-    return service.query(
-      `SELECT Id, Name, UH__Contact__r.Name, UH__Product__r.ProductCode, UH__installedDate__c
-      FROM UH__ProductInPlace__c
-      WHERE UH__ServicePlace__c = '${spId}'`
-    )
-    .then(r => {        
-      let labels = [
-          ['Products in Place', 'ProductInPlacePage'],
-          ["Contact", "Product code", "Install Date"]
-      ];
-      let data = r.records.map(item => (
-          [
-              item["Id"],
-              item["Name"],
-              item["UH__Contact__r"] ? item["UH__Contact__r"]["Name"] : null,
-              item["UH__Description__c"],
-              item["UH__Product__r"] ? item["UH__Product__r"]["ProductCode"] : null
-          ]
-      ));
-      return [labels, data]
-    });
-  }
+  //   let labels = [
+  //       ['Work Orders', 'WorkorderDetailsPage'],
+  //       ["Product in Place", "Contact", "Description", "Estimated completion date", "Status"]
+  //   ];
+  //   console.log("related data", res);
+  //   let dataArr = await res.map(item => (
+  //     [
+  //       item["Id"],
+  //       item["Name"],
+  //       item["UH__productInPlace__r"] ? item["UH__productInPlace__r"]["Name"] : null,
+  //       item["UH__Contact__r"] ? item["UH__Contact__r"]["Name"] : null,
+  //       item["UH__Description__c"],
+  //       item["UH__Deadline__c"],
+  //       item["UH__Status__c"]
+  //     ]
+  //   ));
+  //   return [labels, dataArr]
+  // }
+
+  // getRelatedPiPs(oauth, spId) {
+  //   let service = DataService.createInstance(oauth, {useProxy:false});
+  //   return service.query(
+  //     `SELECT Id, Name, UH__Contact__r.Name, UH__Product__r.ProductCode, UH__installedDate__c
+  //     FROM UH__ProductInPlace__c
+  //     WHERE UH__ServicePlace__c = '${spId}'`
+  //   )
+  //   .then(r => {        
+  //     let labels = [
+  //         ['Products in Place', 'ProductInPlacePage'],
+  //         ["Contact", "Product code", "Install Date"]
+  //     ];
+  //     let data = r.records.map(item => (
+  //         [
+  //             item["Id"],
+  //             item["Name"],
+  //             item["UH__Contact__r"] ? item["UH__Contact__r"]["Name"] : null,
+  //             item["UH__Description__c"],
+  //             item["UH__Product__r"] ? item["UH__Product__r"]["ProductCode"] : null
+  //         ]
+  //     ));
+  //     return [labels, data]
+  //   });
+  // }
 
 }
 

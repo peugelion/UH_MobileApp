@@ -55,7 +55,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     public navParams: NavParams,
     private oauth : OAuthServiceProvider,
     private soService: SobjectServiceProvider,
-    private spService: ServicePlacesServiceProvider,
+    //private spService: ServicePlacesServiceProvider,
     public modalCtrl: ModalController,
     private toastCtrl: ToastController,
     private relDataService: RelatedListsDataProvider
@@ -83,9 +83,9 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   //     .then(r => refresher.complete());
   // }
 
-  doRefresh(refresher) {
-    if (this.toptabs == "details") this.loadServicePlace()
-      .then(r => refresher.complete());
+  async doRefresh(refresher) {
+    await (this.toptabs == "details") ? this.loadServicePlace() : this.getRelatedData();
+    refresher.complete();
   }
 
   // DETAILS TAB
@@ -99,7 +99,7 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
     const oauth = await this.oauth.getOAuthCredentials();
     //return await (oauth.isSF) ? this.loadServicePlace_SF(oauth) : this.loadServicePlace_Strapi(oauth);
     ( (oauth.isSF) ? this.fetchData(oauth) : this.fetchData_Strapi(oauth) )
-    .then( sp => {      //console.log("sp main", sp);
+    .then( sp => {      console.log("sp main", sp);
       this.name = sp["Name"];
       this.tel  = sp["UH__Phone__c"];
       this.addr = sp["UH__Address__c"];      //console.log("this.addr", this.addr);
@@ -126,9 +126,9 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   }
   async fetchData_Strapi(oauth) {
     let spPromise = await oauth.strapi.getEntry('serviceplace', this.Id);  //console.log("spPromise", spPromise);
-    this.contact  = await spPromise["UH__Contact__r"];                     console.log("this.contact strapi", this.contact);
-    this.cityName     = "Belgrade" // TODO //this.cityName     = await cityPromise["Name"];
-    this.countryName  = "Serbia";  // TODO //this.countryName  = await countryPromise["Name"];    
+    this.contact  = spPromise["UH__Contact__r"];
+    this.cityName = spPromise["UH__City__r"]["name"];
+    this.countryName = spPromise["UH__City__r"]["country"];
     return await spPromise;
   }
 
@@ -147,12 +147,13 @@ export class ServicePlaceDetailsPage implements AfterViewInit {
   // }
 
   async getRelatedData() {
+    this.relatedData = [];
     let oauth = await this.oauth.getOAuthCredentials();
     let whereCond: string = `WHERE UH__ServicePlace__c = '${this.Id}'`;
-    let relatedWOs = await this.relDataService.getRelatedWOs(oauth, whereCond);  console.log("relatedWOs", relatedWOs);
-    this.relatedData.push({"name": "Workorders", "elements": relatedWOs, "size": relatedWOs.length});
-    let relatedPIPs = await this.relDataService.getRelatedPIPs(oauth, this.Id);
-    this.relatedData.push({"name": "Products in Place", "elements": relatedPIPs, "size": relatedPIPs.length});
+    this.relDataService.getRelatedWOs(oauth, whereCond)
+      .then( r => this.relatedData[0] = {"name": "Workorders", "elements": r, "size": r.length} );
+    this.relDataService.getRelatedPIPs(oauth, this.Id)
+      .then( r => this.relatedData[1] = {"name": "Products in Place", "elements": r, "size": r.length} );
   }
 
   gotoRecord(page, recordId) {

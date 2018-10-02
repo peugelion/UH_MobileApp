@@ -46,16 +46,11 @@ export class ServicePlacesPage {
       then(refresher.complete())
   }
 
-  loadSPs(filter) {
-    return new Promise((resolve, reject) => {
-      this.oauth.getOAuthCredentials()
-      .then(oauth => this.spService.loadServicePlaces(oauth, filter))
-      .then(results => {          //console.log(results);
-        this.listLabel = (filter ? "All" : "Recently Viewed") + " Service Places";
-        this.filter = filter;
-        resolve(this.items = results);
-      });
-    });
+  async loadSPs(filter) {
+    let oauth = await this.oauth.getOAuthCredentials();
+    this.listLabel = (filter ? "All" : "Recently Viewed") + " Service Places";
+    this.filter = filter;
+    return this.items = await this.spService.loadServicePlaces(oauth, filter);
   }
 
   itemClicked(event: any, page: string, id: string): void {

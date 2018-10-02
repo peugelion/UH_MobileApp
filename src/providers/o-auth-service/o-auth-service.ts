@@ -67,7 +67,7 @@ export class OAuthServiceProvider {
     const user = await strapi.login('pera', 'Sdexter3'); // console.log("Auth_strapi user", user);
     this.oAuthCreds = user;    //await console.log("this.oAuthCreds - Auth_strapi 0 ", await this.oAuthCreds);
     this.oAuthCreds["isSF"] = false;
-    this.oAuthCreds["userId"] = user["user"]["_id"]; // muljanje da se poklapa sa SF
+    this.oAuthCreds["userId"] = user["user"]["id"]; // muljanje da se poklapa sa SF
     this.oAuthCreds["strapi"] = strapi;
     this.oAuthCreds["instanceURL"]           = Constants.STRAPI_ENDPOINT; // kao SF
     this.oAuthCreds["strapi"]["instanceURL"] = Constants.STRAPI_ENDPOINT;
