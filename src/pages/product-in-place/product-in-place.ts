@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { DataService } from 'forcejs';
 import { HttpClient } from '@angular/common/http';
-import Strapi from 'strapi-sdk-javascript/build/main';
 
 @IonicPage({
   segment: 'pip/:id',

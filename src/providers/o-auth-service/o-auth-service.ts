@@ -32,7 +32,7 @@ export class OAuthServiceProvider {
     else {
       // authenticate and resolve the promise
       this.storage.set('isStrapi', JSON.parse(localStorage.getItem('isStrapi')) );
-      let isStrapi = await this.storage.get('isStrapi');  //      await console.log('isStrapi', isStrapi);
+      let isStrapi = await this.storage.get('isStrapi');        await console.log('isStrapi ??? ', isStrapi);
       this.oAuthCreds = (!isStrapi) ? this.Auth() /* SF */ : this.Auth_strapi();
       return this.oAuthCreds;
     }

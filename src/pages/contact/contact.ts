@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { OAuthServiceProvider } from '../../providers/o-auth-service/o-auth-service';
 import { RelatedListsDataProvider } from '../../providers/related-lists-data/related-lists-data';
 import { DataService } from 'forcejs';
-import Strapi from 'strapi-sdk-javascript/build/main';
 
 @IonicPage({
   segment: 'contact/:id'
