@@ -30,6 +30,16 @@
   </script>
   <noscript>This application needs JavaScript to work, please enable JavaScript on your browser</noscript>
 
+  <!-- debagujem ... -->
+  <!-- <script>
+    console.log = (function (old_function, div_log) { 
+      return function (text) {
+          old_function(text);
+          div_log.value += text;
+      };
+    } (console.log.bind(console), document.getElementById("error-log")));
+  </script> -->
+
   <link href="build/main.css" rel="stylesheet">
 
   <link href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" rel="stylesheet" />

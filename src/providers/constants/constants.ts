@@ -1,5 +1,6 @@
 
-export const STRAPI_ENDPOINT= 'http://localhost:1337';
+//export const STRAPI_ENDPOINT= 'http://localhost:1337';
+export const STRAPI_ENDPOINT= window.location.protocol + '://' + window.location.hostname;
 export const DATE_TIME_FMT= `short`;
 export const DATE_FMT= `date`;
 // export class Constants {
