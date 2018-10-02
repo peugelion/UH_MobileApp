@@ -4,7 +4,7 @@ import { WorkorderFooterActionsPage } from './workorder-footer-actions';
 
 @NgModule({
   declarations: [
-    WorkorderFooterActionsPage,
+    //WorkorderFooterActionsPage,
   ],
   imports: [
     IonicPageModule.forChild(WorkorderFooterActionsPage),

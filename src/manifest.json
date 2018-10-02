@@ -1,6 +1,6 @@
 {
-  "name": "Ionic",
-  "short_name": "Ionic",
+  "name": "UH field service app (Ionic WPA)",
+  "short_name": "UH field service",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{
