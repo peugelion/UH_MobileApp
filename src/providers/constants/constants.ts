@@ -3,8 +3,8 @@
 //export const STRAPI_ENDPOINT = window.location.protocol + '//' + window.location.hostname;
 //export const STRAPI_ENDPOINT = (window.location.hostname == "localhost") ? 'http://localhost:1337' : window.location.origin; // public url works on port 80
 //export const STRAPI_ENDPOINT = (window.location.hostname == "localhost") ? 'http://localhost:1337' : 'https://uhstrapi.app.sajtweb.net'; // public url works on port 80 .. hardcoded for now
-//export const STRAPI_ENDPOINT = 'https://uhstrapi.app.sajtweb.net';
-export const STRAPI_ENDPOINT = (window.location.hostname == "localhost") ? 'https://uhstrapi.app.sajtweb.net' : window.location.origin + '/api'; // public url works on port 80 .. hardcoded for now
+export const STRAPI_ENDPOINT = 'https://uhstrapi.app.sajtweb.net';
+//export const STRAPI_ENDPOINT = (window.location.hostname == "localhost") ? 'https://uhstrapi.app.sajtweb.net' : window.location.origin + '/api'; // public url works on port 80 .. hardcoded for now
 
 export const DATE_TIME_FMT= `short`;
 export const DATE_FMT= `date`;
