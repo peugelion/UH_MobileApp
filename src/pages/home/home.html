@@ -11,7 +11,8 @@
   <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <button class="btn" ion-button full (click)="add_to_home(event)" *ngIf="showBtn" >Install</button>
+  <!-- <button class="btn" ion-button full (click)="add_to_home(event)" *ngIf="showBtn" >Install</button> -->
+  <pwa-prompt></pwa-prompt>
   <!-- Show warehouse stock -->
   <!-- <dept-inventory [showCloseBtn]="false" #deptStock></dept-inventory> -->
 

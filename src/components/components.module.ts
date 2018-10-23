@@ -9,6 +9,7 @@ import { AddLaborComponent } from './add-labor/add-labor';
 import { RejectWorkorderComponent } from './reject-workorder/reject-workorder';
 import { EditWorkorderComponent } from './edit-workorder/edit-workorder';
 import { AddPartComponent } from './add-part/add-part';
+import { PwaPromptComponent } from './pwa-prompt/pwa-prompt';
 
 //import { PipesModule } from '../pipes/pipes.module';
 
@@ -23,6 +24,7 @@ import { AddPartComponent } from './add-part/add-part';
     RejectWorkorderComponent,
     EditWorkorderComponent,
     AddPartComponent,
+    PwaPromptComponent,
 	],
 	entryComponents: [
     AddExpenseComponent,
@@ -46,7 +48,8 @@ import { AddPartComponent } from './add-part/add-part';
     AddLaborComponent,
     RejectWorkorderComponent,
     EditWorkorderComponent,
-    AddPartComponent
+    AddPartComponent,
+    PwaPromptComponent
 	]
 })
 export class ComponentsModule {}
