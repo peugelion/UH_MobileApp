@@ -16,7 +16,7 @@ export class PwaPromptComponent {
   deferredPrompt;           // PWA prompt
 
   constructor() {
-    console.log('Hello PwaPromptComponent Component');
+    // console.log('Hello PwaPromptComponent Component');
     this.showBtn = false;
   }
 
@@ -54,6 +54,8 @@ export class PwaPromptComponent {
       .then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
           console.log('User accepted the prompt');
+          // hide our user interface that shows our button
+          this.showBtn = false;
         } else {
           console.log('User dismissed the prompt');
         }
