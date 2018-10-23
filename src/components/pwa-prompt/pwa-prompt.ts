@@ -47,6 +47,7 @@ export class PwaPromptComponent {
   add_to_home(e){
     debugger
     // hide our user interface that shows our button
+    this.showBtn = false;
     // Show the prompt
     this.deferredPrompt.prompt();
     // Wait for the user to respond to the prompt
